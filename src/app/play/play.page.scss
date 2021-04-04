@@ -1,0 +1,24 @@
+ion-item.active
+{
+    --background: #eeeeee !important;
+    color: #ff9f43 !important;
+}
+ion-item.active h2
+{
+    color: #1f1d1d !important;
+}
+ion-item.active .play
+{
+    display: none;
+}
+.playall {
+    position: absolute;
+    padding: 6px;
+    border: 1px solid #1e5091;
+    top: -20px;
+    right: 0px;
+    background: #ffffff;
+    --color: #1e5091 !important;
+    color: #1e5091 !important;
+    border-radius: 6px;
+}

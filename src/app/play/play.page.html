@@ -1,0 +1,116 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{activetrack?.chapter}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <ion-list  style="padding: 8px; " lines='full' >
+    
+    <ng-container *ngFor="let a of playlist; let i = index">
+
+      <ion-item  class="chaptercontainer ion-activatable">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-text slot="start"  (click)="play(playlist,i)" style="margin-inline-end: 2px;">
+          {{i+1}}.
+        </ion-text>
+        <ion-label  (click)="play(playlist,i)" class="ion-text-wrap" >
+          <h2>{{a.audioname}}
+            <strong style="float: right;" class="urdufont">{{a.audionameurdu}}</strong>
+        </h2>
+        </ion-label>
+        <ion-icon name="play"  (click)="play(playlist,i)" class="icon"></ion-icon> 
+    </ion-item>
+ 
+      
+    </ng-container>
+
+  </ion-list>
+
+
+  <!--div class="ion-padding">
+  <!--div class="default-container" style="border-radius: 0px; box-shadow: none;">
+    <h5 class="tile " style="padding-right: 15px; text-align: right;">{{activetrack?.chapterurdu}}</h5>
+    <br />
+  </div-->
+<!--ng-container *ngFor="let a of playlist; let i=index ">
+  <div class="grid-container"  [ngClass]="{'active':a == api.currentaudio.value}">
+    <div class="item1" style="margin-top: -20px;">
+
+      <a routerLink="/tab/home/audio/{{a.id}}" (click)="play(playlist,i)" slot="start">
+        <img slot="start"  [defaultImage]="defaultImage" [lazyLoad]="a.logo_min"></a>
+
+    </div>
+    <div class="item2">
+      <div style="padding-left: 15px;">
+        <div>
+
+
+          <div class="title" (click)="play(playlist,i)">{{a.audioname}}</div>
+          <p align="right" (click)="play(playlist,i)" class="urdufont">{{a.audionameurdu}}</p>
+
+        </div>
+      </div>
+      <ion-icon name="play" (click)="play(playlist,i)" style="float: right;" class="playall"></ion-icon>
+      <ion-icon name="heart"  (click)="favourite(a)" *ngIf="!a.fav"  class="playall" style="right:2.5em" ></ion-icon>
+      <ion-icon name="heart" style=" color: #e62200 !important" (click)="removefavouriteAudio(a)"
+        *ngIf="a.fav"  class="playall" style="right:2.5em" ></ion-icon>
+        <ion-icon name="share" (click)='shareaudio(a?.bookname+"-"+a.chapter,a?.logo_min,a?.url)' class="playall" style="right:5em" ></ion-icon>
+      </div>
+    <div class="item5">
+      <!--ion-grid>
+        <ion-row>
+          <ion-col align="center">
+            <div class="ion-activatable" style="border-radius: 100%; padding-top: 10px;">
+              <b>3K+ View</b>
+            </div>
+          </ion-col>
+          <ion-col>
+            <ion-icon name="share" (click)='shareaudio(a?.bookname+"-"+a.chapter,a?.logo_min,a?.url)' ></ion-icon>
+          </ion-col>
+
+          <ion-col align="center" >
+
+            <ion-icon name="heart"  (click)="favourite(a)" *ngIf="!a.fav"></ion-icon>
+            <ion-icon name="heart" style=" color: #e62200 !important" (click)="removefavouriteAudio(a)"
+              *ngIf="a.fav"></ion-icon>
+          </ion-col>
+          <ion-col align="right">
+            <ion-icon name="play" (click)="play(playlist,i)" style="float: right;"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid-->
+    <!--/div>
+  </div>
+  </ng-container>
+</div-->
+
+  <!--ion-list *ngIf="playlist" class="ion-padding">
+    <ion-item *ngFor="let a of playlist; let i=index"
+      [ngClass]="{'active': a === api.currentaudio.value ,'default-container' : true}" lines="none"
+       class="item-borderless default-container">
+      
+      <ion-label style="padding-left: 15px;">
+        <h2 (click)="play(i)">{{a.audioname}}</h2>
+        <p  align="right" (click)="play(i)">{{a.audionameurdu}}</p>
+        <div align="left" class="sub-title" style="font-size: 12px; color: #adadad" (click)="play(i)" >{{a?.bookname}}-{{a?.chapter}}</div>
+        <ion-icon name="heart" style="float: left;" (click)="favourite(a)" *ngIf="!a.fav"></ion-icon>
+        <ion-icon name="heart" style="float: left; color: #d62000 !important" (click)="removefavouriteAudio(a)"
+          *ngIf="a.fav"></ion-icon>
+
+        <ion-icon name="stats" style="float: right;" *ngIf="a == api.currentaudio.value"></ion-icon>
+        <ion-icon name="play" style="float: right;" (click)="play(playlist,i)" *ngIf="a != api.currentaudio.value">
+        </ion-icon>
+            </ion-label>
+
+    </ion-item>
+  </ion-list-->
+  <div style="width: 100%; height: 300px;"></div>
+
+</ion-content>

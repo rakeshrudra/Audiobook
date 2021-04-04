@@ -1,0 +1,42 @@
+<ion-header no-border>
+  <ion-toolbar >
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Islamic Audio Books</ion-title>
+    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;"></ion-icon>
+
+</ion-toolbar>
+</ion-header>
+<ion-content >
+<ion-list class="ion-padding">
+   <ng-container *ngFor="let p of appPages">
+      <ion-item  [routerLink]="[p.url]" lines="none" class="ion-activatable">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-icon slot="start" [name]="p.icon" style="padding: 5px !important;"></ion-icon>
+        <ion-label>
+          {{p.title}}
+        </ion-label>
+      </ion-item>
+      </ng-container>
+      <ion-item  lines="none"  (click)="rate()" class="ion-activatable">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-icon slot="start" name="thumbs-up"></ion-icon>
+        <ion-label>
+          Rate Us On Google Play
+        </ion-label>
+      </ion-item>
+
+  </ion-list>
+  <br />
+  <br />
+  <h3 style="text-align: center; color: #888888;">V {{app}}</h3>
+
+<!--ion-button color="primary" (click)="change('primary')">Primary</ion-button>
+<ion-button color="dark" (click)="change('dark')">Dark</ion-button>
+<ion-button color="tertiary" (click)="change('tertiary')">Tertiary</ion-button>
+<ion-button color="warning" (click)="change('warning')">Warning</ion-button>
+<ion-button color="danger" (click)="change('danger')">Danger</ion-button-->
+
+</ion-content>

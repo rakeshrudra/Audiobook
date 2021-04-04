@@ -1,0 +1,19 @@
+
+
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-searchbar animated (ionFocus)="searchfocus()"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+    <ion-list>
+    <ion-item-sliding>
+      <ion-item lines="none" *ngFor="let a of [1,1,1,1,1,1,1]">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia vitae nihil doloribus odio nobis eveniet magni, tempora nemo architecto, nesciunt cumque harum ullam commodi laudantium. Dignissimos mollitia harum eligendi nostrum!</p>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

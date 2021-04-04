@@ -1,0 +1,93 @@
+<ion-header no-border>
+  <ion-toolbar >
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Islamic Audio Books</ion-title>
+    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;"></ion-icon>
+</ion-toolbar>
+</ion-header>
+<ion-content > 
+  <h4 style="padding-left: 15px;">History
+    <ion-button name="search" (click)="clearall()" color="danger" slot="end" style="float: right; margin-right: 15px;" size="small">Clear History</ion-button>
+  </h4>
+  <h5 style="padding-left: 15px;"><small><b>Swipe left to remove</b></small></h5>
+
+  <ion-list  style="padding: 8px; " lines='full' >
+    
+    <ng-container *ngFor="let a of playlist; let i = index">
+    <ion-item-sliding>
+      <ion-item  class="chaptercontainer ion-activatable">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-text slot="start"  (click)="play(playlist,i)" style="margin-inline-end: 2px;">
+          {{i+1}}.
+        </ion-text>
+        <ion-label  (click)="play(playlist,i)" class="ion-text-wrap" >
+          <p><small>{{a?.chapter}} - {{a?.bookname}}</small></p>
+          <h2 style="float: left; width: 100%;">{{a.audioname}}
+            <strong style="float: right;" class="urdufont">{{a.audionameurdu}}</strong>
+        </h2>
+
+        </ion-label>
+        <ion-icon name="play"  (click)="play(playlist,i)" class="icon"></ion-icon> 
+      </ion-item>
+      <ion-item-options side="end">
+          <ion-item-option (click)="_autoload.removehistoryAudio(a)" color="danger">
+            <ion-icon name="trash" ></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+      
+    </ng-container>
+
+  </ion-list>
+
+  <!--ng-container *ngFor="let a of playlist; let i = index">
+    <div class="grid-container " >
+      <div class="item1" >
+  
+        <a  (click)="play(playlist,i)" slot="start">
+          <img  [defaultImage]="defaultImage" [lazyLoad]="a.logo_min"></a>
+  
+      </div>
+      <div class="item2">
+  
+        <div style="padding-left: 15px;">
+          <div>
+  
+  
+            <div class="title" (click)="play(playlist,i)">{{a.audioname}}</div>
+            <p align="right" (click)="play(playlist,i)" class="urdufont" >{{a.audionameurdu}}</p>
+ 
+          </div>
+        </div>
+        <ion-icon name="play" (click)="play(playlist,i)" style="float: right;" class="playall"></ion-icon>
+      </div>
+      <div class="item5">
+        <!--ion-grid>
+          <ion-row>
+            <ion-col align="center">
+              <div class="ion-activatable" style="border-radius: 100%; padding-top: 10px;">
+                <b>3K+ View</b>
+              </div>
+            </ion-col>
+            <ion-col align="center">
+              <ion-icon name="play" (click)="play(playlist,i)" style="float: right;"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </ng-container-->
+  <ion-list *ngIf="!playlist">
+    <ion-item lines="none">
+      <ion-icon name="list" slot="start"></ion-icon>
+      <ion-label>
+        <h2>History notfound</h2>
+      </ion-label>
+    </ion-item>
+    </ion-list>
+    <div style="width: 100%; height: 300px;"></div>
+
+</ion-content>

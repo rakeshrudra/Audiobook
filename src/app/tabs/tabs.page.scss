@@ -1,0 +1,24 @@
+
+ion-tab-bar
+{
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+}
+.inactive,
+.inactive svg
+{
+    color: #ffffff;
+}
+.active,
+.active svg
+{
+    color: #a3cff3;
+}
+ion-button
+{
+    --padding-start: 2px;
+    --padding-end: 2px;
+    --border-radius:100%;
+    --padding-top:2px;
+    --padding-bottom:2px;
+}

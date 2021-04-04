@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-searchbar animated [(ngModel)]="searchTerm" ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+  <ion-list class="ion-padding">
+    <ion-item *ngFor="let a of chapters | search:searchTerm" lines="none" routerLink="/tab/home/audio/{{a.id}}" >{{a.chapter}}</ion-item>
+    <ng-container *ngFor="let a of audios | search:searchTerm">
+    <ion-item  lines="none" class="item-borderless default-container" click="play(i)" ><div style="width: 100%;"><div >{{a.audioname}}</div><div align="right">{{a.audionameurdu}}</div></div></ion-item>
+    </ng-container> 
+  </ion-list>
+</ion-content>
+ 

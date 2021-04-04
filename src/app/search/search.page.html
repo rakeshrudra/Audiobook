@@ -1,0 +1,159 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-searchbar
+      #searchbar
+      animated
+      [(ngModel)]="searchTerm"
+      autofocus
+      (ionChange)="search()"
+    ></ion-searchbar>
+  </ion-toolbar>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <select
+          style="width: 100%; width: 100%; padding: 6px; border-radius: 6px"
+          (change)="bookChange($event)"
+          [ngModel]="selectedbook"
+        >
+          <option value="" selected disabled>Select Book</option>
+          <option value="">All</option>
+          <ng-container *ngFor="let a of books;let i=index">
+            <option [value]="a.id">{{a.name}}</option>
+          </ng-container>
+        </select>
+      </ion-col>
+      <ion-col size="6">
+        <select
+          style="width: 100%; width: 100%; padding: 6px; border-radius: 6px"
+          (change)="chapterChange($event)"
+          [ngModel]="selectedchapter"
+        >
+          <option value="" selected disabled>Select Chapter</option>
+          <option value="">All</option>
+          <ng-container *ngFor="let a of chapters;let i=index">
+            <option [value]="a.id">{{a.chapter}}</option>
+          </ng-container>
+        </select>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content>
+  <!--p *ngIf="data"><b>Modules</b></p>
+  <ion-row *ngIf="data">
+    <ion-col *ngFor="let a of data" no-lines routerLink='/tab/home/book/{{a.modulename}}' align="center"
+      class="ion-padding">
+      <div routerLink='/tab/home/book/{{a.modulename}}'>
+        <img [defaultImage]="defaultImage" [lazyLoad]="a.logo_min"
+          style="width: 40px; height: 40px; border-radius: 6px" />
+        <div align="center">{{a.modulename}}</div>
+      </div>
+    </ion-col>
+  </ion-row-->
+  <!--ion-list *ngIf="api.isapiloading.value === false">
+  <ion-item >Some data is loading in the background please give us some time</ion-item>
+  </ion-list-->
+  <div *ngIf="!books">
+    <div class="ion-padding custom-skeleton" *ngFor="let a of [1,2,3,4]">
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </div>
+  </div>
+  <!--ion-list--
+    *ngIf="books.length > 0 && searchTerm?.length > 1"
+    class="ion-padding"
+  >
+    <ion-item
+      *ngFor="let a of books| booksearch:searchTerm; let i=index"
+      no-lines
+      routerLink="/tab/home/chapter/{{a.id}}"
+      lines="none"
+    >
+      <a routerLink="/tab/home/chapter/{{a.id}}"
+        ><img
+          [src]="a.profile_image_min"
+          style="width: 50px"
+          alt="Book"
+          slot="start"
+      /></a>
+      <ion-label style="padding-left: 10px">
+        <h2
+          style="margin-bottom: 6px"
+          routerLink="/tab/home/chapter/{{a.id}}"
+          innerHTML="{{a.name | highlight : searchTerm}}"
+        ></h2>
+        <div style="margin-bottom: 6px; font-size: 14px" align="left">
+          <span innerHTML="{{a.nameurdu | highlight:searchTerm}}"></span>
+        </div>
+      </ion-label>
+    </ion-item>
+  </!--ion-list-->
+  <!--ion-list--
+    *ngIf="chapters.length > 0 && searchTerm?.length > 1"
+    class="ion-padding"
+  >
+    <ng-container
+      *ngFor="let a of chapters | chaptersearch:searchTerm; let i=index"
+    >
+      <ion-item
+        *ngIf="i < 15"
+        lines="none"
+        class="item-borderless default-container"
+        click="playserch(i)"
+        routerLink="/tab/home/audio/{{a.id}}"
+      >
+        <ion-icon name="list-box" slot="start" color="success"></ion-icon>
+        <div style="width: 100%">
+          <div innerHTML="{{a.chapter | highlight:searchTerm}}"></div>
+          <div align="right" innerHTML="a.audionameurdu"></div>
+        </div>
+      </ion-item>
+    </ng-container>
+  </ion-list-->
+
+<ion-item *ngIf="!audios && searchTerm.length >2">
+    <ion-label>No audio found</ion-label>
+</ion-item>
+
+  <ion-list
+    *ngIf="audios.length > 0 && searchTerm?.length > 1"
+    class="ion-padding"
+  >
+    <ng-container *ngFor="let a of audios; let i=index">
+      <ion-item
+        *ngIf="i < 99"
+        lines="none"
+        [ngClass]="{'active': api.currentaudio.value==a,'item-borderless default-container':true }"
+        (click)="playserch(a)"
+      >
+        <ion-icon name="musical-notes" slot="start" color="warning"></ion-icon>
+        <div style="width: 100%">
+          <div
+            innerHTML="{{a.audioname | highlight:searchTerm}}"
+            appMarquee
+          ></div>
+          <div
+            align="right"
+            innerHTML="{{a.audionameurdu | highlight:searchTerm}}"
+          ></div></div
+      ></ion-item>
+    </ng-container>
+  </ion-list>
+  <div class="ion-padding custom-skeleton" *ngIf="audioloader">
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    <ion-skeleton-text animated></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+  </div>
+  <div style="width: 100%; height: 300px"></div>
+</ion-content>

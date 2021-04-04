@@ -1,0 +1,18 @@
+
+<ion-content style="--background: #ffffff">
+  <ion-list>
+      
+    <ion-item *ngFor= "let chapter of chapters" style="--background: #ffffff;" (click)="save(chapter.id,chapter.topiccount)">
+
+      <ion-label>
+        <h2>{{chapter.chapter}}</h2>
+        <h3>{{chapter.chapterudu}}</h3>
+      </ion-label>
+      <ion-badge *ngIf="chapter.audiocountd > 0">
+        {{chapter.audiocountd}}
+      </ion-badge>
+    </ion-item>
+
+</ion-list>
+
+</ion-content>

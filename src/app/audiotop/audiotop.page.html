@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{chapter?.chapter}}
+
+    </ion-title>
+    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;"></ion-icon>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollEvents]="true" (ionScroll)="scroll($event)">
+
+
+
+  <div class="ion-padding10">
+
+    <div *ngIf="!playlist">
+      <div class="ion-padding custom-skeleton" *ngFor="let a of [1,2,3,4]">
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      </div>
+    </div>
+
+
+    <ion-list  style="padding: 8px;" lines='full' >
+
+      <ng-container *ngFor="let a of playlist; let i = index">
+
+        <ion-item  class="chaptercontainer ion-activatable">
+          <ion-ripple-effect></ion-ripple-effect>
+
+          <ion-text slot="start"  routerLink="/tab/home/topicaudiolist/{{a.id}}" style="margin-inline-end: 2px;">
+            {{i+1}}.
+          </ion-text>
+          <ion-label  routerLink="/tab/home/topicaudiolist/{{a.id}}" class="ion-text-wrap" >
+            <h2>{{a.topic}}
+              <strong style="float: right;" class="urdufont">{{a.topicurdu}}</strong>
+          </h2>
+          </ion-label>
+          <ion-icon name="share-social-outline" class="icon" (click)='shareaudio(a?.topic)' ></ion-icon> <br />
+        </ion-item>
+
+
+      </ng-container>
+
+    </ion-list>
+
+      <!--ion-list style="padding: 10px;">
+
+        <ng-container *ngFor="let a of playlist; let i = index">
+          <div class="cpcontainer"   routerLink="/tab/home/topicaudiolist/{{a.id}}" [ngStyle]="{'box-shadow': '0px 0px 90px '+getColor(a)+' inset'}">
+            <div  class="avator" style="padding: 1px 4px;">
+              <img [defaultImage]="defaultImage" [lazyLoad]="a?.logo" style="width: 36px;" >
+            </div>
+            <ion-label>
+              <h2>{{i+1}}. {{a.topic}}</h2>
+              <h3 class="urdufont">{{a.topicurdu}}</h3>
+            </ion-label>
+            <div  class="menulist">
+              <ion-icon name="share" class="icon" (click)='shareaudio(a?.topic)' ></ion-icon> <br />
+              <ion-icon name="cloud-download" class="icon" (click)='download(a)'></ion-icon>
+              </div>
+
+          </div>
+
+          </ng-container>
+
+        </ion-list-->
+
+
+    <!--div class="grid-container" *ngFor="let a of playlist; let i = index" [ngStyle]="{'box-shadow': '0px 0px 70px '+getColor(a)+' inset'}">
+      <div class="item1" >
+
+        <a routerLink="/tab/home/topicaudiolist/{{a.id}}" slot="start">
+          <img slot="start" [defaultImage]="defaultImage" [lazyLoad]="a.logo"></a>
+
+      </div>
+      <div class="item2">
+
+        <div style="padding-left: 5px;" routerLink="/tab/home/topicaudiolist/{{a.id}}">
+          <div>
+            <div class="title">
+              <marquee scrollamount="1.5" beha *ngIf="a.topic.length > 100" direction="up" style="height: 45px;">
+               {{i+1}}. {{a.topic}}</marquee>
+              <span *ngIf="a.topic.length <= 100">{{i+1}}. {{a.topic}}</span>
+            </div>
+          </div>
+          <div class="urdufont" align="right">
+            <marquee class="urdufont" scrollamount="1.5" *ngIf="a.topic.length > 120" direction="up"
+              style="height: 45px; margin-right: 15px;">{{a.topicurdu}}</marquee>
+            <span class="urdufont" *ngIf="a.topic.length <= 120">{{a.topicurdu}} </span>
+          </div>
+
+        </div>
+
+        <ion-icon name="play" (click)="play(a.id)" style="float: right;" class="playall"></ion-icon>
+        <ion-icon name="share" class="playall" (click)='shareaudio(a?.topic,a?.logo_min,a?.url)' style="right: 2.5em;">
+        </ion-icon>
+      </div>
+      <div class="item5" routerLink="/tab/home/topicaudiolist/{{a.id}}">
+      </div>
+    </div-->
+
+  </div>
+  <div class="scroltotop" style="position: fixed; bottom: 80px; right: 10px;" *ngIf="showscrolltotop" (click)="scrollContent()">  <ion-icon name="chevron-up-circle-outline"></ion-icon>
+  </div>
+  <div style="width: 100%; height: 300px;"></div>
+</ion-content>

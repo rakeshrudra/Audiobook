@@ -1,0 +1,16 @@
+ion-slide div
+{
+    font-size: 14px;
+}
+.light ion-item
+{
+   --background: #ffffff;
+   background: #ffffff;
+}
+.light .slider-container{
+    background: #ffffff !important;
+}
+
+.dark .slider-container{
+    background: #555555 !important;
+} 

@@ -1,0 +1,130 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{topicdata?.topic}}</ion-title>
+    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;"></ion-icon>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content [scrollEvents]="true" (ionScroll)="scroll($event)"  >
+
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+      <ion-tab-button >
+        <ion-text>({{playlist?.length}})</ion-text>
+        <ion-label>Audios</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button (click)="play(0)">
+        <ion-icon name="play"></ion-icon>
+        <ion-label>Play All</ion-label>
+      </ion-tab-button>
+
+      <!--ion-tab-button (click)="downloadAll()">
+        <ion-icon name="cloud-download"></ion-icon>
+        <ion-label>All Download</ion-label>
+      </ion-tab-button-->
+
+    </ion-tab-bar>
+  </ion-tabs>
+
+
+  <div *ngIf="!playlist">
+    <div class="ion-padding custom-skeleton" *ngFor="let a of [1,2,3,4]">
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </div>
+  </div>
+
+<div  class="ion-padding10" style="margin-top: 60px;">
+  <ion-list  style="padding: 8px;" lines='full' >
+
+    <ng-container *ngFor="let a of playlist; let i = index">
+
+      <ion-item  class="chaptercontainer ion-activatable">
+        <ion-ripple-effect></ion-ripple-effect>
+
+        <ion-text slot="start"  (click)="play(i)" style="margin-inline-end: 2px;">
+          {{i+1}}.
+        </ion-text>
+        <ion-label  (click)="play(i)" class="ion-text-wrap" >
+          <h2>{{a.audioname}}
+            <strong style="float: right;" class="urdufont">{{a.audionameurdu}}</strong>
+        </h2>
+      </ion-label>
+      <ion-icon name="cloud-download" class="icon"  *ngIf="a.downloaded" style="color: #58B19F !important; " ></ion-icon>
+      <ion-icon name="cloud-download" class="icon" (click)='downloadQ(a)' *ngIf="!a.downloaded && !a.downloading" ></ion-icon>
+      <ion-icon name="cloud-download" class="icon"  *ngIf="!a.downloaded && a.downloading" style="background: orange !important; color: #ffffff !important"  (click)='_autoload.removedownloadqAudio(a)'></ion-icon>
+      <ion-icon name="play"  (click)="play(i)" class="icon"></ion-icon>
+
+    </ion-item>
+
+
+    </ng-container>
+
+  </ion-list>
+  <!--ion-list style="padding: 10px;">
+
+    <ng-container *ngFor="let a of playlist; let i = index">
+      <div class="cpcontainer"   [ngStyle]="{'box-shadow': '0px 0px 90px '+getColor(a)+' inset'}">
+        <div  class="avator" (click)="play(i)" style="padding: 1px 4px;">
+          <img [defaultImage]="defaultImage" [lazyLoad]="a?.logo_min" style="width: 36px;" >
+        </div>
+        <ion-label (click)="play(i)">
+          <h2 style="font-weight: 600;">{{i+1}}. {{a.audioname}}</h2>
+          <h3 class="urdufont">{{a.audionameurdu}}</h3>
+        </ion-label>
+        <div  class="menulist">
+          <ion-icon name="share" class="icon" (click)='shareaudio(a?.bookname+" Or "+a.chapter,a?.logo_min,a?.url)' ></ion-icon> <br />
+          <ion-icon name="cloud-download" class="icon" (click)='downloadQ(a)'></ion-icon>
+          </div>
+      </div>
+
+      </ng-container>
+
+    </ion-list>
+        <!--ion-item-sliding  -->
+  <!--div class="grid-container" *ngFor="let a of playlist ; let i=index " [ngStyle]="{'box-shadow': '0px 0px 70px '+getColor(a)+' inset'}">
+    <div class="item1" >
+
+      <a routerLink="/tab/home/audio/{{a.id}}" (click)="play(i)" >
+        <img  [defaultImage]="defaultImage" [lazyLoad]="topicdata?.logo"></a>
+    </div>
+    <div class="item2" >
+
+      <div style="padding-left: 5px;" (click)="play(i)">
+        <div>
+          <div   class="title" ><marquee scrollamount="1.5" beha *ngIf="a.audioname.length > 100" direction="up" style="height: 45px;">{{a.audioname}}</marquee>
+            <span *ngIf="a.audioname.length <= 100">{{a.audioname}}</span>
+          </div>
+        </div>
+      </div>
+
+      <ion-icon name="play" (click)="play(i)" style="float: right;"  class="playall"></ion-icon>
+
+      <ion-icon name="heart"  (click)="addfavouriteAudio(a)" *ngIf="!a.fav" class="playall" style="right: 2.5em;"></ion-icon>
+      <ion-icon name="heart" style="color: #e62200 !important; right: 2.5em;" (click)="removefavouriteAudio(a)"
+        *ngIf="a.fav"  class="playall" ></ion-icon>
+
+        <ion-icon name="share" class="playall" (click)='shareaudio(a?.bookname+" Or "+a.chapter,a?.logo_min,a?.url)' style="right: 5em;" ></ion-icon>
+
+        <ion-icon name="cloud-download" ios="ios-cloud-download" md="md-cloud-download" class="playall" (click)='download(a)' style="right: 7.5em;" ></ion-icon>
+
+      </div>
+    <div class="item5">
+      <div   class="urdufont"  align="right" ><marquee class="urdufont" scrollamount="1.5"  *ngIf="a.audionameurdu.length > 100" direction="up" style="height: 45px; margin-right: 15px;">{{a.audionameurdu}}</marquee>
+        <span class="urdufont" *ngIf="a.audionameurdu.length <= 100">{{a.audionameurdu}} </span>
+      </div>
+    </div>
+  </div-->
+  <div class="scroltotop" style="position: fixed; bottom: 80px; right: 10px;" *ngIf="showscrolltotop" (click)="scrollContent()">  <ion-icon name="chevron-up-circle-outline"></ion-icon>
+  </div>
+</div>
+<div style="width: 100%; height: 300px;"></div>
+</ion-content>

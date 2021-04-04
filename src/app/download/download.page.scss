@@ -1,0 +1,67 @@
+.payer {
+    position: fixed;
+    width: 100%;
+    bottom: 48px;
+    background: azure;
+  }
+  
+  .play-pause-btn1 {
+    display: inline-block;
+    box-shadow: 0 0 10px #999;
+    font-size: 2.3em;
+    border-radius: 50%;
+  }
+  
+  .skip-btn1 {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 0 10px #999;
+  }
+  .light ion-item
+  {
+    --padding-top: 0px;
+    border-radius: 6px;
+    --padding-start : 6px;
+    --padding-end : 6px;
+    --inner-padding-end	: 0px;
+    --background: #ffffff;
+    background: #ffffff;
+
+}
+.modal-css
+{
+  height: 60vh;
+}
+ul.breadcrumb {
+  padding: 10px 16px;
+  list-style: none;
+  background-color: #eee;
+}
+
+/* Display list items side by side */
+ul.breadcrumb li {
+  display: inline;
+  font-size: 1em;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+ul.breadcrumb li+li:before {
+  padding: 8px;
+  color: black;
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}

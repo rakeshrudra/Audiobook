@@ -1,0 +1,46 @@
+<ion-content style="--background: #5ab6dd;" *ngIf="howpage">
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide>
+      <div class="slide">
+        <img src="/assets/slider/0.jpg" />
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <img src="/assets/slider/1.jpg" />
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="/assets/slider/2.jpg" />
+    </ion-slide>
+
+    <ion-slide>
+      <div class="slide">
+        <img src="/assets/slider/3.jpg" />
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <img src="/assets/slider/4.jpg" />
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <div class="slide">
+        <img src="/assets/slider/5.jpg" />
+        <ion-button (click)="submit()" style="position: absolute;
+        bottom: 10vh;
+        left: 12px;
+        border-radius: 34px;
+        color: #ffffff;
+        --background: #E91E63;
+        background: #014075;
+        text-transform: capitalize;">Continue <ion-icon slot="end" name="arrow-forward"></ion-icon>
+        </ion-button>
+
+      </div>
+    </ion-slide>
+
+  </ion-slides>
+</ion-content>

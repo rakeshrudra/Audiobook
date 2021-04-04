@@ -1,0 +1,85 @@
+<ion-header no-border>
+  <ion-toolbar >
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Islamic Audio Books</ion-title>
+    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;"></ion-icon>
+
+</ion-toolbar>
+</ion-header>
+<ion-content > 
+  <div class="ion-padding">
+      <h5>Your Feedback</h5>
+  <form [formGroup]="profileForm" >
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      <ion-item lines="none"  class="default-container" >
+        <ion-label position="stacked">Full Name <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input required type="text" formControlName="name"></ion-input>
+      </ion-item>
+      <div lines="none" *ngFor="let validation of validation_message.name">
+        <small class="text-danger"
+          *ngIf="profileForm.get('name').hasError(validation.type) && (profileForm.get('name').dirty || profileForm.get('name').touched || register_slot_submited)">
+          {{validation.message}}
+        </small>
+      </div>
+
+      <ion-item lines="none"  class="default-container" >
+        <ion-label position="stacked">Email <ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input required type="text" formControlName="email"></ion-input>
+      </ion-item>
+
+      <div lines="none" *ngFor="let validation of validation_message.email">
+        <small class="text-danger"
+          *ngIf="profileForm.get('email').hasError(validation.type) && (profileForm.get('email').dirty || profileForm.get('email').touched || register_slot_submited)">
+          {{validation.message}}
+        </small>
+      </div>
+
+      <ion-item lines="none"  class="default-container" >
+        <ion-label position="stacked">Feedback<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-textarea formControlName="feedback"></ion-textarea>
+      </ion-item>
+      <div lines="none" *ngFor="let validation of validation_message.feedback">
+        <small class="text-danger"
+          *ngIf="profileForm.get('feedback').hasError(validation.type) && (profileForm.get('feedback').dirty || profileForm.get('feedback').touched || register_slot_submited)">
+          {{validation.message}}
+        </small>
+      </div>
+      <h1 style="font-weight: 800; padding: 15px" align="center">{{val1}} + {{val2}} =  <ion-icon name="refresh" (click)="refresh()" slot="end" style="float: right; color: #adadad !important;"></ion-icon></h1>
+      <ion-item lines="none"  class="default-container" >
+        <ion-label  *ngIf="cperror" ><ion-text color="danger">Invalid number</ion-text></ion-label>
+
+        <ion-input  type="number" formControlName="captua" placeholder="Captcha value" style="text-align: center;"></ion-input>
+      </ion-item>
+
+
+      
+
+
+    </ion-list>
+    <div>
+      <ion-button expand="block" type="submit" class="ion-no-margin" color="dark" (click)="submit()">Submit Feedback
+      </ion-button>
+    </div>
+  </form>
+  <!--ion-list lines="full" class="ion-no-margin ion-no-padding" *ngIf="feedback">
+    <ion-item lines="none" class="default-container" >
+      <div>
+        <b>Name:</b>
+        <h4>{{feedback.name}}</h4>
+        <b>Email:</b>
+        <h5>{{feedback.email}}</h5>
+        <b>Feedback:</b>
+        <p>{{feedback.feedback}}</p>
+      </div>
+    </ion-item>
+  </ion-list-->
+  </div>
+  <div style="width: 100%; height: 300px;"></div>
+
+</ion-content>

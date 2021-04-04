@@ -1,0 +1,41 @@
+
+<ion-content class="ion-padding" style="--padding-bottom: 100px" > 
+  <div>
+    <img [defaultImage]="defaultImage" [lazyLoad]="book?.horizontal_img"  *ngIf="book?.horizontal_img" style="border-radius: 6px; width: 100%;"  >
+    <img [defaultImage]="defaultImage" [lazyLoad]="book?.profile_image_min" *ngIf="!book?.horizontal_img" style="border-radius: 6px; width: 100%;"   >
+
+    <div>
+      <h4>{{book?.name}}</h4>
+      <p align="left"  > <span class="urdu">{{book?.nameurdu}}</span> </p>
+    </div>
+  </div>
+  <div  style="line-height: 15px; letter-spacing: 1px">
+    <p style="font-size: 11px; line-height: 15px; letter-spacing: 1px; text-align: justify;">{{book?.synopsys}}</p>
+    <p style="font-size: 11px; line-height: 15px; letter-spacing: 1px; text-align: justify;" class="urdu">{{book?.synopsysurdu}}</p>
+  </div>
+  <!--div *ngIf="!playlist">
+    <div class="ion-padding custom-skeleton" *ngFor="let a of [1,2,3,4]">
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </div>
+ </!--div>
+ 
+ <ion-list *ngIf="playlist">
+  <ion-item *ngFor="let a of playlist" class=“item-borderless” lines="none" >
+    <a routerLink="/tab/home/audio/{{a.id}}"><img  slot="start" style="width: 60px;" [defaultImage]="defaultImage" [lazyLoad]="a.logo_min" ></a>
+    <ion-label style="padding-left: 15px;">
+      <h2 routerLink="/tab/home/audio/{{a.id}}" >{{a.chapter}}</h2>
+      <div style="margin-bottom: 6px; font-size: 14px;" align="right">
+        {{a.chapterurdu}}
+      </div>
+
+      <button  (click)="play(a.id)" class="float-right play-all"><ion-icon name="play"  style="float: right;" class="one" ></ion-icon> Play all</button>
+
+    </ion-label>
+  </ion-item>
+  </ion-list-->
+  </ion-content>
+

@@ -1,0 +1,15 @@
+<ion-content padding>
+  <ion-grid style="height: 100%">
+    <ion-row justify-content-center align-items-center style="height: 100%; flex-direction: column">
+      <ion-spinner name="ios"></ion-spinner>
+      <h3 style="text-align: center;"><b>Downloading necessary files</b> </h3>
+      <ion-list>
+        <ion-list-header>
+          <ion-label>{{percent}}% complete</ion-label>
+        </ion-list-header>
+        <ion-progress-bar [value]="per"></ion-progress-bar>
+      </ion-list>
+      <h4 style="text-align: center;">Syncing new data from server. This will take few minutes.</h4>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "516342191697",
+    "firebase_url": "https://islamic-audio-books-111.firebaseio.com",
+    "project_id": "islamic-audio-books-111",
+    "storage_bucket": "islamic-audio-books-111.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516342191697:android:6c831ef97d11fa1d6a0a70",
+        "android_client_info": {
+          "package_name": "com.urduaudiobooks.urdutafsir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "516342191697-cpppovsq72g90g43cck30i7cgas79pu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSdp6wkHp2YOeD44r-9lucNGe97HObECM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516342191697-cpppovsq72g90g43cck30i7cgas79pu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

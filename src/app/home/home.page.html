@@ -1,20 +1,106 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-router-outlet style="max-height: 100vh;"></ion-router-outlet>
+<!--div class="mediaplayer animated flipInX" *ngIf="api.showplayer.value" style="height: 92vh; overflow: auto;">
+    <div align="center" style="padding-top: 40px; min-height: 50vh;">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+        <img [defaultImage]="defaultImage" [lazyLoad]="activeTrack?.horizontal_img" *ngIf="activeTrack?.horizontal_img"
+            slot="start" style="max-height: 300px">
+        <img [defaultImage]="defaultImage" [lazyLoad]="activeTrack?.logo_min" *ngIf="!activeTrack?.horizontal_img"
+            slot="start" style="max-height: 300px">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
-</ion-content>
+    </div>
+    <ion-icon name="arrow-dropdown" style="left:20px; top: 10px" (click)='hide()' class="close"></ion-icon>
+    <div style="padding:5px 15px;">
+        <div style="text-transform: capitalize; text-align: center;" class="title" *ngIf="!loader"
+            routerLink="/tab/home/play">{{trackNo+1}}/{{playlist.length}} {{title}}</div>
+        <div style="text-transform: capitalize; text-align: center;" class="title" *ngIf="!loader"
+            routerLink="/tab/home/play">{{activeTrack?.audionameurdu}}</div>
+        <ion-progress-bar value="0.25" buffer="0.5" *ngIf="loader"></ion-progress-bar>
+        <ion-range color="secondary" pin="false" *ngIf="!loader" #range [(ngModel)]="progress" style="padding: 0px;" (touchend)="seek()"
+            (drag)="pause()" (ionFocus)="pause()" class="n0-padding"></ion-range>
+        <div style="padding-top:8px" *ngIf="loader" align="center">
+            <ion-spinner name="dots"></ion-spinner>
+        </div>
+        <div align="center" *ngIf="!loader" class="sub-title" style="font-size: 12px; color: #adadad">
+            {{activeTrack?.bookname}}-{{activeTrack.chapter}}</div>
+        <ion-row>
+
+            <ion-col routerLink="/tab/home/play" size="12" *ngIf="ctime > 0.5 && !loader"
+                style="padding-top: 15px; color: #adadad; text-align: center;">{{ctime | minuteSeconds}} /
+                {{duration | minuteSeconds}}</ion-col>
+            <ion-col routerLink="/tab/home/play" size="12" *ngIf="loader"
+                style="padding-top: 15px; color: #adadad; text-align: center;"> <span style="padding-top:8px">
+                    <ion-spinner name="dots"></ion-spinner>
+                </span>
+            </ion-col>
+            <ion-col size="12" class="ion-text-center ion-float-center ion-text-center">
+                <ion-row>
+                    <ion-col size="3"></ion-col>
+                    <ion-col size="2" class="ion-activatable" style="border-radius: 100%; float: left;" align="right">
+                        <ion-icon name="skip-backward" (click)='previous()' *ngIf="disableButton"></ion-icon>
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-col>
+                    <ion-col size="2" class="ion-activatable" style="border-radius: 100%; float: left;" align="center">
+                        <ion-icon name="pause" (click)='togglePlayer(true)' *ngIf="isplaying  && ctime"></ion-icon>
+                        <ion-icon name="play" (click)='togglePlayer(false)' *ngIf="!isplaying  && ctime"></ion-icon>
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-col>
+                    <ion-col size="2" class="ion-activatable" style="border-radius: 100%; float: left;" align="left">
+                        <ion-icon name="skip-forward" (click)='next()' *ngIf="disableButton"></ion-icon>
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-col>
+                    <ion-col size="3"></ion-col>
+                </ion-row>
+            </ion-col>
+
+        </ion-row>
+    </div>
+</div>
+
+
+<div class="mediaplayer animated fadeInUp" *ngIf="!api.showplayer.value && playlist.length > 0"
+    style="min-height: 95px;">
+    <ion-icon name="close" (click)='close()' class="close"></ion-icon>
+    <div style="padding:5px 15px;">
+        <div style="text-transform: capitalize;" class="title" *ngIf="!loader" routerLink="/tab/home/play"
+            (click)="show()">{{trackNo+1}}/{{playlist.length}} {{title}}</div>
+        <ion-col style="padding-top:8px" *ngIf="loader" align="center">
+            <ion-spinner name="dots"></ion-spinner>
+        </ion-col>
+        <div style="text-transform: capitalize;" class="subtitle" style="font-size: 12px; color: #adadad" *ngIf="!loader"
+            routerLink="/tab/home/play" (click)="show()">{{activeTrack?.bookname}}-{{activeTrack?.chapter}}</div>
+        <ion-col style="padding-top:8px" *ngIf="loader" align="center">
+            <ion-spinner name="dots"></ion-spinner>
+        </ion-col>
+
+        <ion-range color="secondary" pin="false" #range [(ngModel)]="progress" style="padding: 0px;" *ngIf="!loader"
+            (touchend)="seek()" (drag)="pause()" (ionFocus)="pause()" class="n0-padding"></ion-range>
+        <ion-row>
+            <ion-col>
+                <div routerLink="/tab/home/play" size="6" *ngIf="!loader" style="padding-top: 10px; color: #adadad">
+                    {{ctime | minuteSeconds}} / {{duration | minuteSeconds}}
+                </div>
+                <div style="padding-top:8px" *ngIf="loader" align="center">
+                    <ion-spinner name="dots"></ion-spinner>
+                </div>
+            </ion-col>
+            <ion-col class="ion-text-center ion-float-center ion-text-center" style="padding:0px;">
+                <ion-row>
+                    <ion-col class="ion-activatable" style="border-radius: 100%; float: left;">
+                        <ion-icon name="skip-backward" (click)='previous()' *ngIf="disableButton"></ion-icon>
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-col>
+                    <ion-col class="ion-activatable" style="border-radius: 100%; float: left;">
+                        <ion-icon name="pause" (click)='togglePlayer(true)' *ngIf="isplaying"></ion-icon>
+                        <ion-icon name="play" (click)='togglePlayer(false)' *ngIf="!isplaying"></ion-icon>
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-col>
+                    <ion-col class="ion-activatable" style="border-radius: 100%; float: left;">
+                        <ion-icon name="skip-forward" (click)='next()' *ngIf="disableButton"></ion-icon>
+                        <ion-ripple-effect></ion-ripple-effect>
+                    </ion-col>
+                </ion-row>
+            </ion-col>
+
+        </ion-row>
+    </div>
+</div-->

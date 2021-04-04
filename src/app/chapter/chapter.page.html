@@ -1,0 +1,173 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{book?.name}}</ion-title>
+    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;">
+    </ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content [scrollEvents]="true" (ionScroll)="scroll($event)" >
+
+  <!--div class="grid-container-big" style="margin-bottom: 0px;">
+    <div class="item1">
+
+      <!--img [defaultImage]="defaultImage" *ngIf="!book?.horizontal_img" [lazyLoad]="book?.profile_image_min"
+      style="width: 100%; border-radius: 6px;" />
+    <img [defaultImage]="defaultImage1" *ngIf="book?.horizontal_img" [lazyLoad]="book?.horizontal_img"
+      style="width: 100%; border-radius: 6px;" />
+
+      <div style="padding-left: 15px;">
+          <p align="center" style="padding-right: 15px;" class="urdufont">{{book?.nameurdu}}</p>
+      </div-->
+
+    <!--/div>
+    <div class="item5">
+
+
+
+      <!--div size="12" style="padding-left: 15px; padding-right: 15px">
+        <p>{{book?.synopsys}}</p>
+        <p style="text-align: right;" style="margin-top: 10px;">{{book?.synopsysurdu}}</p>
+      </div-->
+
+      <!--ion-segment (ionChange)="segmentChanged($event)" color="success">
+        <ion-segment-button value="chapters" checked>
+          <ion-label>Chapters ({{(book_id == '1') ? 114: playlist?.length}})</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="details" [checked]="menu === 'details'">
+          <ion-label>Details</ion-label>
+        </ion-segment-button>
+
+      </ion-segment>
+
+      <ion-fab-button color="light"
+        (click)='shareaudio(book?.name)'
+        style="position: fixed;top:10vh; z-index: 1; right:2px; border-radius: 100%; overflow: hidden;">
+        <ion-icon name="share" style="color: black !important;"></ion-icon>
+      </ion-fab-button>
+    </div>
+  </div-->
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+      <ion-tab-button (click)="segmentChanged('chapters')">
+        <ion-text>({{(book_id == '1') ? 114: playlist?.length}})</ion-text>
+        <ion-label>Chapters</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button (click)="segmentChanged('details')">
+        <ion-icon name="information-circle"></ion-icon>
+        <ion-label>Details</ion-label>
+      </ion-tab-button>
+      <ion-tab-button (click)='shareaudio(book?.name)'>
+        <ion-icon name="share-social-outline"></ion-icon>
+        <ion-label>Share</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+
+  <div *ngIf="menu === 'chapters'" class="ion-padding10" style="margin-top: 60px;">
+
+    <div *ngIf="!playlist">
+      <div class="ion-padding custom-skeleton" *ngFor="let a of [1,2,3,4]">
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      </div>
+   </div>
+
+    <ion-list  style="padding: 8px;" lines='full' >
+      <ng-container *ngFor="let a of playlist">
+
+        <ion-item *ngIf="int(a.topiccount) == 0" class="chaptercontainer ion-activatable">
+          <ion-ripple-effect></ion-ripple-effect>
+
+          <ion-text slot="start"  routerLink="/tab/home/audio/{{a.id}}" style="margin-inline-end: 2px;">
+            {{(book_id == '1' && a.chapterno!= '1')? int(a.chapterno)-1 : (book_id == '1' && a.chapterno == '1')?'':a.chapterno}}.
+          </ion-text>
+          <ion-label  routerLink="/tab/home/audio/{{a.id}}"  class="ion-text-wrap">
+            <h2>{{a.chapter}}
+              <strong style="float: right;" class="urdufont">{{a.chapterurdu}}</strong>
+          </h2>
+          <small><ion-badge color="light">{{a?.audiocount}} Audios </ion-badge></small>
+
+          </ion-label>
+          <ion-icon name="share-social-outline" class="icon" class="icon" (click)="shareaudio(a.chapter)"></ion-icon>
+        </ion-item>
+
+
+        <ion-item *ngIf="int(a.topiccount) > 0" class="chaptercontainer ion-activatable">
+          <ion-ripple-effect></ion-ripple-effect>
+
+          <ion-text slot="start" routerLink="/tab/home/audiotop/{{a.id}}" *ngIf="int(a.book_id) != 3" style="margin-inline-end: 2px; ">
+            <span style="font-weight: 600;" *ngIf="int(a.book_id) != 3">{{a.chapterno}}</span>
+          </ion-text>
+          <ion-label routerLink="/tab/home/audiotop/{{a.id}}" class="ion-text-wrap" >
+            <h2>{{a.chapter}}
+              <strong style="float: right;" class="urdufont">{{a.chapterurdu}}</strong>
+            </h2>
+            <small><ion-badge color="light">{{a?.audiocount}} Audios </ion-badge></small>
+          </ion-label>
+          <ion-icon name="share-social-outline" class="icon" class="icon" (click)="shareaudio(a.chapter)"></ion-icon>
+        </ion-item>
+
+      </ng-container>
+
+    </ion-list>
+
+
+<!--ion-list style="padding: 8px;" >
+  <ng-container *ngFor="let a of playlist">
+  <div class="cpcontainer" *ngIf="a.topiccount == 0" [ngStyle]="{'box-shadow': '0px 0px 90px '+getColor(a)+' inset'}">
+    <div  class="avator" style="padding: 1px 4px;"  routerLink="/tab/home/audio/{{a.id}}">
+      <img [defaultImage]="defaultImage" [lazyLoad]="a?.logo_min" style="width: 36px;" >
+    </div>
+    <ion-label  routerLink="/tab/home/audio/{{a.id}}">
+      <h2 style="font-weight: 600;">{{(book_id == '1' && a.chapterno!= '1')? a.chapterno-1 : (book_id == '1' && a.chapterno == '1')?'':a.chapterno}}. {{a.chapter}}</h2>
+      <h3 class="urdufont">{{a.chapterurdu}}</h3>
+    </ion-label>
+    <div  class="menulist">
+      <ion-icon name="share" class="icon"></ion-icon>
+    </div>
+
+  </div>
+  <div class="cpcontainer" *ngIf="a.topiccount > 0"  [ngStyle]="{'box-shadow': '0px 0px 90px '+getColor(a)+' inset'}">
+    <div class="avator" style="padding: 1px 4px;" routerLink="/tab/home/audiotop/{{a.id}}">
+      <img [defaultImage]="defaultImage" [lazyLoad]="a?.logo_min" style="width: 36px;" >
+    </div>
+    <ion-label routerLink="/tab/home/audiotop/{{a.id}}">
+      <h2 style="font-weight: 600;" *ngIf="a.book_id != 3">{{a.chapterno}}. {{a.chapter}}</h2>
+      <h2 style="font-weight: 500;" *ngIf="a.book_id == 3">{{a.chapter}}</h2>
+      <h3 class="urdufont">{{a.chapterurdu}}</h3>
+    </ion-label>
+    <div class="menulist">
+      <ion-icon name="share" class="icon" class="icon" (click)="shareaudio(a.chapter)"></ion-icon>
+    </div>
+
+  </div>
+  </ng-container>
+
+  </ion-list-->
+
+
+
+
+
+  </div>
+  <div class="ion-padding" *ngIf="menu === 'details'" style="margin-top: 60px;" >
+    <div class="default-container ion-padding">
+      <p style="font-size: 13px; line-height: 15px; letter-spacing: 1px; text-align: justify;">
+        {{book?.details}}</p>
+
+      <p align="right" style="font-size: 13px; line-height: 15px; letter-spacing: 0px; text-align: justify; " class="urdufont">
+        {{book?.detailsurdu}}</p>
+    </div>
+  </div>
+  <div class="scroltotop" style="position: fixed; bottom: 80px; right: 10px;" *ngIf="showscrolltotop" (click)="scrollContent()">  <ion-icon name="chevron-up-circle-outline"></ion-icon>
+  </div>
+  <div style="width: 100%; height: 300px;"></div>
+
+</ion-content>

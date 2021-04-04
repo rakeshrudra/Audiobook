@@ -1,0 +1,16 @@
+
+
+<ion-content>
+  
+  <ion-list>
+      
+    <ion-item *ngFor= "let topic of topics" style="--background: #ffffff;"  (click)="save(topic.id)">
+
+      <ion-label>
+        <h2>{{topic.topic}}</h2>
+        <h3>{{topic.topicurdu}}</h3>
+      </ion-label>
+    </ion-item>
+
+</ion-list>
+</ion-content>

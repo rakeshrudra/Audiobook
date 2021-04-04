@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button text=""></ion-back-button>
+      </ion-buttons>
+    <ion-title>Help & FAQ</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  style="--padding-bottom: 80px">
+
+  <div style="font-size: medium;">
+    <ol>
+      <li *ngFor="let faq of faqs">
+        <p>{{faq.question}}</p>
+        <strong>Ans.</strong> {{faq.ans}}
+      </li>
+      <!--li>
+        <p>Can I share and download books or files from Islamic Audio Books ?</p>
+        <strong>Ans.</strong> Yes, you can share app/books/files on various platforms by clicking the share button at the bottom of the
+        page. To download files kindly visit our website www.islamicaudiobooks.info
+      </li>
+      <li>
+        <p>Can I use the files or books for commercial purposes? </p>
+        <strong>Ans.</strong> No, Islamic Audio Books has a strict policy on using any or whole part of any files for commercial purposes
+        and legal action will be taken if someone violates this policy.
+      </li>
+      <li>
+
+        <p>I have found some error in one of the files, how I can report? </p>
+        <strong>Ans.</strong> We at Islamic Audio Books have tried our level best to post error free files. However, If you come across
+        any mistake please raise an alert by sending a message by clicking feedback button or by sending an email on
+        contact@islamicaudiobooks.info so it can be corrected in future updates.
+      </li>
+      <li>
+
+       <p> Does Islamic Audio Books require any special permission to download? </p>
+        <strong>Ans.</strong> No, Islamic Audio Books does not require any special permission. In addition, we do not require access to
+        your contacts, gallery etc.
+
+      </li>
+      <li>
+        <p>How can I save an audio file and listen to it later? </p>
+        <strong>Ans.</strong> If you like an audio or would like to listen to it later just click the heart button and it will be saved
+        in the favorites list which can be accessed from menu button.
+
+      </li>
+      <li>
+       <p> Can I search a particular file or chapter? </p>
+        <strong>Ans.</strong> Yes, we have used coding to enable a user to search a file or chapter typing keywords in urdu or English in
+        the search bar.
+      </li-->
+    </ol>
+
+  </div>
+  <div style="width: 100%; height: 300px;"></div>
+</ion-content>

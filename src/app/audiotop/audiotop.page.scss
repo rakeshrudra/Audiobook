@@ -1,0 +1,14 @@
+.light ion-item
+{
+    margin-bottom: 10px;
+    --padding-top: 0px;
+    border-radius: 6px;
+    --padding-start : 6px;
+    --padding-end : 6px;
+    --inner-padding-end	: 0px;
+    --background: #ffffff;
+}
+ion-item div, ion-item ion-label
+{
+    padding: 2px 6px;
+} 

@@ -1,0 +1,203 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-title> Islamic Audio Books</ion-title>
+    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="animated fadeInRight">
+
+  <div *ngIf="!playlist">
+    <div class="ion-padding custom-skeleton" *ngFor="let a of [1,2,3,4]">
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </div>
+  </div>
+  <ion-list *ngIf="playlist" lines="none" class="ion-padding">
+    <br />
+
+    <!--ion-item *ngFor="let a of playlist " class="book1">
+      <div style="width : 100%; padding: 0px;">
+        <ion-row style="border-radius: 6px; overflow: hidden; box-shadow: 1px 3px 8px #ADADA8;" class="default-container">
+          <ion-col size="1" style="background:url('assets/bind.jpg');  background-size: cover;">
+          </ion-col>
+          <ion-col size="11" style="height: auto; transition: width 2s, height 4s;" >
+            <!--ion-row>
+              <ion-col align="center" style="margin-top: 3px;"></ion-col>
+              <ion-col align="center" style="margin-top: 3px;">
+                <div class="ion-activatable" style="border-radius: 100%;">
+                  <ion-icon name="heart" (click)="favourite(a)" *ngIf="!a.fav"></ion-icon>
+                  <ion-icon name="heart" (click)="removefavourite(a)" *ngIf="a?.fav" style="color: #eb0000 !important;">
+                  </ion-icon>
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
+              </ion-col>
+              <ion-col align="center" style="margin-top: 3px;">
+
+                <div class="ion-activatable" style="border-radius: 100%;">
+                  <ion-icon name="information-circle" style="font-size: 46px; color: blue" class="one" color="primary"
+                    (click)="chagewidth()"></ion-icon>
+                   <ion-ripple-effect></ion-ripple-effect>
+               </div>
+
+              </ion-col>
+              <ion-col align="center" style="margin-top: 3px;"></ion-col>
+
+            </ion-row>
+
+            <a routerLink="/tab/home/chapter/{{a.id}}" class="ion-activatable">
+              <img [defaultImage]="defaultImage" [lazyLoad]="a?.horizontal_img" *ngIf="a?.horizontal_img"
+                style="width: 100%;">
+              <img [defaultImage]="defaultImage" [lazyLoad]="a?.profile_image_min" *ngIf="!a?.horizontal_img"
+                style="width: 100%;">
+                <ion-ripple-effect></ion-ripple-effect>
+            </a>
+
+            <ion-label>
+              <h2 style="margin-bottom: 6px; font-weight: 700;" align="center">
+                {{a.name}}</h2>
+              <div style="margin-bottom: 6px; font-size: 14px;" align="center">
+                <span class="urdu">{{a.nameurdu}}</span>
+              </div>
+            </ion-label>
+
+            <div style="font-size: 12px;" >{{a.synopsys}} </div>
+            <br />
+            <div align="right" style="font-size: 12px;" >{{a.synopsysurdu}}</div>
+
+
+            <div style="font-size: 12px;" *ngIf="details == 11">{{a.details}} </div>
+            <br />
+            <div align="right" style="font-size: 12px;" *ngIf="details == 11">{{a.detailsurdu}}</div>
+
+            <ion-row>
+              <ion-col size="12">
+                <div routerLink="/tab/home/chapter/{{a.id}}"
+                  style="padding: 8px; text-align: center; border: 1px solid #adadad; border-radius: 30px; color: #999999;"
+                  class="play ion-activatable">{{a.chapters?.length}} <span style="font-size: 12px;">Chapters</span>
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
+              </ion-col>
+              <!--ion-col align="right" >
+                <div  style="padding: 8px; text-align: center; border: 1px solid #adadad; border-radius: 30px; color: #666666;"
+                class="play"><span style="font-size: 12px;">View Chapters</span></div>
+               </ion-col>
+
+            </ion-row>
+          </ion-col>
+          <!--ion-col [size]="chapterslist" (click)="chagecpterwidth()"
+            style="transition: width 2s, height 4s; display : none">
+            <div style="width:100%; max-height: 80vh; overflow: auto;">
+              <ul style="padding: 0px; list-style: none;">
+                <li *ngFor="let ads of a.chapters"
+                  style="border: 1px solid #efefef; margin-bottom : 10px; padding: 0px; position: relative;">
+                  <label slot="start" class="p" style="padding: 4px; font-style: 12px;">{{ads.chapter}}</label>
+                  <ion-icon name="play" style="right: 4px; position: absolute;top: 4px; padding:3px"
+                    (click)="play(ads.id)"></ion-icon>
+                </li>
+              </ul>
+
+            </div>
+          </ion-col>
+
+
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="ion-padding">
+            <ion-label *ngIf="details == 1">
+              <h2 style="margin-bottom: 6px; font-weight: 700;" routerLink="/tab/home/chapter/{{a.id}}" align="center">
+                {{a.name}}</h2>
+              <div style="margin-bottom: 6px; font-size: 14px;" align="center">
+                <span class="urdu">{{a.nameurdu}}</span>
+              </div>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-item-->
+<ng-container *ngFor="let book of playlist ">
+  <div class="grid-container-big-book ion-activatable" *ngIf="api.activeClass.value == 'light' || !api.activeClass.value"  routerLink="/tab/home/chapter/{{book.id}}" style="position: relative; " [ngStyle]="{'box-shadow': '0px 0px 250px '+getColor(book)+' inset'}" >
+    <div class="item1" style="width: 150px; height: 150px; padding: 15px;" >
+      <ion-ripple-effect></ion-ripple-effect>
+
+      <img  *ngIf="book?.profile_image_min" [src]="book?.profile_image_min"
+        style="width: 90%; border-radius: 6px;" alt="{{book?.name}}" />
+        <div  style=" padding-top: 10px; width: 100%; text-align: center;">
+          <b>Chapters ({{book?.id == 1 ? 114: book?.chapters?.length}})</b>
+        </div>
+
+    </div>
+    <div class="item2" >
+
+      <div style="padding-left: 15px;">
+        <div>
+          <h5 style="padding-right: 6px;">{{book?.name}}</h5>
+          <p align="right" style="padding-right: 15px;" class="urdufont">{{book?.nameurdu}}</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="item5">
+      <div size="12" style="padding-left: 15px; padding-right: 15px" >
+        <p ion-text-justify style="text-align: justify;">{{book?.synopsys}}</p>
+        <p style="text-align: right;" style="margin-top: 10px; width: 100%;" align="right" class="urdufont">{{book?.synopsysurdu}}</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="grid-container-big-book ion-activatable" *ngIf="api.activeClass.value == 'dark' " routerLink="/tab/home/chapter/{{book.id}}" style="position: relative; background: transparent !important; "  >
+    <div class="item1" style="width: 150px; height: 150px; padding: 15px;" >
+      <ion-ripple-effect></ion-ripple-effect>
+
+      <img  *ngIf="book?.profile_image_min" [src]="book?.profile_image_min"
+        style="width: 90%; border-radius: 6px;" alt="{{book?.name}}" />
+        <div  style=" padding-top: 10px; width: 100%; text-align: center;">
+          <b>Chapters ({{book?.id == 1 ? 114: book?.chapters?.length}})</b>
+        </div>
+
+    </div>
+    <div class="item2" >
+
+      <div style="padding-left: 15px;">
+        <div>
+          <h5 style="padding-right: 6px;">{{book?.name}}</h5>
+          <p align="right" style="padding-right: 15px;" class="urdufont">{{book?.nameurdu}}</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="item5">
+      <div size="12" style="padding-left: 15px; padding-right: 15px" >
+        <p ion-text-justify style="text-align: justify;">{{book?.synopsys}}</p>
+        <p style="text-align: right;" style="margin-top: 10px; width: 100%;" align="right" class="urdufont">{{book?.synopsysurdu}}</p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+    </ng-container>
+    <!--ion-item *ngFor="let a of playlist " class="book">
+      <div style="width: 100%;">
+        <a routerLink="/tab/home/chapter/{{a.id}}">
+
+          <img [defaultImage]="defaultImage" [lazyLoad]="a?.horizontal_img" *ngIf="a?.horizontal_img"
+            style="width: 100%;">
+          <img [defaultImage]="defaultImage" [lazyLoad]="a?.profile_image_min" *ngIf="!a?.horizontal_img"
+            style="width: 100%;">
+        </a>
+
+      </div>
+    </ion-item-->
+  </ion-list>
+  <div style="width: 100%; height: 300px;"></div>
+
+</ion-content>
