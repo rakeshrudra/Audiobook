@@ -10,5 +10,7 @@ export interface topic {
     status:string,
     color : string,
     isChecked : boolean,
-    audiocount : any
+    audiocount : any,
+    newaudios : Array<string>
+
 }

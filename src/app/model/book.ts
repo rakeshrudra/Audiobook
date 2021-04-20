@@ -17,6 +17,8 @@ export interface book {
     horizontal_img : string,
     fav : boolean,
     chapters : Array<chapter>,
-    color : string
+    color : string,
+    audiodownloaded : number,
+    newaudios : Array<string>
 
 }

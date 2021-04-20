@@ -9,12 +9,12 @@
 
 </ion-toolbar>
 </ion-header>
-<ion-content > 
+<ion-content >
   <div class="ion-padding">
       <h5>Your Feedback</h5>
   <form [formGroup]="profileForm" >
     <ion-list lines="full" class="ion-no-margin ion-no-padding">
-      <ion-item lines="none"  class="default-container" >
+      <ion-item lines="none"   >
         <ion-label position="stacked">Full Name <ion-text color="danger">*</ion-text>
         </ion-label>
         <ion-input required type="text" formControlName="name"></ion-input>
@@ -26,7 +26,7 @@
         </small>
       </div>
 
-      <ion-item lines="none"  class="default-container" >
+      <ion-item lines="none"   >
         <ion-label position="stacked">Email <ion-text color="danger">*</ion-text>
         </ion-label>
         <ion-input required type="text" formControlName="email"></ion-input>
@@ -39,7 +39,7 @@
         </small>
       </div>
 
-      <ion-item lines="none"  class="default-container" >
+      <ion-item lines="none"   >
         <ion-label position="stacked">Feedback<ion-text color="danger">*</ion-text>
         </ion-label>
         <ion-textarea formControlName="feedback"></ion-textarea>
@@ -51,14 +51,14 @@
         </small>
       </div>
       <h1 style="font-weight: 800; padding: 15px" align="center">{{val1}} + {{val2}} =  <ion-icon name="refresh" (click)="refresh()" slot="end" style="float: right; color: #adadad !important;"></ion-icon></h1>
-      <ion-item lines="none"  class="default-container" >
+      <ion-item lines="none"   >
         <ion-label  *ngIf="cperror" ><ion-text color="danger">Invalid number</ion-text></ion-label>
 
         <ion-input  type="number" formControlName="captua" placeholder="Captcha value" style="text-align: center;"></ion-input>
       </ion-item>
 
 
-      
+
 
 
     </ion-list>
@@ -68,7 +68,7 @@
     </div>
   </form>
   <!--ion-list lines="full" class="ion-no-margin ion-no-padding" *ngIf="feedback">
-    <ion-item lines="none" class="default-container" >
+    <ion-item lines="none"  >
       <div>
         <b>Name:</b>
         <h4>{{feedback.name}}</h4>

@@ -49,6 +49,7 @@
 
       <ion-item  class="chaptercontainer ion-activatable">
         <ion-ripple-effect></ion-ripple-effect>
+        <ion-icon name="stop-circle-outline" color="success" style="padding:0px" *ngIf="a.new == 'true' && !storedid.includes(a.id)"></ion-icon>
 
         <ion-text slot="start"  (click)="play(i)" style="margin-inline-end: 2px;">
           {{i+1}}.

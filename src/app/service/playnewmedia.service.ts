@@ -111,10 +111,11 @@ export class PlaynewmediaService {
     this.position = 0;
     this.downloadPlayer.stop();
     this.downloadPlayer.release();
-    this.selectandplay(no, this.downloadPlaylist);
-    if (no >= this.downloadPlaylist.length) {
+    console.log(no , this.downloadPlaylist.length , "ddownloadplaY")
+    if (!this.downloadPlaylist || no >= this.downloadPlaylist.length) {
       this.download_close()
     }
+    this.selectandplay(no, this.downloadPlaylist);
   }
 
   download_previous() {

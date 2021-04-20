@@ -120,19 +120,19 @@
     </ng-container>
   </ion-list-->
 
-<ion-item *ngIf="!audios && searchTerm.length >2">
+<ion-item *ngIf="!audios ">
     <ion-label>No audio found</ion-label>
 </ion-item>
 
   <ion-list
-    *ngIf="audios.length > 0 && searchTerm?.length > 1"
+    *ngIf="audios.length > 0 "
     class="ion-padding"
   >
     <ng-container *ngFor="let a of audios; let i=index">
       <ion-item
         *ngIf="i < 99"
         lines="none"
-        [ngClass]="{'active': api.currentaudio.value==a,'item-borderless default-container':true }"
+        [ngClass]="{'active': api.currentaudio.value==a,'item-borderless default-containerd':true }"
         (click)="playserch(a)"
       >
         <ion-icon name="musical-notes" slot="start" color="warning"></ion-icon>

@@ -50,6 +50,7 @@ export class BookPage implements OnInit {
     this._api.books('?modules='+this.module).subscribe(val=>{
       this.playlist = val
     })
+    this.get_storedlist()
   }
   getColor(book:book)
   {
@@ -141,4 +142,25 @@ export class BookPage implements OnInit {
 
     })
   }
+
+  ///
+storedid = [];
+get_storedlist(){
+  this.storage.get("storedaudio").then((val:Array<any>)=>{
+    if(val)
+    {
+    this.storedid = val
+    }
+    else{
+      this.storedid = []
+    }
+  })
+
+}
+checkstatusnew(alist:Array<any>){
+  var v =alist.every(v => this.storedid.includes(v));
+  console.log(alist,this.storedid,v);
+  return v;
+}
+
 }

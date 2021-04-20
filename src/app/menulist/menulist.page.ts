@@ -98,6 +98,6 @@ export class MenulistPage implements OnInit {
   }
   async appBuild(){
     const info = await Device.getInfo();
-      this.app = info.appBuild;
+      this.app = info.appVersion;
   }
 }

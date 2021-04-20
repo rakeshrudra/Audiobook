@@ -13,7 +13,6 @@ import { book } from '../model/book';
 import { topic } from '../model/topic';
 import { File, FileEntry } from '@ionic-native/file/ngx';
 import { promise } from 'protractor';
-import { resolve } from 'url';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { DownloadService } from '../service/download.service';
 import { FileTransferObject, FileTransfer } from '@ionic-native/file-transfer/ngx';
@@ -188,6 +187,10 @@ export class TabsPage implements OnInit {
      this._downloadPlay.download_close()
     // this.api.audiolistnext(null)
     //this.download_close()
+    if(track.new == 'true')
+    {
+    this.storepayaudio(track.id)
+    }
     await new Promise((resolve, reject) => {
       if (typeof track.download !== undefined && track.download == 1) {
         var dir = this.file.dataDirectory + track.url.replace(/^file:\/\//, '');
@@ -521,11 +524,11 @@ export class TabsPage implements OnInit {
   }
   nextchapteraodios() {
     if (this.api.playno.value <= this.playlist.length) {
-      this.storage.get('allaudios').then((tracks: track[]) => {
-        let chapter_id = parseInt(this.activeTrack.chapter_id) + 1;
-        this.nextplaylist = tracks.filter((val: track) => val.book_id == this.activeTrack.book_id && val.chapter_id == chapter_id.toString());
-        //console.log(this.nextplaylist)
-      })
+      this._api.get_nextchapteraudio('?id='+this.activeTrack.id).subscribe(val=>{
+        this.nextplaylist = val
+    })
+
+
     } else {
       this.close()
     }
@@ -618,7 +621,11 @@ export class TabsPage implements OnInit {
       },
       "androidInfo": {
         "androidPackageName": "com.urduaudiobooks.urdutafsir",
-      }
+      },
+      "iosInfo": {
+        "iosBundleId": 'com.islamicaudbooks.managix',
+        "iosAppStoreId": '1512406926'
+    }
   })
   .then(async (res: any) => {
     await Share.share({
@@ -827,4 +834,21 @@ settimeeout(){
   }, 600);
 }
 
+
+/// tracking played Audio
+storepayaudio(id){
+this.storage.get("storedaudio").then((val:Array<any>)=>{
+  if(val){
+    val.push(id);
+    console.log(val)
+    var unique = val.filter((v, i, a) => a.indexOf(v) === i);
+    this.storage.set("storedaudio",unique)
+  }else{
+    this.storage.set("storedaudio",[id])
+  }
+})
 }
+
+}
+
+

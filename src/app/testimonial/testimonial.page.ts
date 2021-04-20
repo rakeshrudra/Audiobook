@@ -9,7 +9,7 @@ import { NewapiService } from '../newapi.service';
 export class TestimonialPage implements OnInit {
 
   constructor(public _api : NewapiService) { }
-  data = []
+  data: Array<any>;
   ngOnInit() {
     this._api.testimonial().subscribe(val=>{
       this.data = val;

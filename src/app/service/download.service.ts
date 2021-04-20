@@ -96,9 +96,10 @@ export class DownloadService {
       visibleInDownloadsUi: true,
       notificationVisibility: 1,
     //  destinationInExternalFilesDir
-      destinationInExternalPublicDir: {
+     // destinationInExternalPublicDir:
+      destinationInExternalFilesDir: {
           dirType: 'Downloads',
-          subPath: 'islaminAudio/'+vv+'.mp3'
+          subPath: 'islamicAudio/'+track.bookname+'/'+track.chapter+'/'+vv
       }
   };
 

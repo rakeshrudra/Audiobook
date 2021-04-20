@@ -35,6 +35,7 @@
 
         <ion-item  class="chaptercontainer ion-activatable">
           <ion-ripple-effect></ion-ripple-effect>
+          <ion-icon name="stop-circle-outline" color="success" style="padding:0px" *ngIf="a.newaudios.length >0 && !checkstatusnew(a.newaudios)"></ion-icon>
 
           <ion-text slot="start"  routerLink="/tab/home/topicaudiolist/{{a.id}}" style="margin-inline-end: 2px;">
             {{i+1}}.

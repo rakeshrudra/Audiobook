@@ -29,7 +29,7 @@ export class DownloadPage implements OnInit {
 
   @ViewChild('range', { static: false }) range: IonRange;
 
-  constructor(public api : ApiService, public modalCtrl: ModalController, public _downloadPlay: PlaynewmediaService, public storage: Storage, public file: File, public _autoload: AutoloadService) {
+  constructor(public api: ApiService, public modalCtrl: ModalController, public _downloadPlay: PlaynewmediaService, public storage: Storage, public file: File, public _autoload: AutoloadService) {
     _autoload.activetrack.subscribe(val => {
       _autoload.activetrack.subscribe(val => {
         this.ngOnInit();
@@ -47,18 +47,25 @@ export class DownloadPage implements OnInit {
   bookname: string = null;
   chaptername: string = null;
   subchaptername: string = null;
+  allbooks: Array<book>;
+  allchapters: Array<chapter>;
+  allaudios : Array<track>;
+  allaudiostemp : Array<track>=[];
+  downloadedBookcount = 0;
+
 
   showdownloadsfun() {
     this.ngOnInit();
     this.showdownloads = true;
     this.showdownloading = false;
+    this.ionViewDidEnter();
   }
-  showdownloadingfun() {
+
+  showdownloadingfun()
+  {
     this.showdownloads = false;
     this.showdownloading = true;
   }
-
-
 
   ngOnInit() {
     this.loadFiles();
@@ -68,9 +75,31 @@ export class DownloadPage implements OnInit {
         //console.log(val,"Qlist")
       }
     })
+    this.findBook();
   }
+  setinterval;
   ionViewDidEnter() {
-    this.ngOnInit()
+    this.ngOnInit();
+    this.selectedbook = null;
+    this.selectedchapter = null;
+    this.findBook();
+      this.storage.get('chapters').then((book: chapter[]) => {
+        if (book) {
+          this.allchapters = book.filter(e => e.book_id === this.selectedbook);
+        }
+      })
+
+      this.storage.get('download').then((book: track[]) => {
+        if (book) {
+          this.allaudios = book.filter(e => e.chapter_id === this.selectedchapter);
+        }
+      })
+
+
+
+  }
+  ionViewWillLeave(){
+    clearInterval(this.setinterval)
   }
   play(i) {
     this.api.showplayernext(false);
@@ -80,10 +109,10 @@ export class DownloadPage implements OnInit {
 
   loadFiles() {
     this.storage.get('download').then((val: track[]) => {
-      if(val){
-      this.files = val;
-      this.tempfiles = val;
-      this.boookfilter();
+      if (val) {
+        this.files = val;
+        this.tempfiles = val;
+        this.boookfilter();
       }
     })
   }
@@ -103,9 +132,9 @@ export class DownloadPage implements OnInit {
     let b = count + 1;
     this._downloadPlay.selectandplay(b, this.files)
   }
-  download_play(i,files) {
+  download_play(i, files) {
     this.api.audiolistnext([])
-    this._downloadPlay.selectandplay(i,files)
+    this._downloadPlay.selectandplay(i, files)
     //this._downloadPlay.download_play()
   }
   download_pause() {
@@ -170,12 +199,11 @@ export class DownloadPage implements OnInit {
         this.chaptername = null;
         this.chapterfilter();
 
-        this.storage.get('allbooks').then((book: book[])=>{
-          if(book)
-          {
-          var vv = book.find(e=>e.id === val);
-          console.log(vv)
-          this.bookname = vv.name;
+        this.storage.get('allbooks').then((book: book[]) => {
+          if (book) {
+            var vv = book.find(e => e.id === val);
+            console.log(vv)
+            this.bookname = vv.name;
           }
         })
 
@@ -201,13 +229,13 @@ export class DownloadPage implements OnInit {
           this.topicfilter()
         })
         this.topicfilter()
-        this.storage.get('chapters').then((book: chapter[])=>{
-          if(book)
-          {
+        this.storage.get('chapters').then((book: chapter[]) => {
+          if (book) {
 
-          var vv = book.find(e=>e.id === val)
-          console.log(vv)
-          this.chaptername = vv.chapter;
+            var vv = book.find(e => e.id === val)
+            console.log(vv)
+            this.chaptername = vv.chapter;
+            console.log(this.chaptername)
           }
         })
 
@@ -220,13 +248,12 @@ export class DownloadPage implements OnInit {
         this.files = this.tempfiles.filter(e => e.topic === val)
         console.log('topic', this.files)
         // this.showtopic = true;
-        this.storage.get('alltopic').then((book: topic[])=>{
-          if(book)
-          {
-          var vv = book.find(e=>e.id === val)
-          console.log(vv)
+        this.storage.get('alltopic').then((book: topic[]) => {
+          if (book) {
+            var vv = book.find(e => e.id === val)
+            console.log(vv)
 
-          this.subchaptername = vv.topic;
+            this.subchaptername = vv.topic;
           }
         })
 
@@ -235,22 +262,107 @@ export class DownloadPage implements OnInit {
 
   }
 
-  clearfilter()
-  {
-     this.storage.remove('filter_book').then(()=>{
+  clearfilter() {
+    this.storage.remove('filter_book').then(() => {
       this.ngOnInit();
       this.bookname = null
-     });
+    });
 
-     this.storage.remove('filter_chapter').then(()=>{
+    this.storage.remove('filter_chapter').then(() => {
       this.ngOnInit();
-       this.chaptername = null
-     });
-     
-     this.storage.remove('filter_topic').then(()=>{
+      this.chaptername = null
+    });
+
+    this.storage.remove('filter_topic').then(() => {
       this.ngOnInit();
       this.subchaptername = null
-     });
+    });
+  }
+
+
+
+  ////   book chapter accrodian
+
+  selectedbook;
+  selectedchapter;
+  allaudiolist;
+
+
+
+  findBook() {
+    this.storage.get('download').then((book: track[]) => {
+      if (book) {
+        this.allaudiolist = book;//.filter(e => e.chapter_id === i);
+      }
+    }).then(()=>{
+
+    this.storage.get('allbooks').then(val => {
+      if (val) {
+        this.allbooks = val;
+        for(var i =0 ; i < this.allbooks.length ; i++){
+           var vv = this.allaudiolist.filter(e => e.book_id === this.allbooks[i].id);
+           this.allbooks[i].audiodownloaded = vv.length;
+        }
+      }
+    }).then(v=>{
+      this.downloadedBookcount = this.allbooks.filter(e=>e.audiodownloaded>0).length;
+    })
+  })
+  }
+
+  findChapter(i) {
+    if(this.selectedbook == i)
+    {
+      this.selectedbook = null;
+    }else{
+    this.selectedbook = i;
+
+    this.storage.get('chapters').then((book: chapter[]) => {
+      if (book) {
+        this.allchapters = book.filter(e => e.book_id === i);
+        this.allchapters = this.allchapters.sort((a, b) => (a.chapterno < b.chapterno)?-1:1);
+
+        for(var j =0 ; j < this.allchapters.length ; j++){
+          var vv = [];
+           vv = this.allaudiolist.filter(e => e.chapter_id === this.allchapters[j].id);
+          this.allchapters[j].audiodownloaded = vv.length;
+        }
+       var bb = this.allaudiolist.filter(e => e.book_id === this.selectedbook);
+       this.allaudiostemp = bb.sort((a,b)=> (a.slno < b.slno)?-1:1);//.sort((a, b) =>  a.chapter_id.localeCompare(b.chapter_id) && a.slno.localeCompare(b.slno) );
+       this.allaudiostemp = this.allaudiostemp.sort((a,b)=> (a.chapter_id < b.chapter_id)?-1:1);//.sort((a, b) =>  a.chapter_id.localeCompare(b.chapter_id) && a.slno.localeCompare(b.slno) );
+       console.log(this.allchapters)
+      }
+    })
+  }
+
+  }
+  findaudios(i) {
+    if(this.selectedchapter == i)
+    {
+      this.selectedchapter = null;
+    }else{
+    this.selectedchapter = i;
+
+    this.storage.get('download').then((book: track[]) => {
+      if (book) {
+        this.allaudios = book.filter(e => e.chapter_id === i);
+      }
+    })
+  }
+  }
+  removeaudiofromq(f){
+    this.allaudios = this.allaudios.filter((item) => item.id !== f.id);  //ES6
+
+    this.storage.get('download').then((book: track[]) => {
+      if (book) {
+       var vv = book.filter(e => e.id !== f.id);
+       this.storage.set('downloa',vv);
+      }
+    }).then(()=>{
+    this.findBook();
+    this.findChapter(this.selectedbook)
+  })
+
   }
 
 }

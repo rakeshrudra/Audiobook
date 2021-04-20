@@ -24,5 +24,6 @@ export interface track {
     color : string,
     downloading : boolean,
     downloaded : boolean,
-    fullpath : string
+    fullpath : string,
+    chapter_id : string
 }

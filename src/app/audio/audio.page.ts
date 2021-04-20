@@ -14,6 +14,7 @@ import { File } from '@ionic-native/file/ngx';
 import { AutoloadService } from '../service/autoload.service';
 const MEDIA_FOLDER_NAME = 'audios';
 import { Plugins } from '@capacitor/core';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 const { CapacitorMusicControls , Share } = Plugins;
 
 @Component({
@@ -36,7 +37,8 @@ export class AudioPage implements OnInit {
     public storage: Storage,
     public route: ActivatedRoute,
     public router: Router,
-    public _autoload : AutoloadService
+    public _autoload : AutoloadService,
+    public firebaseDynamicLinks : FirebaseDynamicLinks
     ) {
       _autoload.activetrack.subscribe(val=>{
         _autoload.activetrack.subscribe(val=>{
@@ -48,6 +50,7 @@ export class AudioPage implements OnInit {
   //playlist : track[] = this.route.snapshot.data['audios'];
   playlist: track[] ;//= this.route.snapshot.data['audios'];
   favourit = [];
+  storedid = [];
   chapter = this.route.snapshot.paramMap.get('id');
   chapterdata: chapter;
   defaultImage = '/assets/loader.gif';
@@ -62,6 +65,9 @@ export class AudioPage implements OnInit {
         this.ckfev();
         this.jsonaudiofun()
       })  */
+      setInterval(v=>{
+        this.get_storedlist()
+      },2000)
     }
       ionViewWillEnter(){
 
@@ -217,8 +223,8 @@ export class AudioPage implements OnInit {
     return await loading.present();
   }
 
-async  shareaudio(msg, img, url) {
-    let ccc = "To listen more files from " + msg + " download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info " + url
+async  shareaudio(msg, img, url,id) {
+  /*  let ccc = "To listen more files from " + msg + " download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info " + url
     this.presentLoadingWithOptions();
     //this.socialSharing.share(ccc, 'Islamic Audio Book').then(() => {
   //  })
@@ -227,8 +233,39 @@ async  shareaudio(msg, img, url) {
     text: 'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
     dialogTitle: 'Share with buddies'
   });
+*/
+
+  let ccc = "To listen more files from " + msg + " download Islamic Audio Books ";
+
+
+  this.firebaseDynamicLinks.createShortDynamicLink({
+    domainUriPrefix: "https://islamicaudiobooks.page.link/",
+    link: "https://islamicaudiobooks.info/"+id,
+    socialMetaTagInfo: {
+      "socialTitle": "Islamic Audio Books - Listen Authentic Islamic Knowledge",
+      "socialDescription": ccc,
+    },
+    "androidInfo": {
+      "androidPackageName": "com.urduaudiobooks.urdutafsir",
+    }
+})
+.then(async (res: any) => {
+  await Share.share({
+    title: 'Islamin Audio Book',
+    text: ccc + res,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
+    dialogTitle: 'Share with buddies'
+  });
+
+})
+
+
+
 
   }
+
+
+
+
   getColor(book: track) {
     return book.color;
   }
@@ -421,5 +458,21 @@ async  shareaudio(msg, img, url) {
       this.showscrolltotop = true;
     };
   }
+
+
+///
+
+get_storedlist(){
+  this.storage.get("storedaudio").then((val:Array<any>)=>{
+    if(val)
+    {
+    this.storedid = val
+    }
+    else{
+      this.storedid = []
+    }
+  })
+
+}
 
 }

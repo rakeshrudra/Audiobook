@@ -17,7 +17,7 @@ import { NewapiService } from '../newapi.service';
 export class SearchPage implements OnInit {
 
   @ViewChild('searchbar',{static:true}) searchbar;
-  searchTerm;
+  searchTerm ='';
   atrack: track;
   constructor(public api: ApiService, public _api : NewapiService, public route: ActivatedRoute,  public router: Router, public storage: Storage, private platform: Platform) {
 
@@ -133,9 +133,6 @@ export class SearchPage implements OnInit {
     this.timeout = setTimeout(()=>{
       this._api.searchtrack('?search='+this.searchTerm+'&book_id='+this.selectedbook+'&chapter_id='+this.selectedchapter).subscribe(val=>{
         this.audios = val;
-        if(val.length == 0){
-          this.audios = null;
-        }
         this.audioloader = false
       },er=>{
         this.audioloader = false

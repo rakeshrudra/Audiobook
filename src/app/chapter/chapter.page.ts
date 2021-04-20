@@ -52,11 +52,12 @@ export class ChapterPage implements OnInit {
 
       }
    })*/
+   this._api.chapters('?book_id='+this.book_id).subscribe(val=>{
+    this.playlist = val;
+  })
+
   }
   ionViewWillEnter(){
-     this._api.chapters('?book_id='+this.book_id).subscribe(val=>{
-       this.playlist = val;
-     })
      this._api.book('?book_id='+this.book_id).subscribe(val=>{
         this.book = val[0]
      })
@@ -68,7 +69,7 @@ export class ChapterPage implements OnInit {
       console.log(this.playlist)
     }
  })
-
+this.get_storedlist();
 }
 play(id)
 {
@@ -173,5 +174,24 @@ downloadall()
       this.showscrolltotop = true;
     };
   }
+///
+storedid = [];
+get_storedlist(){
+  this.storage.get("storedaudio").then((val:Array<any>)=>{
+    if(val)
+    {
+    this.storedid = val
+    }
+    else{
+      this.storedid = []
+    }
+  })
+
+}
+checkstatusnew(alist:Array<any>){
+  var v =alist.every(v => this.storedid.includes(v));
+  console.log(alist,this.storedid,v);
+  return v;
+}
 
 }

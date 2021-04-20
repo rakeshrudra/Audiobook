@@ -43,6 +43,7 @@
     <ng-container *ngFor="let a of playlist; let i = index">
 
       <ion-item  class="chaptercontainer ion-activatable">
+        <ion-icon name="stop-circle-outline" color="success" style="padding:0px" *ngIf="a.new == 'true' && !storedid.includes(a.id)"></ion-icon>
         <ion-ripple-effect></ion-ripple-effect>
 
         <ion-text slot="start"  (click)="play(i)" style="margin-inline-end: 2px;">

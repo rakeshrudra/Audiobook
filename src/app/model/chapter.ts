@@ -14,5 +14,7 @@ export interface chapter {
     topiccount : string,
     color : string,
     downloadfilter : true,
-    isChecked : boolean
+    isChecked : boolean,
+    audiodownloaded  : number,
+    newaudios : Array<string>
 }

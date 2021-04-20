@@ -8,6 +8,15 @@
 </ion-header>
 
 <ion-content  style="--padding-bottom: 80px">
+  <div *ngIf="!faqs">
+    <div class="ion-padding custom-skeleton" *ngFor="let a of [1,2,3,4]">
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </div>
+  </div>
 
   <div style="font-size: medium;">
     <ol>

@@ -12,13 +12,13 @@ export interface track {
     topic: string,
     synopsys: string,
     details: string,
-
-    booknameurdu : string, 
+    newaudios : Array<string>,
+    booknameurdu : string,
     bookdetailsenglish : string,
     bookdetailsurdu : string,
     booksynopsysenglish : string,
     booksynopsysurdu : string,
-
+   new : string,
     modules: Array<any>,
     slno: string,
     fav : boolean,

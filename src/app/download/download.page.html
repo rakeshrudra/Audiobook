@@ -5,113 +5,249 @@
     </ion-buttons>
 
     <ion-title>Islamic Audio Books</ion-title>
-    <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;">
+    <ion-icon
+      name="search"
+      slot="end"
+      routerLink="/tab/search"
+      style="padding-right: 15px; font-size: 24px"
+    >
     </ion-icon>
   </ion-toolbar>
 </ion-header>
-<ion-content style="--padding-top: 15px; --padding-bottom: 200px !important;">
+<ion-content style="--padding-top: 15px; --padding-bottom: 200px !important">
   <ion-tabs>
     <ion-tab-bar slot="top">
       <ion-tab-button (click)="showdownloadsfun()" *ngIf="showdownloads">
-        <ion-icon name="cloud-download" style="color: #004075 !important"></ion-icon>
+        <ion-icon
+          name="cloud-download"
+          style="color: #004075 !important"
+        ></ion-icon>
         <ion-label>Downloads</ion-label>
       </ion-tab-button>
       <ion-tab-button (click)="showdownloadsfun()" *ngIf="!showdownloads">
-        <ion-icon name="cloud-download" ></ion-icon>
+        <ion-icon name="cloud-download"></ion-icon>
         <ion-label>Downloads</ion-label>
       </ion-tab-button>
-  
-  
+
       <ion-tab-button (click)="showdownloadingfun()" *ngIf="showdownloads">
         <ion-icon name="cloud-download"></ion-icon>
         <ion-label>Downloading</ion-label>
       </ion-tab-button>
       <ion-tab-button (click)="showdownloadingfun()" *ngIf="!showdownloads">
-        <ion-icon name="cloud-download" style="color: #004075 !important"></ion-icon>
+        <ion-icon
+          name="cloud-download"
+          style="color: #004075 !important"
+        ></ion-icon>
         <ion-label>Downloading</ion-label>
       </ion-tab-button>
 
       <ion-tab-button>
-        <a href="https://islamicaudiobooks.info/downloads/" style="text-decoration: none; color:#666666">
-        <ion-icon name="book" style="font-size: 22px; color:#666666"></ion-icon>
-        <br />
-        <ion-label>Download All</ion-label>
+        <a
+          href="https://islamicaudiobooks.info/downloads/"
+          style="text-decoration: none; color: #666666"
+        >
+          <ion-icon
+            name="book"
+            style="font-size: 22px; color: #666666"
+          ></ion-icon>
+          <br />
+          <ion-label>Download All</ion-label>
         </a>
       </ion-tab-button>
-
-
     </ion-tab-bar>
   </ion-tabs>
-  <h4  *ngIf="!showdownloading && showdownloads" style="margin-top: 60px; padding-left: 15px;" >Download list
-    <ion-button size="small" color="danger" (click)="clearfilter()" style="float: right; margin-right: 10px;">Clear Filter</ion-button>
+  <h4
+    *ngIf="!showdownloading && showdownloads"
+    style="margin-top: 60px; padding-left: 15px"
+  >
+    Download list
+    <ion-button
+      size="small"
+      color="danger"
+      (click)="ionViewDidEnter()"
+      style="float: right; margin-right: 10px"
+      >Refresh list</ion-button
+    >
   </h4>
-  <h5 style="padding-left: 15px;"  *ngIf="!showdownloading && showdownloads"><small><b>Swipe left to remove</b></small></h5>
-  <h5 style="padding-left: 15px;"><small>Narrow your download list by selecting</small></h5>
+  <h5 style="padding-left: 15px" *ngIf="!showdownloading && showdownloads">
+    <small><b>Swipe left to remove</b></small>
+  </h5>
+  <h5 style="padding-left: 15px">
+    <small>Narrow your download list by selecting</small>
+  </h5>
 
   <ul class="breadcrumb" *ngIf="bookname && showdownloads">
     <li>{{bookname}}</li>
     <li *ngIf="chaptername">{{chaptername}}</li>
     <li *ngIf="subchaptername">{{subchaptername}}</li>
-  </ul> 
+  </ul>
 
-  <ion-button  class="theme-color" (click)="presentModal()" *ngIf="showdownloads" style="margin-left: 10px;">Book</ion-button>
+  <!--ion-button
+    class="theme-color"
+    (click)="presentModal()"
+    *ngIf="showdownloads"
+    style="margin-left: 10px"
+    >Book</!--ion-button
+  >
 
-  <ion-button  class="theme-color" (click)="openchaptermod()" *ngIf="bookname && showchapter && showdownloads">Chapter</ion-button>
+  <ion-button
+    class="theme-color"
+    (click)="openchaptermod()"
+    *ngIf="bookname && showchapter && showdownloads"
+    >Chapter</ion-button
+  >
 
-  <ion-button  class="theme-color" (click)="opensubchapter()" *ngIf="showtopic && showdownloads">Sub-Chapter</ion-button>
-
+  <ion-button
+    class="theme-color"
+    (click)="opensubchapter()"
+    *ngIf="showtopic && showdownloads"
+    >Sub-Chapter</ion-button
+-->
 
   <br />
-  <ion-list class="ion-padding1" *ngIf="!showdownloading && showdownloads">
+  <!--ion-list-- class="ion-padding1" *ngIf="!showdownloading && showdownloads">
     <ion-item-sliding *ngFor="let f of files; let i = index">
-        <ion-item (click)="download_play(i,files)" class="chaptercontainer ion-activatable">
-          <ion-ripple-effect></ion-ripple-effect>
-          <ion-label class="ion-text-wrap">
-            <h2>{{ f.audioname }} </h2>
-            <small>{{f?.chapter}} - {{f?.bookname}}</small>
-          </ion-label>
-          <ion-icon name="play"  (click)="download_play(i,files)" class="icon"></ion-icon> 
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option (click)="_autoload.deldownloadfile(f)" color="danger">
-            <ion-icon name="trash" slot="icon-only"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-
-    </ion-item-sliding>
-  </ion-list>
-
-  <h3 *ngIf="downloadPlaylistq.length > 0 && showdownloading && !showdownloads" style="margin-top: 60px; padding-left: 15px;" >Downloading list</h3>
-  <h5 style="padding-left: 15px;" *ngIf="downloadPlaylistq.length > 0 && showdownloading && !showdownloads"><small><b>Swipe left to remove</b></small></h5>
-
-  <ion-list class="ion-padding1" *ngIf="downloadPlaylistq.length > 0 && showdownloading && !showdownloads">
-    <ion-item-sliding *ngFor="let f of downloadPlaylistq; let i = index">
-      <ion-item  class="chaptercontainer ion-activatable">
+      <ion-item
+        (click)="download_play(i,files)"
+        class="chaptercontainer ion-activatable"
+      >
         <ion-ripple-effect></ion-ripple-effect>
-        <ion-label  class="ion-text-wrap">
-          <h2>{{ f.audioname }} </h2>
+        <ion-label class="ion-text-wrap">
+          <h2>{{ f.audioname }}</h2>
           <small>{{f?.chapter}} - {{f?.bookname}}</small>
         </ion-label>
-        <ion-icon name="cloud-download" class="icon"   style="background: orange !important; color: #ffffff !important"  ></ion-icon>
+        <ion-icon
+          name="play"
+          (click)="download_play(i,files)"
+          class="icon"
+        ></ion-icon>
       </ion-item>
       <ion-item-options side="end">
-        <ion-item-option (click)="_autoload.removedownloadqAudio(f)" color="danger">
+        <ion-item-option (click)="_autoload.deldownloadfile(f)" color="danger">
+          <ion-icon name="trash" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </!--ion-list-->
+
+  <h3
+    *ngIf="downloadPlaylistq.length > 0 && showdownloading && !showdownloads"
+    style="margin-top: 60px; padding-left: 15px"
+  >
+    Downloading list
+  </h3>
+  <h5
+    style="padding-left: 15px"
+    *ngIf="downloadPlaylistq.length > 0 && showdownloading && !showdownloads"
+  >
+    <small><b>Swipe left to remove</b></small>
+  </h5>
+
+  <ion-list
+    class="ion-padding1"
+    *ngIf="downloadPlaylistq.length > 0 && showdownloading && !showdownloads"
+  >
+    <ion-item-sliding *ngFor="let f of downloadPlaylistq; let i = index">
+      <ion-item class="chaptercontainer ion-activatable">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-label class="ion-text-wrap">
+          <h2>{{ f.audioname }}</h2>
+          <small>{{f?.chapter}} - {{f?.bookname}}</small>
+        </ion-label>
+        <ion-icon
+          name="cloud-download"
+          class="icon"
+          style="background: orange !important; color: #ffffff !important"
+        ></ion-icon>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option
+          (click)="_autoload.removedownloadqAudio(f)"
+          color="danger"
+        >
           <ion-icon name="trash" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
 
-  <ion-list *ngIf="files.length < 1 && !showdownloading && showdownloads">
+  <ion-list
+    *ngIf="files.length < 1 && !showdownloading && showdownloads && this.downloadedBookcount == 0"
+  >
     <ion-item lines="none">
-      <ion-icon name="heart" style="color: #8dd600 !important;" slot="start"></ion-icon>
+      <ion-icon
+        name="heart"
+        style="color: #8dd600 !important"
+        slot="start"
+      ></ion-icon>
       <ion-label>
-        <h2>Downloads Not Found</h2>
+        <h2>Downloads Not Found </h2>
       </ion-label>
     </ion-item>
   </ion-list>
 
+
+  <ng-container *ngIf="showdownloads">
+
+  <ion-list *ngFor="let book of allbooks"  style="padding-top:1px">
+    <ion-item (click)="findChapter(book.id)" *ngIf="book.audiodownloaded > 0">
+      <ion-icon name="book-outline" slot="start"></ion-icon>
+      <p>{{book?.name}}</p>
+      <ion-badge slot="start">{{book?.audiodownloaded}}</ion-badge>
+      <ion-icon *ngIf="book.id == selectedbook" name="chevron-down-outline" slot="end"></ion-icon>
+      <ion-icon *ngIf="book.id != selectedbook" name="chevron-up-outline" slot="end"></ion-icon>
+    </ion-item>
+    <ng-container *ngIf="book.id == selectedbook">
+      <ng-container *ngFor="let chapter of allchapters">
+        <ion-list
+          style="width: 95%; margin-left: 5%; padding-bottom: 0px"
+          lines="none"
+          *ngIf="chapter.audiodownloaded > 0"
+        >
+          <ion-item (click)="findaudios(chapter.id)" lines="none">
+            <ion-icon name="bookmarks-outline" slot="start"></ion-icon>
+            <p>{{chapter.chapter}}</p>
+            <ion-badge slot="start">{{chapter?.audiodownloaded}}</ion-badge>
+            <ion-icon *ngIf="book.id == selectedbook && selectedchapter == chapter.id" name="chevron-down-outline" slot="end"></ion-icon>
+            <ion-icon *ngIf="selectedchapter != chapter.id" name="chevron-up-outline" slot="end"></ion-icon>
+
+          </ion-item>
+          <ion-item
+            *ngIf="book.id == selectedbook && selectedchapter == chapter.id"
+          >
+            <ion-list style="width: 100%">
+
+              <ng-container *ngFor="let f of allaudiostemp; let i = index">
+              <ion-item-sliding *ngIf="f.chapter_id == selectedchapter" >
+                <ion-item (click)="download_play(i,allaudiostemp)">
+                  <p>{{f.audioname}}</p>
+                  <ion-icon
+                  name="play"
+                  (click)="download_play(i,files)"
+                  class="icon" slot="end"
+                ></ion-icon>
+                </ion-item>
+
+                <ion-item-options side="end">
+                  <ion-item-option
+                    (click)="_autoload.removedownloadqAudio(f); removeaudiofromq(f)"
+                    color="danger"
+                  >
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+              </ng-container>
+            </ion-list>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+    </ng-container>
+  </ion-list>
+
+
+  </ng-container>
   <!--div text-center class="payer" *ngIf="_downloadPlay.downloadShowplayer && _downloadPlay.duration > 1" -->
 
-  <div style="width: 100%; height: 300px;"></div>
+  <div style="width: 100%; height: 300px"></div>
 </ion-content>

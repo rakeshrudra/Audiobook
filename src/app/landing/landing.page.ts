@@ -72,7 +72,8 @@ export class LandingPage implements OnInit {
   dailyaskar: track[] = []
 
   playslideraudio(id) {
-    if (typeof id != undefined || id != '') {
+    if (typeof id != undefined && id != '' && id != null) {
+      this.storage.remove('audioid');
       this.api.audio('?a_id=' + id).subscribe(val => {
         this._api.playnextchapternext(false)
         this._api.audiolistnext(val)
@@ -80,7 +81,6 @@ export class LandingPage implements OnInit {
         this._api.showplayernext(true)
       })
     }
-    this.storage.remove('audioid');
 
   }
   getColor(book: track) {
@@ -89,6 +89,7 @@ export class LandingPage implements OnInit {
 
   playpushaudio(){
     this.storage.get('audioid').then(val=>{
+      console.log("pu",val)
       if(val){
       this.playslideraudio(val)
       }
@@ -102,9 +103,14 @@ export class LandingPage implements OnInit {
     this.storage.get('allbooks').then((val: book[]) => {
       this.books = val;
     })/*.then(() => { */
-    this.storage.get('allmodule').then(val => {
+   /* this.storage.get('allmodule').then(val => {
       this.data = val
+    })*/
+
+    this.api.modules().subscribe(data => {
+     this.data = data;
     })
+
     this.storage.get('allslider').then(val => {
       this.sliders = val
     })
@@ -158,10 +164,10 @@ export class LandingPage implements OnInit {
         this.activetrack = val
       })
     })
-    setTimeout(() => {
-      this.playpushaudio()
-    }, 1000);
-
+    setInterval(() => {
+      this.playpushaudio();
+    }, 3000);
+this.get_storedlist()
   }
 
 
@@ -182,4 +188,31 @@ export class LandingPage implements OnInit {
     })
   }
 
+
+
+    ///
+storedid = [];
+get_storedlist(){
+  this.storage.get("storedaudio").then((val:Array<any>)=>{
+    if(val)
+    {
+    this.storedid = val
+    }
+    else{
+      this.storedid = []
+    }
+  })
+
 }
+checkstatusnew(alist:Array<any>){
+  if(alist){
+  var v =alist.every(v => this.storedid.includes(v));
+  console.log(alist,this.storedid,v);
+  return v;
+  }else{
+    return true;
+  }
+}
+
+}
+

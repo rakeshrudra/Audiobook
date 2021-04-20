@@ -30,7 +30,7 @@ export class NewapiService {
   url_appupdatechecker = this.url+'appupdatechecker';
   url_faq = this.url+'faq';
   url_latestaudio =  this.url+'latestaudio';
-  
+
   url_testimonial = this.url+'testimonial';
 
   url_previouschapteraudio = this.url+'previouschapteraudio';
@@ -38,8 +38,12 @@ export class NewapiService {
   url_audiotracksbycp = this.url+'audiotracksbycp';
   url_searchtrack = this.url+'searchtrack';
   url_search = this.url+'search';
+  url_nextchapteraudio = this.url+'nextchapteraudio';
+
+
+
   playlist : track[] = []
-  
+
   constructor(public http: HttpClient , public storage : Storage) { }
   audiolist = new BehaviorSubject<track[]>(this.playlist)
   activetrack = new BehaviorSubject<track>(null)
@@ -71,7 +75,7 @@ export class NewapiService {
   }
   modules()
   {
-     return this.http.get(this.url_module)
+     return this.http.get<Array<{modulename:string,newaudios : Array<string>}>>(this.url_module)
   }
   faqs() : Observable<Array<{question:string,ans:string}>>
   {
@@ -89,7 +93,7 @@ export class NewapiService {
   {
    return this.http.get<book[]>(this.url_bookdata+`${uri}`)
   }
-  
+
   latestaudio(uri) : Observable<track[]>
   {
    return this.http.get<track[]>(this.url_latestaudio+`${uri}`)
@@ -131,8 +135,13 @@ export class NewapiService {
    return this.http.get<track[]>(this.url_searchtrack+`${uri}`)
   }
 
+  get_nextchapteraudio(uri) : Observable<track[]>
+  {
+   return this.http.get<track[]>(this.url_nextchapteraudio+`${uri}`)
+  }
 
-  
+
+
   previouschapteraudio(uri) : Observable<track[]>
   {
    return this.http.get<track[]>(this.url_previouschapteraudio+`${uri}`)
@@ -151,7 +160,7 @@ export class NewapiService {
   {
    return this.http.get<track[]>(this.url_trandingaudio)
   }
-  
+
   feedback(uri) : Observable<{message:string}>
   {
    return this.http.get<{message:string}>(this.url_feedback+`${uri}`)
@@ -168,7 +177,7 @@ export class NewapiService {
   {
     return this.http.get<track[]>(this.url_search+`${uri}`)
   }
-  
+
   alltopic() : Observable<topic[]>
   {
     return this.http.get<topic[]>(this.url_topic)
@@ -177,7 +186,7 @@ export class NewapiService {
   {
     return this.http.get<topic[]>(this.url_topic+`${uri}`)
   }
-  
+
   audiolistnext(data)
   {
      this.audiolist.next(data)

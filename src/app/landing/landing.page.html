@@ -3,23 +3,22 @@
     <ion-title>Islamic Audio Books</ion-title>
     <ion-icon name="search" slot="end" routerLink="/tab/search" style="padding-right: 15px; font-size: 24px;">
     </ion-icon>
-
   </ion-toolbar>
 </ion-header>
 <ion-content>
 
-  <div class="slider-container" style="border : var(--ion-color-theme); padding: 15px 0px;" *ngIf="sliders.length > 0" >
+  <div class="slider-container" style="border : var(--ion-color-theme); padding: 1px 0px;" *ngIf="sliders.length > 0" >
 
     <ion-slides pager="true" [options]="slideOpts" style="max-height: 250px !important;">
       <ion-slide *ngFor="let a of sliders" class="ion-activatable ion-padding" (click)="playslideraudio(a.audio)">
         <div class="ion-text-center">
         <ion-ripple-effect></ion-ripple-effect>
         <img [src]="a.image_min" alt="Slider"
-          style="width: 90%; max-height: 230px; border-radius: 6px" />
+          style="width: 93%;  border-radius: 6px; height:150px " />
           <h3 class="dai-banna" style="     position: absolute;
           color: #222222;
           z-index: 177;
-          top: 42px;
+          bottom: 46%;
           width: 90%;
           font-weight: 900;
           font-family: sans-serif;
@@ -27,7 +26,7 @@
 
           <h5 style="position: absolute;
           z-index: 177;
-          bottom: 42px;
+          top: 45%;
           width: 50%;
           left: 25%;
           color: #222223; font-size: 11px; " class="dai-banna">{{a?.audio_details?.audioname}}</h5>
@@ -37,8 +36,13 @@
   </div>
   <!--br />
 <p style="padding-left: 16px;"><b>Category</b></p-->
-  <ion-row class="ion-padding ">
+  <ion-row class="ion-padding module">
     <ion-col size="6" *ngFor="let a of data; let i = index" align="center" style="padding: 0px 7.5px;">
+      <ion-icon name="stop-circle-outline" color="success" style="padding:0px; position: absolute;
+      padding: 0px;
+      z-index: 1;
+      right: 14px;" *ngIf="a.newaudios && a.newaudios.length >0 && !checkstatusnew(a.newaudios)"></ion-icon>
+
       <div (click)="urllink(a.modulename)" style="width: 100%; padding-top: 15px !important;" align="center"
         class="ion-activatable default-container animated fadeInUp" [ngStyle]="{'box-shadow': '0px 0px 50px '+getColor(a)+' inset'}">
         <img src="./assets/icon/{{i+1}}.png"  alt="{{a.modulename}}"
@@ -67,22 +71,6 @@
   </ion-slides><br /-->
 
 
-  <!--p style="padding-left: 16px; font-size: 16px;" *ngIf="taudiodata?.length >0"><b>Latest audio</b></!--p><br />
-  <ion-slides pager="false" [options]="slideOpts2" class="ion-padding default-container"
-    style="--margin-top: 10px;--margin-bottom: 10px;" *ngIf="taudiodata?.length >0">
-    <ng-container *ngFor="let a of taudiodata; let i = index">
-      <ion-slide *ngIf="i< 5">
-        <div (click)="trandingpalylast(i)" style="text-align: left; padding: 20px;">
-          <img [src]="a.logo_min" style="width: 100%;  border-radius: 6px" alt="{{a.audioname}}" />
-          <div class=" ion-activatable">
-            <div align="center">{{a.audioname}}</div>
-            <div align="center">{{a.audionameurdu}}</div>
-            <ion-ripple-effect></ion-ripple-effect>
-          </div>
-        </div>
-      </ion-slide>
-    </ng-container>
-  </ion-slides><br /-->
   <p style="padding-left: 16px; font-size: 16px;" *ngIf="lastlist?.length >0"><b>You were listening</b></p>
   <div class="ion-padding">
 
@@ -101,6 +89,24 @@
     </ion-list>
 
   </div>
+
+  <p style="padding-left: 16px; font-size: 16px;" *ngIf="taudiodata?.length >0"><b>Latest audio</b></p><br />
+  <ion-slides pager="false" [options]="slideOpts2" class="ion-padding default-containe"
+    style="--margin-top: 10px;--margin-bottom: 10px;" *ngIf="taudiodata?.length >0">
+    <ng-container *ngFor="let a of taudiodata; let i = index">
+      <ion-slide *ngIf="i< 5">
+        <div (click)="trandingpalylast(i)" style="text-align: left; padding: 20px;">
+          <img [src]="a.logo_min" style="width: 100%;  border-radius: 6px" alt="{{a.audioname}}" />
+          <div class=" ion-activatable">
+            <div align="center">{{a.audioname}}</div>
+            <div align="center">{{a.audionameurdu}}</div>
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+        </div>
+      </ion-slide>
+    </ng-container>
+  </ion-slides><br />
+
 
   <!--ion-list class="ion-padding">
     <ng-container *ngFor="let activetrack of lastlist; let i = index">

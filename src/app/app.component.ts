@@ -21,7 +21,9 @@ import {
   PushNotificationActionPerformed,
 } from '@capacitor/core';
 
-const { PushNotifications,App } = Plugins;
+import { FCM } from '@capacitor-community/fcm';
+const fcm = new FCM();
+const { PushNotifications,App , FCMPlugin } = Plugins;
 
 
 @Component({
@@ -147,9 +149,6 @@ export class AppComponent {
     });
 */
 
-
-
-
    //////////////
 
    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.FOREGROUND_SERVICE).then(
@@ -231,6 +230,7 @@ export class AppComponent {
           // slug = /tabs/tab2
           const slug = data.url.split(".info/").pop();
           if (slug) {
+           // alert(slug)
             this.storage.set('audioid',slug);
           }
           // If no match, do nothing - let regular routing
@@ -355,6 +355,11 @@ export class AppComponent {
       (token: PushNotificationToken) => {
         //alert('Push registration success, token: ' + token.value);
         console.log(token.value);
+        fcm
+        .subscribeTo({ topic: 'all' })
+        .then((r) => console.log(`subscribed to topic`))
+        .catch((err) => console.log(err));
+
         this._api.get_fbtoken(token.value).subscribe(v=>{
 
         })

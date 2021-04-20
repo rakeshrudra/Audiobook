@@ -10,7 +10,7 @@ export class FaqPage implements OnInit {
 
   constructor(public _api : NewapiService) { }
 
-  faqs : Array<{question:string,ans:string}> = []
+  faqs : Array<{question:string,ans:string}>;
   ngOnInit() {
     this._api.faqs().subscribe((val)=>{
       this.faqs = val

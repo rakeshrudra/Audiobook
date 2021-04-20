@@ -124,6 +124,8 @@
 <ng-container *ngFor="let book of playlist ">
   <div class="grid-container-big-book ion-activatable" *ngIf="api.activeClass.value == 'light' || !api.activeClass.value"  routerLink="/tab/home/chapter/{{book.id}}" style="position: relative; " [ngStyle]="{'box-shadow': '0px 0px 250px '+getColor(book)+' inset'}" >
     <div class="item1" style="width: 150px; height: 150px; padding: 15px;" >
+      <ion-icon name="stop-circle-outline" color="success" style="padding:0px" *ngIf="book.newaudios.length >0 && !checkstatusnew(book.newaudios)"></ion-icon>
+
       <ion-ripple-effect></ion-ripple-effect>
 
       <img  *ngIf="book?.profile_image_min" [src]="book?.profile_image_min"
@@ -155,7 +157,7 @@
   <div class="grid-container-big-book ion-activatable" *ngIf="api.activeClass.value == 'dark' " routerLink="/tab/home/chapter/{{book.id}}" style="position: relative; background: transparent !important; "  >
     <div class="item1" style="width: 150px; height: 150px; padding: 15px;" >
       <ion-ripple-effect></ion-ripple-effect>
-
+      <ion-icon name="stop-circle-outline" color="success" style="padding:0px" *ngIf="book.newaudios.length >0 && !checkstatusnew(book.newaudios)"></ion-icon>
       <img  *ngIf="book?.profile_image_min" [src]="book?.profile_image_min"
         style="width: 90%; border-radius: 6px;" alt="{{book?.name}}" />
         <div  style=" padding-top: 10px; width: 100%; text-align: center;">

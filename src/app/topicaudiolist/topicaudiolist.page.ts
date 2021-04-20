@@ -39,7 +39,7 @@ export class TopicaudiolistPage implements OnInit {
 
   ngOnInit() {
   }
-  ionViewWillEnter(){ 
+  ionViewWillEnter(){
 
    // sudo ln -s /etc/nginx/sites-available/admin.restaurant.twerlo.com /etc/nginx/sites-enabled/admin.restaurant.twerlo.com
 
@@ -66,6 +66,9 @@ export class TopicaudiolistPage implements OnInit {
        this._api.audio("?topic="+this.topic).subscribe(val=>{
          this.playlist = val;
        })
+       setInterval(v=>{
+        this.get_storedlist()
+      },2000)
   }
 
   jsonaudiofun()
@@ -321,7 +324,6 @@ export class TopicaudiolistPage implements OnInit {
         else {
           this.storage.set('downloadq', [track]).then(() => {
             this.ckfev();
-
            })
         }
       }
@@ -355,4 +357,20 @@ export class TopicaudiolistPage implements OnInit {
     };
   }
 
+  ///
+  storedid = [];
+///
+
+get_storedlist(){
+  this.storage.get("storedaudio").then((val:Array<any>)=>{
+    if(val)
+    {
+    this.storedid = val
+    }
+    else{
+      this.storedid = []
+    }
+  })
+
+}
 }

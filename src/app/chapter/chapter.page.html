@@ -84,6 +84,7 @@
 
         <ion-item *ngIf="int(a.topiccount) == 0" class="chaptercontainer ion-activatable">
           <ion-ripple-effect></ion-ripple-effect>
+          <ion-icon name="stop-circle-outline" color="success" style="padding:0px" *ngIf="a.newaudios.length >0 && !checkstatusnew(a.newaudios)"></ion-icon>
 
           <ion-text slot="start"  routerLink="/tab/home/audio/{{a.id}}" style="margin-inline-end: 2px;">
             {{(book_id == '1' && a.chapterno!= '1')? int(a.chapterno)-1 : (book_id == '1' && a.chapterno == '1')?'':a.chapterno}}.
@@ -101,7 +102,7 @@
 
         <ion-item *ngIf="int(a.topiccount) > 0" class="chaptercontainer ion-activatable">
           <ion-ripple-effect></ion-ripple-effect>
-
+          <ion-icon name="stop-circle-outline" color="success" style="padding:0px" *ngIf="a.newaudios.length >0 && !checkstatusnew(a.newaudios)"></ion-icon>
           <ion-text slot="start" routerLink="/tab/home/audiotop/{{a.id}}" *ngIf="int(a.book_id) != 3" style="margin-inline-end: 2px; ">
             <span style="font-weight: 600;" *ngIf="int(a.book_id) != 3">{{a.chapterno}}</span>
           </ion-text>

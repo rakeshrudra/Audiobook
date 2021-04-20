@@ -48,6 +48,7 @@ export class AudiotopPage implements OnInit {
         this.chapter = values.filter(list => list.id === this.chapter_id)[0]
       }
     })
+    this.get_storedlist()
   }
   getColor(book:track)
   {
@@ -136,4 +137,24 @@ export class AudiotopPage implements OnInit {
     };
   }
 
-}
+  ///
+  storedid = [];
+  get_storedlist(){
+    this.storage.get("storedaudio").then((val:Array<any>)=>{
+      if(val)
+      {
+      this.storedid = val
+      }
+      else{
+        this.storedid = []
+      }
+    })
+
+  }
+  checkstatusnew(alist:Array<any>){
+    var v =alist.every(v => this.storedid.includes(v));
+    console.log(alist,this.storedid,v);
+    return v;
+  }
+
+  }
