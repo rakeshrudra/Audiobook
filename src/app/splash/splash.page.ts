@@ -63,10 +63,6 @@ networkck()
         this.router.navigate(['/loader'], { replaceUrl: true })
       }
     })*/
-    this.api.allchapters({}).subscribe(data => {
-      this.storage.set('chapters', data).then(() => {
-      })
-    }).add(a => {
       this.api.allbook({}).subscribe(data => {
         this.storage.set('allbooks', data).then(() => {
           // this.timmer()
@@ -86,13 +82,6 @@ networkck()
 
           })
         })
-      }).add(() => {
-        this.api.alltopic().subscribe(data => {
-          this.storage.set('alltopic', data).then(() => {
-            // this.timmer()
-          })
-
-        })
       }).add(val => {
         this.api.modules().subscribe(data => {
           this.storage.set('allmodule', data).then(() => {
@@ -100,7 +89,6 @@ networkck()
           })
         })
       })
-    })
   }
   ngOnInit1() {
     this.api.allchapters({}).subscribe(data => {

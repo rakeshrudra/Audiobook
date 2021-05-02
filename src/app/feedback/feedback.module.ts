@@ -4,13 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-
+import { AuthGuard } from '../auth.guard';
 import { FeedbackPage } from './feedback.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: FeedbackPage
+    component: FeedbackPage,
+    canActivate : [AuthGuard]
   }
 ];
 

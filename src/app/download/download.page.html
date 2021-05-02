@@ -204,7 +204,7 @@
           lines="none"
           *ngIf="chapter.audiodownloaded > 0"
         >
-          <ion-item (click)="findaudios(chapter.id)" lines="none">
+          <ion-item (click)="findaudios(chapter.id)" lines="none" id="item-{{chapter.id}}">
             <ion-icon name="bookmarks-outline" slot="start"></ion-icon>
             <p>{{chapter.chapter}}</p>
             <ion-badge slot="start">{{chapter?.audiodownloaded}}</ion-badge>

@@ -131,7 +131,21 @@ export class SearchPage implements OnInit {
     this.audios = []
     clearTimeout(this.timeout);
     this.timeout = setTimeout(()=>{
-      this._api.searchtrack('?search='+this.searchTerm+'&book_id='+this.selectedbook+'&chapter_id='+this.selectedchapter).subscribe(val=>{
+     // this._api.searchtrack('?search='+this.searchTerm+'&book_id='+this.selectedbook+'&chapter_id='+this.selectedchapter).subscribe(val=>{
+      var formData_new = new FormData();
+      for(var i =0; i<this.selectedbook.length;i++)
+      {
+       formData_new.append('book_id[]',this.selectedbook[i]);
+      }
+
+      formData_new.append('search',this.searchTerm);
+
+      for(var i =0; i<this.selectedchapter.length;i++)
+      {
+       formData_new.append('chapter_id[]',this.selectedchapter[i]);
+      }
+
+        this._api.post_searchtrack(formData_new).subscribe(val=>{
         this.audios = val;
         this.audioloader = false
       },er=>{
@@ -142,14 +156,19 @@ export class SearchPage implements OnInit {
   selectedbook = '';
   selectedchapter = '';
   bookChange($event){
-    this.selectedbook = $event.target.value;
-    this._api.chapters('?book_id='+this.selectedbook).subscribe(val=>{
+    //this.selectedbook = $event.target.value;
+    var formData_new = new FormData();
+   for(var i =0; i<this.selectedbook.length;i++)
+   {
+    formData_new.append('book_id[]',this.selectedbook[i]);
+   }
+    this._api.post_chapters(formData_new).subscribe(val=>{
       this.chapters = val;
       this.search();
     })
   }
   chapterChange($event){
-    this.selectedchapter =  $event.target.value;
+   // this.selectedchapter =  $event.target.value;
     this.search();
   }
 

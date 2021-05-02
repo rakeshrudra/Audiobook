@@ -42,6 +42,18 @@ export class TabsPage implements OnInit {
 
     })
  //   alert(this.api.activeClass.value)
+ this.api.allchapters({}).subscribe(data => {
+  this.storage.set('chapters', data).then(() => {
+  })
+}).add(() => {
+  this.api.alltopic().subscribe(data => {
+    this.storage.set('alltopic', data).then(() => {
+      // this.timmer()
+    })
+
+  })
+})
+
   }
   change(val) {
     this.api.activeClassnext(val);

@@ -7,11 +7,13 @@ import { IonicModule } from '@ionic/angular';
 
 import { HistoryPage } from './history.page';
 import { ShareModule } from '../share/share.module';
+import { AuthGuard } from '../auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: HistoryPage
+    component: HistoryPage,
+    canActivate : [AuthGuard]
   }
 ];
 

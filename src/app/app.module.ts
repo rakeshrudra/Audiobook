@@ -1,3 +1,4 @@
+import { AuthGuard } from './auth.guard';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -66,7 +67,8 @@ import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
     AutoloadService,
     Network,
     AndroidPermissions,
-    FirebaseDynamicLinks
+    FirebaseDynamicLinks,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

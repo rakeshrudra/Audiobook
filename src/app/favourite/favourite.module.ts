@@ -7,11 +7,14 @@ import { IonicModule } from '@ionic/angular';
 
 import { FavouritePage } from './favourite.page';
 import { ShareModule } from '../share/share.module';
+import { AuthGuard } from '../auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: FavouritePage
+    component: FavouritePage,
+    canActivate : [AuthGuard]
+
   }
 ];
 

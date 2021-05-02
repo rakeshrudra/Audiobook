@@ -55,6 +55,10 @@ export class NewapiService {
 
   activeClass = new BehaviorSubject<string>('light')
 
+  get_api()
+  {
+    return this.http.get<[any]>(this.url)
+  }
 
   testimonial() : Observable<[{name: string,message : string}]>
   {
@@ -109,6 +113,12 @@ export class NewapiService {
   {
    return this.http.get<chapter[]>(this.url_chapter+`${uri}`)
   }
+  post_chapters(uri) //: Observable<chapter[]>
+  {
+   return this.http.post<chapter[]>(this.url_chapter,uri)
+  }
+
+
 
   allchapters(data) : Observable<chapter[]>
   {
@@ -133,6 +143,10 @@ export class NewapiService {
   searchtrack(uri) : Observable<track[]>
   {
    return this.http.get<track[]>(this.url_searchtrack+`${uri}`)
+  }
+  post_searchtrack(uri) : Observable<track[]>
+  {
+   return this.http.post<track[]>(this.url_searchtrack,uri)
   }
 
   get_nextchapteraudio(uri) : Observable<track[]>

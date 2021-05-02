@@ -18,7 +18,7 @@
         <select
           style="width: 100%; width: 100%; padding: 6px; border-radius: 6px"
           (change)="bookChange($event)"
-          [ngModel]="selectedbook"
+          [(ngModel)]="selectedbook" multiple
         >
           <option value="" selected disabled>Select Book</option>
           <option value="">All</option>
@@ -31,7 +31,7 @@
         <select
           style="width: 100%; width: 100%; padding: 6px; border-radius: 6px"
           (change)="chapterChange($event)"
-          [ngModel]="selectedchapter"
+          [(ngModel)]="selectedchapter" multiple
         >
           <option value="" selected disabled>Select Chapter</option>
           <option value="">All</option>

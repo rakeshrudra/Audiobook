@@ -317,6 +317,7 @@ export class DownloadPage implements OnInit {
     }else{
     this.selectedbook = i;
 
+
     this.storage.get('chapters').then((book: chapter[]) => {
       if (book) {
         this.allchapters = book.filter(e => e.book_id === i);
@@ -349,6 +350,12 @@ export class DownloadPage implements OnInit {
       }
     })
   }
+  // inside ngAfterViewInit() to make sure the list items render or inside ngAfterViewChecked() if you are anticipating live data using @Inputs
+const itemToScrollTo = document.getElementById('item-' + i);
+// null check to ensure that the element actually exists
+if (itemToScrollTo) {
+  itemToScrollTo.scrollIntoView(true);
+}
   }
   removeaudiofromq(f){
     this.allaudios = this.allaudios.filter((item) => item.id !== f.id);  //ES6
