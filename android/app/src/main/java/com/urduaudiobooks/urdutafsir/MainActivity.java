@@ -20,6 +20,7 @@ public class MainActivity extends BridgeActivity {
       // Ex: add(TotallyAwesomePlugin.class);
        add(CapacitorMusicControls.class);
       add(FCMPlugin.class);
+      add(jp.rdlabo.capacitor.plugin.facebook.FacebookLogin.class);
     }});
   }
 }
