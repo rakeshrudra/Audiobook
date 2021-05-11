@@ -60,7 +60,7 @@
         <ion-icon name="information-circle"></ion-icon>
         <ion-label>Details</ion-label>
       </ion-tab-button>
-      <ion-tab-button (click)='shareaudio(book?.name)'>
+      <ion-tab-button (click)='sharebook(book?.name, book?.id)'>
         <ion-icon name="share-social-outline"></ion-icon>
         <ion-label>Share</ion-label>
       </ion-tab-button>
@@ -96,7 +96,7 @@
           <small><ion-badge color="light">{{a?.audiocount}} Audios </ion-badge></small>
 
           </ion-label>
-          <ion-icon name="share-social-outline" class="icon" class="icon" (click)="shareaudio(a.chapter)"></ion-icon>
+          <ion-icon name="share-social-outline" class="icon" class="icon" (click)="shareaudio(a.chapter,a.id)"></ion-icon>
         </ion-item>
 
 
@@ -112,7 +112,6 @@
             </h2>
             <small><ion-badge color="light">{{a?.audiocount}} Audios </ion-badge></small>
           </ion-label>
-          <ion-icon name="share-social-outline" class="icon" class="icon" (click)="shareaudio(a.chapter)"></ion-icon>
         </ion-item>
 
       </ng-container>

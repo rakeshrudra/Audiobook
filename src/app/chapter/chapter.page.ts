@@ -12,6 +12,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { track } from '../model/track';
 import { Plugins } from '@capacitor/core';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 const { CapacitorMusicControls , Share } = Plugins;
 
 @Component({
@@ -21,7 +22,7 @@ const { CapacitorMusicControls , Share } = Plugins;
 })
 export class ChapterPage implements OnInit {
 
-  constructor( public loadingController : LoadingController, public socialSharing : SocialSharing, public api : ApiService,public _api : NewapiService, public route : ActivatedRoute,
+  constructor( public loadingController : LoadingController, public socialSharing : SocialSharing, public api : ApiService,public _api : NewapiService, public route : ActivatedRoute, public firebaseDynamicLinks : FirebaseDynamicLinks,
     public storage : Storage, public router : Router) {
     this.book_id = route.snapshot.params.book;
   }
@@ -141,7 +142,7 @@ downloadall()
     return await loading.present();
   }
 
- async shareaudio(msg)
+ async shareaudioold(msg)
   {
     this.presentLoadingWithOptions();
     let ccc = "To listen to more chapters from "+msg+" download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info";
@@ -153,13 +154,71 @@ downloadall()
 
   }
 
-  sharebook(msg)
+
+  async shareaudio(msg, id) {
+
+      this.presentLoadingWithOptions();
+      let ccc = "To listen to more  from "+msg+" click here";
+
+
+    this.firebaseDynamicLinks.createShortDynamicLink({
+      domainUriPrefix: "https://islamicaudiobooks.page.link/",
+      link: "https://islamicaudiobooks.info/chapter/"+id,
+      socialMetaTagInfo: {
+        "socialTitle": "Islamic Audio Books - Listen Authentic Islamic Knowledge",
+        "socialDescription": ccc,
+      },
+      "androidInfo": {
+        "androidPackageName": "com.urduaudiobooks.urdutafsir",
+      },
+      "iosInfo": {
+        "iosBundleId": 'com.islamicaudbooks.managix',
+        "iosAppStoreId": '1512406926'
+    }
+  })
+  .then(async (res: any) => {
+    await Share.share({
+      title: 'Islamin Audio Book',
+      text: ccc + res,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
+      dialogTitle: 'Share with buddies'
+    });
+
+  })
+
+
+  }
+
+
+  async sharebook(msg,id)
   {
     this.presentLoadingWithOptions();
-    let ccc = "To listen to more  from "+msg+" download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info";
-    this.socialSharing.share(ccc).then(()=>{
+    let ccc = "To listen to more  from "+msg+" click here ";
+    this.firebaseDynamicLinks.createShortDynamicLink({
+      domainUriPrefix: "https://islamicaudiobooks.page.link/",
+      link: "https://islamicaudiobooks.info/book/"+id,
+      socialMetaTagInfo: {
+        "socialTitle": "Islamic Audio Books - Listen Authentic Islamic Knowledge",
+        "socialDescription": ccc,
+      },
+      "androidInfo": {
+        "androidPackageName": "com.urduaudiobooks.urdutafsir",
+      },
+      "iosInfo": {
+        "iosBundleId": 'com.islamicaudbooks.managix',
+        "iosAppStoreId": '1512406926'
+    }
+  })
+  .then(async (res: any) => {
+    await Share.share({
+      title: 'Islamin Audio Book',
+      text:  res, //'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
+      dialogTitle: 'Share with buddies'
+    });
 
-   })
+  })
+
+
+
   }
   @ViewChild(IonContent,{static: false}) ionContent: IonContent;
   showscrolltotop : boolean = false;

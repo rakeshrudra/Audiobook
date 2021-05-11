@@ -233,6 +233,18 @@ export class AppComponent {
            // alert(slug)
             this.storage.set('audioid',slug);
           }
+          const slug_book = data.url.split(".info/book/").pop();
+          if (slug_book && slug_book != data.url) {
+            this._api.bookUrlnext(slug_book)
+          }
+          const slug_chapter = data.url.split(".info/chapter/").pop();
+          if (slug_chapter && slug_chapter != data.url) {
+            this._api.chapterUrlnext(slug_chapter)
+          }
+          const slug_topic = data.url.split(".info/topic/").pop();
+          if (slug_topic && slug_topic != data.url) {
+            this._api.topicUrlnext(slug_topic)
+          }
           // If no match, do nothing - let regular routing
           // logic take over
       });

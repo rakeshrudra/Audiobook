@@ -71,7 +71,8 @@
   </ion-slides><br /-->
 
 
-  <p style="padding-left: 16px; font-size: 16px;" *ngIf="lastlist?.length >0"><b>You were listening</b></p>
+  <h3 style="padding-left: 16px; font-size: 16px;" *ngIf="lastlist?.length >0"><b>You were listening</b></h3>
+
   <div class="ion-padding">
 
     <ion-list lines="full">
@@ -90,8 +91,8 @@
 
   </div>
 
-  <p style="padding-left: 16px; font-size: 16px;" *ngIf="taudiodata?.length >0"><b>Latest audio</b></p><br />
-  <ion-slides pager="false" [options]="slideOpts2" class="ion-padding default-containe"
+  <h3 style="padding-left: 16px; font-size: 16px;" *ngIf="taudiodata?.length >0"><b>Latest audio</b></h3>
+  <ion-slides pager="false" [options]="slideOpts2" class="ion-padding-left default-containe"
     style="--margin-top: 10px;--margin-bottom: 10px;" *ngIf="taudiodata?.length >0">
     <ng-container *ngFor="let a of taudiodata; let i = index">
       <ion-slide *ngIf="i< 5">

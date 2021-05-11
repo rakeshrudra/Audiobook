@@ -49,7 +49,28 @@ export class ApiService {
 
 
 
+
   activeClass = new BehaviorSubject<string>('light')
+
+  chapterUrl = new BehaviorSubject<string>('');
+  topicUrl = new BehaviorSubject<string>('');
+  bookUrl = new BehaviorSubject<string>('');
+
+  bookUrlnext(val)
+  {
+     this.bookUrl.next(val)
+  }
+  chapterUrlnext(val)
+  {
+     this.chapterUrl.next(val)
+  }
+  topicUrlnext(val)
+  {
+     this.topicUrl.next(val)
+  }
+
+
+
 
   downloadQstartnext(val)
   {

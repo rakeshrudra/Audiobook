@@ -38,7 +38,7 @@ export class DownloadplayService {
   getposition()
   {
     setInterval(()=>{
-     
+
     },100)
   }
 
@@ -46,7 +46,7 @@ export class DownloadplayService {
     this.dounloadisloading = true;
     this.download_start(no)
     this.downloadcurrenttrackno = i;
-    
+
   }
 
   downloadPlaylistq: track[] = []
@@ -58,7 +58,7 @@ export class DownloadplayService {
 
   download_start(track) {
 
-    if (this.downloadPlayer) 
+    if (this.downloadPlayer)
     {
       this.downloadPlayer.stop();
       this.downloadPlayer.release();
@@ -95,9 +95,9 @@ export class DownloadplayService {
     })
     this.downloadPlayer.play({ playAudioWhenScreenIsLocked: true });
   }
-  download_next() 
+  download_next()
   {
-    if (!this.dounloadisloading) 
+    if (!this.dounloadisloading)
     {
       let count = this.downloadcurrenttrackno;
       var no = count + 1;
@@ -188,7 +188,7 @@ export class DownloadplayService {
 
   download_start(track) {
 
-    if (this.curr_playing_file) 
+    if (this.curr_playing_file)
     {
       this.curr_playing_file.stop();
       this.curr_playing_file.release();
@@ -216,7 +216,7 @@ export class DownloadplayService {
     }, 100);
   }
 
-  download_next() 
+  download_next()
   {
       let count = this.downloadcurrenttrackno;
       var no = count + 1;
@@ -377,7 +377,7 @@ export class DownloadplayService {
     //   s
     // ); // and we add Number s to the string (converting it to String as well)
   //}
-//} 
+//}
 
 
 import { Injectable } from '@angular/core';
@@ -452,7 +452,7 @@ playafter()
     console.log('Reseting')
     this.duration = -1;
     this.position = 0;
-  
+
   }
 
   selectandplay(i)
@@ -471,7 +471,7 @@ playafter()
   }
 
 
-  download_next() 
+  download_next()
   {
       let count = this.downloadcurrenttrackno;
       var no = count + 1;
@@ -509,7 +509,7 @@ playafter()
   }
 
   getDurationAndSetToPlay(track) {
-    if (this.curr_playing_file) 
+    if (this.curr_playing_file)
     {
       this.curr_playing_file.stop();
       this.curr_playing_file.release();
@@ -543,7 +543,7 @@ playafter()
   getAndSetCurrentAudioPosition() {
     console.log('Position tracking')
 
-    let diff = .5;
+    let diff = 1;
     let self = this;
     this.get_position_interval = setInterval(function() {
       let last_position = self.position;
