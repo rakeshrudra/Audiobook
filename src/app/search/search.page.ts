@@ -135,14 +135,18 @@ export class SearchPage implements OnInit {
       var formData_new = new FormData();
       for(var i =0; i<this.selectedbook.length;i++)
       {
+        if(this.selectedbook[i] !=''){
        formData_new.append('book_id[]',this.selectedbook[i]);
+        }
       }
 
       formData_new.append('search',this.searchTerm);
 
       for(var i =0; i<this.selectedchapter.length;i++)
       {
+        if(this.selectedchapter[i] !=''){
        formData_new.append('chapter_id[]',this.selectedchapter[i]);
+        }
       }
 
         this._api.post_searchtrack(formData_new).subscribe(val=>{
@@ -158,6 +162,8 @@ export class SearchPage implements OnInit {
   bookChange($event){
     //this.selectedbook = $event.target.value;
     var formData_new = new FormData();
+    this.selectedchapter = '';
+
    for(var i =0; i<this.selectedbook.length;i++)
    {
     formData_new.append('book_id[]',this.selectedbook[i]);

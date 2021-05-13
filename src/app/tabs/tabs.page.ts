@@ -159,7 +159,7 @@ export class TabsPage implements OnInit {
             }
             var newar = ff.concat(val);
             this.storage.set('allaudios',newar).then(()=>{
-              console.log(newar);
+              //console.log(newar);
             })
             //this.router.navigate(['/tab'], { replaceUrl: true })
             // this.timmer()
@@ -184,7 +184,7 @@ export class TabsPage implements OnInit {
       if (RouterEvent instanceof NavigationStart) {
         let url = RouterEvent.url.split('/');
         this.tab = url[2];
-        //console.log(this.tab)
+        ////console.log(this.tab)
         this.api.showplayernext(false);
       }
     })
@@ -227,7 +227,7 @@ export class TabsPage implements OnInit {
 
         html5PoolSize : 100,
         onload: (e) => {
-          console.log(e, "l")
+          //console.log(e, "l")
 
           this.loader = true;
           this.duration = this.palyer.duration();
@@ -235,16 +235,16 @@ export class TabsPage implements OnInit {
           this.ctime = 0;
         },
         onstop: (e) => {
-          console.log(e, "s")
+          //console.log(e, "s")
         }
          ,onplayerror: function(e) {
-          console.log(e)
+          //console.log(e)
           this.palyer.once('unlock', function() {
             this.palyer.play();
           });
         },
         onplay: (e) => {
-          console.log(e, "p")
+          //console.log(e, "p")
           this.payId = e;
           this.notificationCall = false;
           this.loader = false;
@@ -266,12 +266,12 @@ export class TabsPage implements OnInit {
           this.storage.set('lasttrack', this.activeTrack);
           let index = this.playlist.indexOf(this.activeTrack);
           this.nexttrackId = index + 1;
-          console.log(this.palyer)
+          //console.log(this.palyer)
           this.preloadoudio();
           this.ckfeb(track)
         },
         onend: (e) => {
-          console.log(e, "e")
+          //console.log(e, "e")
           if (!this.repeataudio) {
             if(this.api.playnextchapter.value)
             {
@@ -365,7 +365,7 @@ export class TabsPage implements OnInit {
       {
       this.palyer.pause();
       }
-     // console.log(this.palyer.pause(),'pause')
+     // //console.log(this.palyer.pause(),'pause')
     } else {
       CapacitorMusicControls.updateIsPlaying({
         isPlaying: true, // affects Android only
@@ -374,7 +374,7 @@ export class TabsPage implements OnInit {
       {
       this.palyer.play();
       }
-     // console.log(this.palyer.play(),'play');
+     // //console.log(this.palyer.play(),'play');
     }
   }
 
@@ -459,7 +459,7 @@ export class TabsPage implements OnInit {
   }
   playcurrent() {
     this.palyer.play();
-    console.log('1')
+    //console.log('1')
     CapacitorMusicControls.updateIsPlaying({
       isPlaying: true, // affects Android only
     });
@@ -517,7 +517,7 @@ export class TabsPage implements OnInit {
           }
         } else {
           this.favourit = filteredPeople;
-          //console.log(this.favourit,'3')
+          ////console.log(this.favourit,'3')
           this.api.book(track).subscribe(val => {
             this.favourit.push(val[0])
             this.storage.set('book', this.favourit).then(c => {
@@ -528,7 +528,7 @@ export class TabsPage implements OnInit {
       }
       else {
         this.api.book(track).subscribe(val => {
-          //console.log(val,"4")
+          ////console.log(val,"4")
           this.storage.set('book', val).then()
         })
       }

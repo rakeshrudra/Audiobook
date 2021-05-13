@@ -122,7 +122,7 @@ export class AudiotopPage implements OnInit {
     let ccc = "To listen to more  from "+msg+" click here ";
     this.firebaseDynamicLinks.createShortDynamicLink({
       domainUriPrefix: "https://islamicaudiobooks.page.link/",
-      link: "https://islamicaudiobooks.info/book/"+id,
+      link: "https://islamicaudiobooks.info/topic/"+id,
       socialMetaTagInfo: {
         "socialTitle": "Islamic Audio Books - Listen Authentic Islamic Knowledge",
         "socialDescription": ccc,

@@ -10,6 +10,11 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { topic } from '../model/topic';
 import { Downloader, DownloadRequest, NotificationVisibility } from '@ionic-native/downloader/ngx';
 import { AutoloadService } from '../service/autoload.service';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
+
+const {Share} = Plugins;
+
+import { Plugins } from '@capacitor/core';
 
 @Component({
   selector: 'app-topicaudiolist',
@@ -20,7 +25,7 @@ export class TopicaudiolistPage implements OnInit {
 
   constructor(
     public _autoload : AutoloadService,
-    private downloader: Downloader,public loadingController : LoadingController, public socialSharing : SocialSharing, public toastController : ToastController, public api : ApiService, public storage: Storage, public route : ActivatedRoute , public router : Router, public _api : NewapiService) {
+    private downloader: Downloader,public loadingController : LoadingController, public socialSharing : SocialSharing, public toastController : ToastController, public api : ApiService, public storage: Storage, public route : ActivatedRoute , public router : Router, public _api : NewapiService, private firebaseDynamicLinks : FirebaseDynamicLinks) {
       _autoload.activetrack.subscribe(val=>{
         _autoload.activetrack.subscribe(val=>{
         this.ckfev();
@@ -181,14 +186,6 @@ export class TopicaudiolistPage implements OnInit {
     return await loading.present();
   }
 
-  shareaudio(msg,img,url)
-  {
-  let ccc = "To listen more files from "+msg+" download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info. "+url
-  this.presentLoadingWithOptions();
-  this.socialSharing.share(ccc,'Islamic Audio Book').then(()=>{
-
-   })
-  }
   getColor(book:track)
   {
     return book.color;
@@ -373,4 +370,37 @@ get_storedlist(){
   })
 
 }
+
+async  shareaudio(msg, img, url,id) {
+
+  let ccc = "To listen more files from " + msg + " download Islamic Audio Books ";
+
+
+  this.firebaseDynamicLinks.createShortDynamicLink({
+    domainUriPrefix: "https://islamicaudiobooks.page.link/",
+    link: "https://islamicaudiobooks.info/"+id,
+    socialMetaTagInfo: {
+      "socialTitle": "Islamic Audio Books - Listen Authentic Islamic Knowledge",
+      "socialDescription": ccc,
+    },
+    "androidInfo": {
+      "androidPackageName": "com.urduaudiobooks.urdutafsir",
+    }
+})
+.then(async (res: any) => {
+  await Share.share({
+    title: 'Islamin Audio Book',
+    text:  res,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
+    dialogTitle: 'Share with buddies'
+  });
+
+})
+
+
+
+
+  }
+
+
+
 }

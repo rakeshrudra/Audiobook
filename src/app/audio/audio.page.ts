@@ -252,7 +252,7 @@ async  shareaudio(msg, img, url,id) {
 .then(async (res: any) => {
   await Share.share({
     title: 'Islamin Audio Book',
-    text: ccc + res,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
+    text:  res,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
     dialogTitle: 'Share with buddies'
   });
 

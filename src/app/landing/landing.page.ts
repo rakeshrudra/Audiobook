@@ -103,19 +103,17 @@ export class LandingPage implements OnInit {
           this._api.audiolistnext(result)
           this._api.playnonext(0)
           this._api.showplayernext(true)
-        })
-
+          })
       }
       if(this._api.topicUrl.value !=''){
         var cp2 = this._api.topicUrl.value;//localStorage.getItem('slug_topic');
         this._api.topicUrlnext('');
-        alert(cp2)
         this.api.audio("?topic="+cp2).subscribe(result=>{
           this._api.playnextchapternext(false)
           this._api.audiolistnext(result)
           this._api.playnonext(0)
           this._api.showplayernext(true)
-        })
+          })
 
       }
 

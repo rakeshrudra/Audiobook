@@ -229,23 +229,23 @@ export class AppComponent {
           // Example url: https://beerswift.app/tabs/tab2
           // slug = /tabs/tab2
           const slug = data.url.split(".info/").pop();
-          if (slug) {
-           // alert(slug)
-            this.storage.set('audioid',slug);
+          var myArray = slug.split("/");
+
+         // alert(JSON.stringify(myArray))
+
+          if (myArray[0] == 'book') {
+            this.storage.set('slug_book',myArray[1]);
           }
-          const slug_book = data.url.split(".info/book/").pop();
-          if (slug_book && slug_book != data.url) {
-            this._api.bookUrlnext(slug_book)
+          if (myArray[0] == 'chapter') {
+            this._api.chapterUrlnext(myArray[1])
           }
-          const slug_chapter = data.url.split(".info/chapter/").pop();
-          if (slug_chapter && slug_chapter != data.url) {
-            this._api.chapterUrlnext(slug_chapter)
+          if (myArray[0] == 'topic') {
+            this._api.topicUrlnext(myArray[1])
           }
-          const slug_topic = data.url.split(".info/topic/").pop();
-          if (slug_topic && slug_topic != data.url) {
-            this._api.topicUrlnext(slug_topic)
+          if (myArray[0] != 'book' && myArray[0] != 'chapter' && myArray[0] != 'topic') {
+            this.storage.set('audioid',myArray[0])
           }
-          // If no match, do nothing - let regular routing
+          // If no match, do nothing' - let regular routing
           // logic take over
       });
   });
@@ -310,13 +310,13 @@ export class AppComponent {
           cssClass: 'button success',
           handler: (blah) => {
             this.alertShown = false;
-            console.log('Confirm Cancel: blah');
+            //console.log('Confirm Cancel: blah');
           }
         }, {
           text: 'Yes',
           cssClass: 'button danger',
           handler: () => {
-            //console.log('Confirm Okay');
+            ////console.log('Confirm Okay');
             this.alertShown = false;
             this.musicControls.destroy()
             navigator['app'].exitApp(); //Exit from app
@@ -348,7 +348,7 @@ export class AppComponent {
 
   ///
   pushnotification(){
-    console.log('Initializing HomePage');
+    //console.log('Initializing HomePage');
 
     // Request permission to use push notifications
     // iOS will prompt user and return if they granted permission or not
@@ -366,11 +366,11 @@ export class AppComponent {
       'registration',
       (token: PushNotificationToken) => {
         //alert('Push registration success, token: ' + token.value);
-        console.log(token.value);
+        //console.log(token.value);
         fcm
         .subscribeTo({ topic: 'all' })
-        .then((r) => console.log(`subscribed to topic`))
-        .catch((err) => console.log(err));
+        .then((r) => {console.log(`subscribed to topic`)})
+        .catch((err) =>{ console.log(err)});
 
         this._api.get_fbtoken(token.value).subscribe(v=>{
 
