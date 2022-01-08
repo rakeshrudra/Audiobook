@@ -161,6 +161,11 @@ export class SearchPage implements OnInit {
   selectedchapter = '';
   bookChange($event){
     //this.selectedbook = $event.target.value;
+    if(this.selectedbook[0] == ''){
+      this.selectedbook = '';
+      console.log(this.selectedbook)
+    }
+
     var formData_new = new FormData();
     this.selectedchapter = '';
 
@@ -175,6 +180,10 @@ export class SearchPage implements OnInit {
   }
   chapterChange($event){
    // this.selectedchapter =  $event.target.value;
+   if(this.selectedchapter[0] == ''){
+     this.selectedchapter = '';
+     console.log(this.selectedchapter)
+   }
     this.search();
   }
 
