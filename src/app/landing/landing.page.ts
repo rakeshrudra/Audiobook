@@ -232,7 +232,7 @@ get_storedlist(){
 checkstatusnew(alist:Array<any>){
   if(alist){
   var v =alist.every(v => this.storedid.includes(v));
-  console.log(alist,this.storedid,v);
+  //console.log(alist,this.storedid,v);
   return v;
   }else{
     return true;

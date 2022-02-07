@@ -34,7 +34,9 @@ import { AutoloadService } from './service/autoload.service';
 import { OfflinealertPageModule } from './offlinealert/offlinealert.module';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
+import { DeviceOrientation } from '@ionic-native/device-orientation/ngx';
 
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent, MenulistPipe, AboutusPipe],
@@ -68,7 +70,9 @@ import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
     Network,
     AndroidPermissions,
     FirebaseDynamicLinks,
-    AuthGuard
+    AuthGuard,
+    DeviceOrientation,
+    Geolocation
   ],
   bootstrap: [AppComponent]
 })
