@@ -37,6 +37,7 @@ import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 import { DeviceOrientation } from '@ionic-native/device-orientation/ngx';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 
 @NgModule({
   declarations: [AppComponent, MenulistPipe, AboutusPipe],
@@ -72,7 +73,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     FirebaseDynamicLinks,
     AuthGuard,
     DeviceOrientation,
-    Geolocation
+    Geolocation,
+    NativeGeocoder
   ],
   bootstrap: [AppComponent]
 })

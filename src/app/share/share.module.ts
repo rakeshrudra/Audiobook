@@ -12,17 +12,18 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IntercepterService } from '../intercepter.service';
 import { MarqueeDirective } from './marquee.directive';
 import { OfflinealertPageModule } from '../offlinealert/offlinealert.module';
+import { RemoveISTPipe } from './remove-ist.pipe';
 
 
 @NgModule({
   declarations: [
     MinuteSecondsPipe,
     SearchPipe,
-    AudiosearchPipe, 
-    BooksearchPipe, 
-    ChaptersearchPipe, 
-    HighlightPipe, 
-    MarqueeDirective
+    AudiosearchPipe,
+    BooksearchPipe,
+    ChaptersearchPipe,
+    HighlightPipe,
+    MarqueeDirective, RemoveISTPipe
   ],
   imports: [
     CommonModule,
@@ -33,13 +34,14 @@ import { OfflinealertPageModule } from '../offlinealert/offlinealert.module';
       provide : HTTP_INTERCEPTORS , useClass : IntercepterService , multi : true
      }
   ],
-  exports: [MinuteSecondsPipe, 
-    LazyLoadImageModule, 
-    SearchPipe, 
-    AudiosearchPipe, 
-    BooksearchPipe, 
-    ChaptersearchPipe, 
+  exports: [MinuteSecondsPipe,
+    LazyLoadImageModule,
+    SearchPipe,
+    AudiosearchPipe,
+    BooksearchPipe,
+    ChaptersearchPipe,
     HighlightPipe,
+    RemoveISTPipe
   ]
 })
 export class ShareModule { }

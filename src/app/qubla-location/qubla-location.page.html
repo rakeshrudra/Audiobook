@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Qibla Finder</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <img src="assets/qibla.png" style="margin-top: 20vh;" [ngStyle]="{'transform': 'rotate('+(_apiNew.qublaLocation.value)+'deg)'}" class="qubla">
+
+</ion-content>

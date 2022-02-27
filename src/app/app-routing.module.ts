@@ -110,7 +110,15 @@ const routes: Routes = [
     path: '',// loadChildren: './firstlunch/firstlunch.module#FirstlunchPageModule'
     loadChildren: () => import('../app/firstlunch/firstlunch.module').then(m => m.FirstlunchPageModule)
 
+  },  {
+    path: 'prayer-time',
+    loadChildren: () => import('./prayer-time/prayer-time.module').then( m => m.PrayerTimePageModule)
   },
+  {
+    path: 'qubla-location',
+    loadChildren: () => import('./qubla-location/qubla-location.module').then( m => m.QublaLocationPageModule)
+  },
+
 
 
 ];

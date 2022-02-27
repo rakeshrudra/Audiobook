@@ -54,6 +54,7 @@ export class NewapiService {
 
 
   activeClass = new BehaviorSubject<string>('light')
+  qublaLocation = new BehaviorSubject<number>(null)
 
   get_api()
   {
@@ -200,6 +201,10 @@ export class NewapiService {
   {
     return this.http.get<topic[]>(this.url_topic+`${uri}`)
   }
+  prayerTime(params) : Observable<topic[]>
+  {
+    return this.http.get<topic[]>('https://api.aladhan.com/v1/calendar',{params: params})
+  }
 
   audiolistnext(data)
   {
@@ -229,4 +234,10 @@ export class NewapiService {
   {
      this.isapiloading = c
   }
+  qublaLocationNext(c)
+  {
+   // console.log(c);
+     this.qublaLocation.next(c);
+  }
+
 }

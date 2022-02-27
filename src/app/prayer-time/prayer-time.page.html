@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>prayerTime</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<!-- List of Text Items -->
+<ion-list *ngIf="timings">
+  <ion-item>
+    <ion-label>Fajr</ion-label>
+    <ion-label>{{timings.Fajr | removeIST}}</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Sunrise</ion-label>
+    <ion-label>{{timings.Sunrise | removeIST}}</ion-label>
+  </ion-item>
+
+
+    <ion-item>
+      <ion-label>Dhuhr</ion-label>
+      <ion-label>{{timings.Dhuhr | removeIST}}</ion-label>
+    </ion-item>
+
+    <ion-item>
+
+      <ion-label>Asr</ion-label>
+    <ion-label>{{timings.Asr | removeIST}}</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Maghrib</ion-label>
+    <ion-label>{{timings.Maghrib | removeIST}}</ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Isha</ion-label>
+    <ion-label slot="end">{{timings.Isha  | removeIST}}</ion-label>
+  </ion-item>
+</ion-list>
+</ion-content>

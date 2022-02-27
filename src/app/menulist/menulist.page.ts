@@ -23,6 +23,12 @@ export class MenulistPage implements OnInit {
   app;
   public appPages = [
     {
+      title: 'Prayer Times',
+      url: '/prayer-time',
+      icon: 'information-circle'
+    }
+    ,
+    {
       title: 'About Us',
       url: '/tab/menu/aboutus',
       icon: 'information-circle'

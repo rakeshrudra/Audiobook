@@ -1,3 +1,4 @@
+import { NewapiService } from './newapi.service';
 import { Component, Inject , NgZone} from '@angular/core';
 
 import { Platform, ToastController, LoadingController, AlertController } from '@ionic/angular';
@@ -14,6 +15,8 @@ import { Location } from '@angular/common';
 import { File } from '@ionic-native/file/ngx';
 const MEDIA_FOLDER_NAME = 'audios';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
+
 import {
   Plugins,
   PushNotification,
@@ -69,20 +72,14 @@ export class AppComponent {
   timePeriodToExit = 400;
   counter = 0;
   alertShown = false;
-  public data: DeviceOrientationCompassHeading = null;
-  public currentLocation = null;
-  // Initial Kaaba location that we've got from google maps
-  private kaabaLocation: {lat:number,lng:number} = {lat: 21.42276, lng: 39.8256687};
-  // Initial Qibla Location
-  public qiblaLocation = 0;
 
-
-constructor(private deviceOrientation: DeviceOrientation,
+constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     @Inject(DOCUMENT) private document: Document,
     private _api: ApiService,
+    public _apiNew: NewapiService,
     public storage: Storage,
     private screenOrientation: ScreenOrientation,
     // public network: Network,
@@ -94,99 +91,10 @@ constructor(private deviceOrientation: DeviceOrientation,
     public location: Location,
     public file: File,
     private androidPermissions: AndroidPermissions,
-    private zone : NgZone
+    private zone : NgZone,
+    private nativeGeocoder: NativeGeocoder
   ) {
-    /*network.onConnect().subscribe(()=>{
-      this.conect()
-    })
-    network.onDisconnect().subscribe(()=>{
-      this.disconect()
-    })
-*/
     this.initializeApp();
-
-    // stop connect watch
-    this._router.events.subscribe((RouterEvent: Event) => {
-      if (RouterEvent instanceof NavigationStart) {
-        let url = RouterEvent.url;
-        let urlar = url.split('/');
-        // console.log(urlar)
-        if (RouterEvent.url != '/' && RouterEvent.url != '/loader' && urlar[2] != 'menu') {
-          // this.presentLoadingWithOptions()
-        }
-      }
-      if (RouterEvent instanceof NavigationEnd) {
-        let url = RouterEvent.url;
-        let urlar = url.split('/');
-        if (urlar[2] == 'home') {
-          //this.toastCtrl.dismiss()
-        }
-      }
-      if (RouterEvent instanceof NavigationError) {
-        let url = RouterEvent.url;
-        let urlar = url.split('/');
-        if (urlar[2] == 'home') {
-          //this.toastCtrl.dismiss()
-        }
-      }
-      if (RouterEvent instanceof NavigationCancel) {
-        let url = RouterEvent.url;
-        let urlar = url.split('/');
-        if (urlar[2] == 'home') {
-          //this.toastCtrl.dismiss()
-        }
-      }
-    })
-
-    this.deviceOrientation.watchHeading().subscribe((res: DeviceOrientationCompassHeading) => {
-      this.data = res;
-      // Change qiblaLocation when currentLocation is not empty
-      if (!!this.currentLocation) {
-        const currentQibla = res.magneticHeading-this.getQiblaPosition();
-        this.qiblaLocation = currentQibla > 360 ? currentQibla%360 : currentQibla;
-      }
-    });
-    // Watch current location
-
-    this.kkk();
-  }
-async kkk(){
-  //console.log(hh,"this.geolocation.watchPosition")
-    await Geolocation.watchPosition({}, (position, err) => {
-      this.currentLocation = position;
-      console.log(position,"position")
-    })
-}
-  getQiblaPosition() {
-    // Convert all geopoint degree to radian before jump to furmula
-    const currentLocationLat = this.degreeToRadian(this.currentLocation.coords.latitude);
-    const currentLocationLng = this.degreeToRadian(this.currentLocation.coords.longitude);
-    const kaabaLocationLat = this.degreeToRadian(this.kaabaLocation.lat);
-    const kaabaLocationLng = this.degreeToRadian(this.kaabaLocation.lng);
-
-    // Use Basic Spherical Trigonometric Formula
-    return this.radianToDegree(
-      Math.atan2(
-        Math.sin(kaabaLocationLng-currentLocationLng),
-        (Math.cos(currentLocationLat) * Math.tan(kaabaLocationLat) - Math.sin(currentLocationLat) * Math.cos(kaabaLocationLng - currentLocationLng))
-      )
-    );
-  }
-
-  /**
-   * Convert from Radian to Degree
-   * @param radian
-   */
-  radianToDegree(radian: number) {
-    return radian * 180 / Math.PI;
-  }
-
-  /**
-   * Convert from Degree to Radian
-   * @param degree
-   */
-  degreeToRadian(degree: number) {
-    return degree * Math.PI / 180;
   }
 
   initializeApp() {
@@ -198,32 +106,11 @@ async kkk(){
         this.splashScreen.hide();
 
       }, 1000)
-  /*  this.fcm.getToken().then(token => {
-      console.log('fcm',token);
-    },er=>{
-      console.log('fcm err',er)
-    });
-*/
-
-   //////////////
 
    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.FOREGROUND_SERVICE).then(
     result => console.log('Has permission?',result.hasPermission),
     err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.FOREGROUND_SERVICE)
   );
-
-
-
-  /*  this.fcm.onNotification().subscribe(data => {
-      console.log(data);
-      if (data.wasTapped) {
-        console.log('Received in background');
-       // this.router.navigate([data.landing_page, data.price]);
-      } else {
-        console.log('Received in foreground');
-        //this.router.navigate([data.landing_page, data.price]);
-      }
-    });*/
 
       this.platform.backButton.subscribeWithPriority(10000, () => {
         if (this._api.showplayer.value) {
@@ -301,20 +188,11 @@ async kkk(){
           if (myArray[0] != 'book' && myArray[0] != 'chapter' && myArray[0] != 'topic') {
             this.storage.set('audioid',myArray[0])
           }
-          // If no match, do nothing' - let regular routing
-          // logic take over
       });
   });
 
   }
   async presentLoadingWithOptions() {
-    /* const loading = await this.loadingController.create({
-       duration: 6000,
-       message: 'Loading.',
-       translucent: true,
-       cssClass: 'custom-class custom-loading'
-     });
-     return await loading.present(); */
     const toast = await this.toastCtrl.create({
       message: 'loading...',
       duration: 10000,
@@ -404,6 +282,7 @@ async kkk(){
 
   ///
   pushnotification(){
+
     //console.log('Initializing HomePage');
 
     // Request permission to use push notifications
@@ -428,9 +307,9 @@ async kkk(){
         .then((r) => {console.log(`subscribed to topic`)})
         .catch((err) =>{ console.log(err)});
 
-        this._api.get_fbtoken(token.value).subscribe(v=>{
+   /*     this._api.get_fbtoken(token.value).subscribe(v=>{
 
-        })
+        })*/
       },
     );
 

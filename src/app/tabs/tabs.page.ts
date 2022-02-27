@@ -1,3 +1,4 @@
+import { NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonTabs, LoadingController } from '@ionic/angular';
 
@@ -20,9 +21,17 @@ import { AutoloadService } from '../service/autoload.service';
 import { PlaynewmediaService } from '../service/playnewmedia.service';
 import { NewapiService } from '../newapi.service';
 const MEDIA_FOLDER_NAME = 'audios';
-import { Plugins } from '@capacitor/core';
 const { CapacitorMusicControls , Share } = Plugins;
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
+import {
+  Plugins,
+  PushNotification,
+  Geolocation,
+  PushNotificationToken,
+  PushNotificationActionPerformed
+} from '@capacitor/core';
+
+import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
 @Component({
   selector: 'app-tabs',
@@ -52,6 +61,8 @@ export class TabsPage implements OnInit {
     })
 
   })
+}).add(v=>{
+  this.deviceOrient();
 })
 
   }
@@ -98,7 +109,18 @@ export class TabsPage implements OnInit {
 
   isloading: boolean = false;
 
-  constructor(private loadingController: LoadingController,
+  public data: DeviceOrientationCompassHeading = null;
+  public currentLocation = null;
+  public currentLocationtt = null;
+  // Initial Kaaba location that we've got from google maps
+  private kaabaLocation: {lat:number,lng:number} = {lat: 21.42276, lng: 39.8256687};
+  // Initial Qibla Location
+  public qiblaLocation = 0;
+
+
+
+  constructor(private deviceOrientation: DeviceOrientation,
+    private loadingController: LoadingController,
     private socialSharing: SocialSharing,
     public _router: ActivatedRoute,
     public api: ApiService,
@@ -859,6 +881,69 @@ this.storage.get("storedaudio").then((val:Array<any>)=>{
     this.storage.set("storedaudio",[id])
   }
 })
+}
+
+
+
+///////////////////////
+
+
+async deviceOrient(){
+this.deviceOrientation.watchHeading().subscribe((res: DeviceOrientationCompassHeading) => {
+  this.data = res;
+  // Change qiblaLocation when currentLocation is not empty
+  if (!!this.currentLocation) {
+    const currentQibla = res.magneticHeading-this.getQiblaPosition();
+    this.qiblaLocation = currentQibla > 360 ? currentQibla%360 : currentQibla;
+    this._api.qublaLocationNext(this.qiblaLocation*-1);
+  }else{
+    this.devicekCurrentLocation();
+  }
+});
+// Watch current location
+}
+async devicekCurrentLocation(){
+this.currentLocation = await Geolocation.getCurrentPosition({
+enableHighAccuracy: true,
+timeout: 1000
+})
+}
+getQiblaPosition() {
+console.log(this.currentLocation,"currentLocation");
+
+// Convert all geopoint degree to radian before jump to furmula
+const currentLocationLat = this.degreeToRadian(this.currentLocation.coords.latitude);
+const currentLocationLng = this.degreeToRadian(this.currentLocation.coords.longitude);
+const kaabaLocationLat = this.degreeToRadian(this.kaabaLocation.lat);
+const kaabaLocationLng = this.degreeToRadian(this.kaabaLocation.lng);
+
+let options: NativeGeocoderOptions = {
+  useLocale: true,
+  maxResults: 5
+};
+
+// Use Basic Spherical Trigonometric Formula
+return this.radianToDegree(
+  Math.atan2(
+    Math.sin(kaabaLocationLng-currentLocationLng),
+    (Math.cos(currentLocationLat) * Math.tan(kaabaLocationLat) - Math.sin(currentLocationLat) * Math.cos(kaabaLocationLng - currentLocationLng))
+  )
+);
+}
+/**
+* Convert from Radian to Degree
+* @param radian
+*/
+radianToDegree(radian: number) {
+return radian * 180 / Math.PI;
+}
+
+/**
+* Convert from Degree to Radian
+* @param degree
+*/
+degreeToRadian(degree: number) {
+return degree * Math.PI / 180;
 }
 
 }

@@ -159,6 +159,9 @@
             </ion-tab-button>
         </ion-col>
         <ion-col>
+          <img src="assets/qibla.png" routerLink="/qubla-location"  [ngStyle]="{'transform': 'rotate('+(qiblaLocation*-1)+'deg)'}" class="Tabqubla">
+        </ion-col>
+        <ion-col>
             <ion-tab-button (click)="sharelink()" class="inactive">
                 <ion-icon name="share-social-outline"></ion-icon>
                 <ion-label>Share</ion-label>
