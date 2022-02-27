@@ -25,5 +25,7 @@ export interface track {
     downloading : boolean,
     downloaded : boolean,
     fullpath : string,
-    chapter_id : string
+    chapter_id : string,
+    contentText : string,
+    contentTextArabic : string
 }

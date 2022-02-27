@@ -37,6 +37,8 @@ export interface track {
     downloading : boolean,
     downloaded : boolean,
     fullpath : string,
+    contentText : string,
+    contentTextArabic : string
 
 
 }
