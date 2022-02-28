@@ -1,40 +1,56 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>prayerTime</ion-title>
+    <ion-title>Prayer Time</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-<!-- List of Text Items -->
-<ion-list *ngIf="timings">
-  <ion-item>
-    <ion-label>Fajr</ion-label>
-    <ion-label>{{timings.Fajr | removeIST}}</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>Sunrise</ion-label>
-    <ion-label>{{timings.Sunrise | removeIST}}</ion-label>
-  </ion-item>
+  <super-tabs activeTabIndex="{{indexNo}}"  >
+    <super-tabs-toolbar no-border slot="top" scrollable="true" class="ion-no-border" color="success" >
+      <ng-container *ngFor="let timing of timings; let i = index">
 
+      <super-tab-button *ngIf="i >= indexNo-1" >
+        <ion-label>{{timing?.date?.gregorian?.date}}</ion-label>
+      </super-tab-button>
+      </ng-container>
+    </super-tabs-toolbar>
+    <super-tabs-container>
+      <ng-container *ngFor="let timing of timings; let i = index">
+      <super-tab  *ngIf="i >= indexNo-1">
+        <ion-content>
+          <!-- List of Text Items -->
+          <ion-list *ngIf="timings">
+            <ion-item>
+              <ion-label>Fajr</ion-label>
+              <ion-label slot="end">{{timing.timings?.Fajr | removeIST}}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Sunrise</ion-label>
+              <ion-label slot="end">{{timing.timings?.Sunrise | removeIST}}</ion-label>
+            </ion-item>
 
-    <ion-item>
-      <ion-label>Dhuhr</ion-label>
-      <ion-label>{{timings.Dhuhr | removeIST}}</ion-label>
-    </ion-item>
+            <ion-item>
+              <ion-label>Dhuhr</ion-label>
+              <ion-label slot="end">{{timing.timings?.Dhuhr | removeIST}}</ion-label>
+            </ion-item>
 
-    <ion-item>
+            <ion-item>
+              <ion-label>Asr</ion-label>
+              <ion-label slot="end">{{timing.timings?.Asr | removeIST}}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Maghrib</ion-label>
+              <ion-label slot="end">{{timing.timings?.Maghrib | removeIST}}</ion-label>
+            </ion-item>
 
-      <ion-label>Asr</ion-label>
-    <ion-label>{{timings.Asr | removeIST}}</ion-label>
-  </ion-item>
-  <ion-item>
-    <ion-label>Maghrib</ion-label>
-    <ion-label>{{timings.Maghrib | removeIST}}</ion-label>
-  </ion-item>
-
-  <ion-item>
-    <ion-label>Isha</ion-label>
-    <ion-label slot="end">{{timings.Isha  | removeIST}}</ion-label>
-  </ion-item>
-</ion-list>
+            <ion-item>
+              <ion-label>Isha</ion-label>
+              <ion-label slot="end">{{timing.timings.Isha  | removeIST }}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </super-tab>
+    </ng-container>
+    </super-tabs-container>
+  </super-tabs>
 </ion-content>

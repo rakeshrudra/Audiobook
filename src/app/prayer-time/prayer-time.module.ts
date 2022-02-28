@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { PrayerTimePageRoutingModule } from './prayer-time-routing.module';
 
 import { PrayerTimePage } from './prayer-time.page';
+import { SuperTabsModule } from '@ionic-super-tabs/angular';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { PrayerTimePage } from './prayer-time.page';
     FormsModule,
     IonicModule,
     PrayerTimePageRoutingModule,
-    ShareModule
+    ShareModule,
+    SuperTabsModule
   ],
   declarations: [PrayerTimePage]
 })

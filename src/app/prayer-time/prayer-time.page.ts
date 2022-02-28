@@ -10,13 +10,23 @@ export class PrayerTimePage implements OnInit {
 
   response;
   timings;
+  indexNo;
   constructor(private _api: NewapiService) { }
 
   ngOnInit() {
-    this._api.prayerTime({latitude:17.3850,longitude:78.4867,method:2,day:27,month:2,year:2022}).subscribe(res=>{
+    const d = new Date();
+
+    this.indexNo = d.getDate();
+
+    this._api.prayerTime({latitude:23.5195,longitude:91.6542,method:1,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
       this.response = res;
-      this.timings = this.response?.data[0]?.timings
+      this.timings = this.response?.data;
+    }).add(v=>{
+    this._api.prayerTime({latitude:23.5195,longitude:91.6542,method:1,month:d.getMonth()+2,year:d.getFullYear()}).subscribe(res=>{
+      this.response = res;
+      this.timings = [...this.timings,...this.response?.data];
     })
-  }
+  })
+}
 
 }

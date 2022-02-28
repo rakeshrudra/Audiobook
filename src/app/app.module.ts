@@ -38,6 +38,7 @@ import { DeviceOrientation } from '@ionic-native/device-orientation/ngx';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { SuperTabsModule } from '@ionic-super-tabs/angular';
 
 @NgModule({
   declarations: [AppComponent, MenulistPipe, AboutusPipe],
@@ -49,7 +50,8 @@ import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@aw
     IonicStorageModule.forRoot(),
     HttpClientModule,
     ShareModule,
-    OfflinealertPageModule
+    OfflinealertPageModule,
+    SuperTabsModule.forRoot()
   ],
   providers: [
     StatusBar,
