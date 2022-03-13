@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: PrayerTimePage
+  },
+  {
+    path: 'prayersetting',
+    loadChildren: () => import('../prayerTime/prayersetting/prayersetting.module').then( m => m.PrayersettingPageModule)
   }
 ];
 

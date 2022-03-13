@@ -21,7 +21,7 @@ import { AutoloadService } from '../service/autoload.service';
 import { PlaynewmediaService } from '../service/playnewmedia.service';
 import { NewapiService } from '../newapi.service';
 const MEDIA_FOLDER_NAME = 'audios';
-const { CapacitorMusicControls , Share } = Plugins;
+const { CapacitorMusicControls, Share } = Plugins;
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 import {
   Plugins,
@@ -42,7 +42,7 @@ export class TabsPage implements OnInit {
 
   @ViewChild('myTabs', { static: true }) myTabs: IonTabs;
   audiobcdata = [];
-  downloadingStatus : boolean = false;
+  downloadingStatus: boolean = false;
 
   searchready: boolean = false;
   ngOnInit() {
@@ -50,20 +50,20 @@ export class TabsPage implements OnInit {
       this.api.activeClassnext(val);
 
     })
- //   alert(this.api.activeClass.value)
- this.api.allchapters({}).subscribe(data => {
-  this.storage.set('chapters', data).then(() => {
-  })
-}).add(() => {
-  this.api.alltopic().subscribe(data => {
-    this.storage.set('alltopic', data).then(() => {
-      // this.timmer()
-    })
+    //   alert(this.api.activeClass.value)
+    this.api.allchapters({}).subscribe(data => {
+      this.storage.set('chapters', data).then(() => {
+      })
+    }).add(() => {
+      this.api.alltopic().subscribe(data => {
+        this.storage.set('alltopic', data).then(() => {
+          // this.timmer()
+        })
 
-  })
-}).add(v=>{
-  this.deviceOrient();
-})
+      })
+    }).add(v => {
+      this.deviceOrient();
+    })
 
   }
   change(val) {
@@ -113,7 +113,7 @@ export class TabsPage implements OnInit {
   public currentLocation = null;
   public currentLocationtt = null;
   // Initial Kaaba location that we've got from google maps
-  private kaabaLocation: {lat:number,lng:number} = {lat: 21.42276, lng: 39.8256687};
+  private kaabaLocation: { lat: number, lng: number } = { lat: 21.42276, lng: 39.8256687 };
   // Initial Qibla Location
   public qiblaLocation = 0;
 
@@ -132,14 +132,14 @@ export class TabsPage implements OnInit {
     public media: Media,
     public _downloadService: DownloadService,
     private transfer: FileTransfer,
-    public _download : DownloadService,
-    public _autoload : AutoloadService,
+    public _download: DownloadService,
+    public _autoload: AutoloadService,
     public _downloadPlay: PlaynewmediaService,
     private firebaseDynamicLinks: FirebaseDynamicLinks
   ) {
 
     ///////////
-  //  this.notifcation()
+    //  this.notifcation()
     _download.start();
 
     api.audiolist.subscribe((val: track[]) => {
@@ -167,37 +167,35 @@ export class TabsPage implements OnInit {
       })
     })
     /// all new audios
-    this.storage.get('lastdate').then(lastdate=>{
+    this.storage.get('lastdate').then(lastdate => {
 
-    this._api.latestaudio('?lastdate='+lastdate).subscribe((val: track[]) => {
-      if (val.length > 0) {
+      this._api.latestaudio('?lastdate=' + lastdate).subscribe((val: track[]) => {
+        if (val.length > 0) {
 
-          this.storage.get('allaudios').then((e : track[]) => {
+          this.storage.get('allaudios').then((e: track[]) => {
             var ff = e;
-            for(var i =0; i < val.length; i++)
-            {
-               ff = ff.filter(e=>e.id != val[i].id);
-             //this.storage.set('allaudios',ff)
+            for (var i = 0; i < val.length; i++) {
+              ff = ff.filter(e => e.id != val[i].id);
+              //this.storage.set('allaudios',ff)
             }
             var newar = ff.concat(val);
-            this.storage.set('allaudios',newar).then(()=>{
+            this.storage.set('allaudios', newar).then(() => {
               //console.log(newar);
             })
             //this.router.navigate(['/tab'], { replaceUrl: true })
             // this.timmer()
-         // }).then(() => {
+            // }).then(() => {
             //this.api.isapiloadingnext(true);
-            var date =new Date().toLocaleString();
+            var date = new Date().toLocaleString();
             this.storage.set('lastdate', date)
 
           })
-      }else
-      {
-        var date =new Date().toLocaleString();
-        this.storage.set('lastdate', date)
-      }
+        } else {
+          var date = new Date().toLocaleString();
+          this.storage.set('lastdate', date)
+        }
+      })
     })
-  })
     ///
 
 
@@ -218,12 +216,11 @@ export class TabsPage implements OnInit {
   @ViewChild('range', { static: false }) range: IonRange;
   payId;
   async start(track: track) {
-     this._downloadPlay.download_close()
+    this._downloadPlay.download_close()
     // this.api.audiolistnext(null)
     //this.download_close()
-    if(track.new == 'true')
-    {
-    this.storepayaudio(track.id)
+    if (track.new == 'true') {
+      this.storepayaudio(track.id)
     }
     await new Promise((resolve, reject) => {
       if (typeof track.download !== undefined && track.download == 1) {
@@ -247,7 +244,7 @@ export class TabsPage implements OnInit {
         src: [url],
         //loop: true,
 
-        html5PoolSize : 100,
+        html5PoolSize: 100,
         onload: (e) => {
           //console.log(e, "l")
 
@@ -259,9 +256,9 @@ export class TabsPage implements OnInit {
         onstop: (e) => {
           //console.log(e, "s")
         }
-         ,onplayerror: function(e) {
+        , onplayerror: function (e) {
           //console.log(e)
-          this.palyer.once('unlock', function() {
+          this.palyer.once('unlock', function () {
             this.palyer.play();
           });
         },
@@ -295,11 +292,9 @@ export class TabsPage implements OnInit {
         onend: (e) => {
           //console.log(e, "e")
           if (!this.repeataudio) {
-            if(this.api.playnextchapter.value)
-            {
-            this.next()
-            }else
-            {
+            if (this.api.playnextchapter.value) {
+              this.next()
+            } else {
               this.api.showplayernext(false)
               this.api.audiolistnext([])
               this.close()
@@ -383,20 +378,18 @@ export class TabsPage implements OnInit {
       CapacitorMusicControls.updateIsPlaying({
         isPlaying: false, // affects Android only
       });
-      if(this.palyer.playing())
-      {
-      this.palyer.pause();
+      if (this.palyer.playing()) {
+        this.palyer.pause();
       }
-     // //console.log(this.palyer.pause(),'pause')
+      // //console.log(this.palyer.pause(),'pause')
     } else {
       CapacitorMusicControls.updateIsPlaying({
         isPlaying: true, // affects Android only
       });
-      if(!this.palyer.playing())
-      {
-      this.palyer.play();
+      if (!this.palyer.playing()) {
+        this.palyer.play();
       }
-     // //console.log(this.palyer.play(),'play');
+      // //console.log(this.palyer.play(),'play');
     }
   }
 
@@ -558,9 +551,9 @@ export class TabsPage implements OnInit {
   }
   nextchapteraodios() {
     if (this.api.playno.value <= this.playlist.length) {
-      this._api.get_nextchapteraudio('?id='+this.activeTrack.id).subscribe(val=>{
+      this._api.get_nextchapteraudio('?id=' + this.activeTrack.id).subscribe(val => {
         this.nextplaylist = val
-    })
+      })
 
 
     } else {
@@ -571,41 +564,35 @@ export class TabsPage implements OnInit {
 
   previouschapteraodios() {
     //console.log(this.api.playno.value);
-      this.storage.get('allaudios').then((tracks: track[]) => {
-        if(this.activeTrack.topic !='')
-        {
-          let chapter_id = this.activeTrack.chapter_id;
-          let topic_id = parseInt(this.activeTrack.topic) - 1;
-          this.previousplaylist = tracks.filter((val: track) => val.book_id == this.activeTrack.book_id && val.topic == topic_id.toString() &&  val.chapter_id == chapter_id);
-          if(this.previousplaylist && this.previousplaylist.length > 0)
-          {
-            this.api.audiolistnext(this.previousplaylist)
-            let trac = this.previousplaylist.length - 1;
-            this.api.playnonext(trac)
-            this.nextplaylist = []
+    this.storage.get('allaudios').then((tracks: track[]) => {
+      if (this.activeTrack.topic != '') {
+        let chapter_id = this.activeTrack.chapter_id;
+        let topic_id = parseInt(this.activeTrack.topic) - 1;
+        this.previousplaylist = tracks.filter((val: track) => val.book_id == this.activeTrack.book_id && val.topic == topic_id.toString() && val.chapter_id == chapter_id);
+        if (this.previousplaylist && this.previousplaylist.length > 0) {
+          this.api.audiolistnext(this.previousplaylist)
+          let trac = this.previousplaylist.length - 1;
+          this.api.playnonext(trac)
+          this.nextplaylist = []
 
-          }else
-          {
-            this.api.showplayernext(false)
-            this.close()
-          }
-        }else
-        {
-          let chapter_id = parseInt(this.activeTrack.chapter_id) - 1;
-          this.previousplaylist = tracks.filter((val: track) => val.book_id == this.activeTrack.book_id && val.chapter_id == chapter_id.toString());
-          if(this.previousplaylist && this.previousplaylist.length > 0)
-          {
-            this.api.audiolistnext(this.previousplaylist);
-            let trac = this.previousplaylist.length - 1;
-            this.api.playnonext(trac)
-            this.nextplaylist = []
-          }else
-          {
-            this.api.showplayernext(false)
-            this.close()
-          }
-        }//console.log(this.nextplaylist)
-      })
+        } else {
+          this.api.showplayernext(false)
+          this.close()
+        }
+      } else {
+        let chapter_id = parseInt(this.activeTrack.chapter_id) - 1;
+        this.previousplaylist = tracks.filter((val: track) => val.book_id == this.activeTrack.book_id && val.chapter_id == chapter_id.toString());
+        if (this.previousplaylist && this.previousplaylist.length > 0) {
+          this.api.audiolistnext(this.previousplaylist);
+          let trac = this.previousplaylist.length - 1;
+          this.api.playnonext(trac)
+          this.nextplaylist = []
+        } else {
+          this.api.showplayernext(false)
+          this.close()
+        }
+      }//console.log(this.nextplaylist)
+    })
   }
 
   playnextchapter() {
@@ -623,7 +610,7 @@ export class TabsPage implements OnInit {
     this.repeataudio = true;
   }
 
- async sharelink() {
+  async sharelink() {
     this.presentLoadingWithOptions();
     await Share.share({
       title: 'Islamin Audio Book',
@@ -648,7 +635,7 @@ export class TabsPage implements OnInit {
 
     this.firebaseDynamicLinks.createShortDynamicLink({
       domainUriPrefix: "https://islamicaudiobooks.page.link/",
-      link: "https://islamicaudiobooks.info/"+this.activeTrack.id,
+      link: "https://islamicaudiobooks.info/" + this.activeTrack.id,
       socialMetaTagInfo: {
         "socialTitle": "Islamic Audio Books - Listen Authentic Islamic Knowledge",
         "socialDescription": ccc,
@@ -659,26 +646,26 @@ export class TabsPage implements OnInit {
       "iosInfo": {
         "iosBundleId": 'com.islamicaudbooks.managix',
         "iosAppStoreId": '1512406926'
-    }
-  })
-  .then(async (res: any) => {
-    await Share.share({
-      title: 'Islamin Audio Book',
-      text: ccc + res,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
-      dialogTitle: 'Share with buddies'
-    });
+      }
+    })
+      .then(async (res: any) => {
+        await Share.share({
+          title: 'Islamin Audio Book',
+          text: ccc + res,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
+          dialogTitle: 'Share with buddies'
+        });
 
-  })
+      })
 
 
-  //  let ccc = "To listen more files from " + msg + " download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info " + url
+    //  let ccc = "To listen more files from " + msg + " download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info " + url
     this.presentLoadingWithOptions();
     //await this.socialSharing.share(ccc, 'Islamic Audio Book')
-   /* await Share.share({
-      title: 'Islamin Audio Book',
-      text: ccc,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
-      dialogTitle: 'Share with buddies'
-    });*/
+    /* await Share.share({
+       title: 'Islamin Audio Book',
+       text: ccc,//'Download Islamic Audio Books app https://play.google.com/store/apps/details?id=com.urduaudiobooks.urdutafsir&hl=en or visit www.islamicaudiobooks.info to listen to free Islamic Audio Books',
+       dialogTitle: 'Share with buddies'
+     });*/
 
   }
 
@@ -731,220 +718,216 @@ export class TabsPage implements OnInit {
         if (Array.isArray(filteredPeople)) {
           favourit = filteredPeople;
           favourit.push(track)
-          this.storage.set('favourite', favourit).then(() => {  this.ckfeb(track) })
+          this.storage.set('favourite', favourit).then(() => { this.ckfeb(track) })
         }
         else {
-          this.storage.set('favourite', [track]).then(() => {  this.ckfeb(track) })
+          this.storage.set('favourite', [track]).then(() => { this.ckfeb(track) })
         }
       }
       else {
-        this.storage.set('favourite', [track]).then(() => {  this.ckfeb(track) })
+        this.storage.set('favourite', [track]).then(() => { this.ckfeb(track) })
       }
     })
   }
 
-  ckfeb(track)
-  {
-   // alert("ok")
+  ckfeb(track) {
+    // alert("ok")
     this.storage.get('favourite').then((val: track[]) => {
-      if(val){
-      const filteredPeople = val.filter((item) => item.id == track.id);
-      if(filteredPeople.length > 0)
-      {
-        this.activeTrack.fav = true
-      }else
-      {
-        this.activeTrack.fav = false
+      if (val) {
+        const filteredPeople = val.filter((item) => item.id == track.id);
+        if (filteredPeople.length > 0) {
+          this.activeTrack.fav = true
+        } else {
+          this.activeTrack.fav = false
+        }
       }
-    }
     })
 
   }
 
-  createControls()
-  {
-  CapacitorMusicControls.create({
-    album       : 'Islamic Audio Books',     // optional, default: ''
-    // cover can be a local path (use fullpath 'file:///storage/emulated/...', or only 'my_image.jpg' if my_image.jpg is in the www folder of your app)
-    //			 or a remote url ('http://...', 'https://...', 'ftp://...')
-    hasClose  : true,		// show close button, optional, default: false
+  createControls() {
+    CapacitorMusicControls.create({
+      album: 'Islamic Audio Books',     // optional, default: ''
+      // cover can be a local path (use fullpath 'file:///storage/emulated/...', or only 'my_image.jpg' if my_image.jpg is in the www folder of your app)
+      //			 or a remote url ('http://...', 'https://...', 'ftp://...')
+      hasClose: true,		// show close button, optional, default: false
 
-    track: this.activeTrack.audioname,
-    artist: this.activeTrack.chapter,
-    cover: 'https://islamicaudiobooks.info/audioapp/assets/upload/dd.jpeg',
-    hasPrev: true,
-    hasNext: true,
+      track: this.activeTrack.audioname,
+      artist: this.activeTrack.chapter,
+      cover: 'https://islamicaudiobooks.info/audioapp/assets/upload/dd.jpeg',
+      hasPrev: true,
+      hasNext: true,
 
 
-    // iOS only, optional
-    duration : 60, // optional, default: 0
-    elapsed : 10, // optional, default: 0
-      hasSkipForward : true, //optional, default: false. true value overrides hasNext.
-      hasSkipBackward : true, //optional, default: false. true value overrides hasPrev.
-      skipForwardInterval : 15, //optional. default: 15.
-    skipBackwardInterval : 15, //optional. default: 15.
-    hasScrubbing : false, //optional. default to false. Enable scrubbing from control center progress bar
+      // iOS only, optional
+      duration: 60, // optional, default: 0
+      elapsed: 10, // optional, default: 0
+      hasSkipForward: true, //optional, default: false. true value overrides hasNext.
+      hasSkipBackward: true, //optional, default: false. true value overrides hasPrev.
+      skipForwardInterval: 15, //optional. default: 15.
+      skipBackwardInterval: 15, //optional. default: 15.
+      hasScrubbing: false, //optional. default to false. Enable scrubbing from control center progress bar
 
       // Android only, optional
-      isPlaying   : true,							// optional, default : true
-      dismissable : false,							// optional, default : false
-    // text displayed in the status bar when the notification (and the ticker) are updated
-    ticker	  : 'Now playing "Time is Running Out"',
-    //All icons default to their built-in android equivalents
-    //The supplied drawable name, e.g. 'media_play', is the name of a drawable found under android/res/drawable* folders
-    playIcon: 'media_play',
-    pauseIcon: 'media_pause',
-    prevIcon: 'media_prev',
-    nextIcon: 'media_next',
-    notificationIcon: 'notification'
-  }, onSuccess, onError);
+      isPlaying: true,							// optional, default : true
+      dismissable: true,							// optional, default : false
+      // text displayed in the status bar when the notification (and the ticker) are updated
+      ticker: 'Now playing "Time is Running Out"',
+      //All icons default to their built-in android equivalents
+      //The supplied drawable name, e.g. 'media_play', is the name of a drawable found under android/res/drawable* folders
+      playIcon: 'media_play',
+      pauseIcon: 'media_pause',
+      prevIcon: 'media_prev',
+      nextIcon: 'media_next',
+      notificationIcon: 'notification'
+    }, onSuccess, onError);
 
-  var onSuccess = function(){
-    alert('success')
-  }
-  var onError = function(){
-    alert("error")
-  }
+    var onSuccess = function () {
+      alert('success')
+    }
+    var onError = function () {
+      alert("error")
+    }
 
 
 
-CapacitorMusicControls.updateIsPlaying({
-  isPlaying: true, // affects Android only
-});
+    CapacitorMusicControls.updateIsPlaying({
+      isPlaying: true, // affects Android only
+    });
 
-CapacitorMusicControls.addListener('controlsNotification', (info: any) => {
-  console.log('controlsNotification was fired');
-  console.log(info);
-  this.handleControlsEvent(info);
-});
+    CapacitorMusicControls.addListener('controlsNotification', (info: any) => {
+      console.log('controlsNotification was fired');
+      console.log(info);
+      this.handleControlsEvent(info);
+    });
   }
 
   notificationCall = false;
 
-handleControlsEvent(action){
+  handleControlsEvent(action) {
 
-console.log("hello from handleControlsEvent")
-const message = action.message;
-if(!this.notificationCall){
-  this.notificationCall = true;
- // alert(this.notificationCall)
-switch(message) {
-  case 'music-controls-next':
-    this.next();
-    this.settimeeout()
-    break;
-  case 'music-controls-previous':
-    this.previous();
-    this.settimeeout()
-    break;
-  case 'music-controls-pause':
-    this.togglePlayer(true);
-    this.settimeeout()
-    break;
-  case 'music-controls-play':
-    this.togglePlayer(false);
-    this.settimeeout()
-    break;
-  // Headset events (Android only)
-  // All media button events are listed below
-  case 'music-controls-media-button' :
-    // Do something
-    break;
-  case 'music-controls-headset-unplugged':
-    // Do something
-    break;
-  case 'music-controls-headset-plugged':
-    // Do something
-    break;
-  default:
-    break;
-}
-}
-}
-
-settimeeout(){
-  setTimeout(() => {
-    this.notificationCall = false;
-  }, 600);
-}
-
-
-/// tracking played Audio
-storepayaudio(id){
-this.storage.get("storedaudio").then((val:Array<any>)=>{
-  if(val){
-    val.push(id);
-    console.log(val)
-    var unique = val.filter((v, i, a) => a.indexOf(v) === i);
-    this.storage.set("storedaudio",unique)
-  }else{
-    this.storage.set("storedaudio",[id])
+    console.log("hello from handleControlsEvent")
+    const message = action.message;
+    if (!this.notificationCall) {
+      this.notificationCall = true;
+      // alert(this.notificationCall)
+      switch (message) {
+        case 'music-controls-next':
+          this.next();
+          this.settimeeout()
+          break;
+        case 'music-controls-previous':
+          this.previous();
+          this.settimeeout()
+          break;
+        case 'music-controls-pause':
+          this.togglePlayer(true);
+          this.settimeeout()
+          break;
+        case 'music-controls-play':
+          this.togglePlayer(false);
+          this.settimeeout()
+          break;
+        // Headset events (Android only)
+        // All media button events are listed below
+        case 'music-controls-media-button':
+          // Do something
+          break;
+        case 'music-controls-headset-unplugged':
+          // Do something
+          break;
+        case 'music-controls-headset-plugged':
+          // Do something
+          break;
+        default:
+          break;
+      }
+    }
   }
-})
-}
 
-
-
-///////////////////////
-
-
-async deviceOrient(){
-this.deviceOrientation.watchHeading().subscribe((res: DeviceOrientationCompassHeading) => {
-  this.data = res;
-  // Change qiblaLocation when currentLocation is not empty
-  if (!!this.currentLocation) {
-    const currentQibla = res.magneticHeading-this.getQiblaPosition();
-    this.qiblaLocation = currentQibla > 360 ? currentQibla%360 : currentQibla;
-    this._api.qublaLocationNext(this.qiblaLocation*-1);
-  }else{
-    this.devicekCurrentLocation();
+  settimeeout() {
+    setTimeout(() => {
+      this.notificationCall = false;
+    }, 600);
   }
-});
-// Watch current location
-}
-async devicekCurrentLocation(){
-this.currentLocation = await Geolocation.getCurrentPosition({
-enableHighAccuracy: true,
-timeout: 1000
-})
-}
-getQiblaPosition() {
-console.log(this.currentLocation,"currentLocation");
 
-// Convert all geopoint degree to radian before jump to furmula
-const currentLocationLat = this.degreeToRadian(this.currentLocation.coords.latitude);
-const currentLocationLng = this.degreeToRadian(this.currentLocation.coords.longitude);
-const kaabaLocationLat = this.degreeToRadian(this.kaabaLocation.lat);
-const kaabaLocationLng = this.degreeToRadian(this.kaabaLocation.lng);
 
-let options: NativeGeocoderOptions = {
-  useLocale: true,
-  maxResults: 5
-};
+  /// tracking played Audio
+  storepayaudio(id) {
+    this.storage.get("storedaudio").then((val: Array<any>) => {
+      if (val) {
+        val.push(id);
+        console.log(val)
+        var unique = val.filter((v, i, a) => a.indexOf(v) === i);
+        this.storage.set("storedaudio", unique)
+      } else {
+        this.storage.set("storedaudio", [id])
+      }
+    })
+  }
 
-// Use Basic Spherical Trigonometric Formula
-return this.radianToDegree(
-  Math.atan2(
-    Math.sin(kaabaLocationLng-currentLocationLng),
-    (Math.cos(currentLocationLat) * Math.tan(kaabaLocationLat) - Math.sin(currentLocationLat) * Math.cos(kaabaLocationLng - currentLocationLng))
-  )
-);
-}
-/**
-* Convert from Radian to Degree
-* @param radian
-*/
-radianToDegree(radian: number) {
-return radian * 180 / Math.PI;
-}
 
-/**
-* Convert from Degree to Radian
-* @param degree
-*/
-degreeToRadian(degree: number) {
-return degree * Math.PI / 180;
-}
+
+  ///////////////////////
+
+
+  async deviceOrient() {
+    this.deviceOrientation.watchHeading().subscribe((res: DeviceOrientationCompassHeading) => {
+      this.data = res;
+      // Change qiblaLocation when currentLocation is not empty
+      if (!!this.currentLocation) {
+        const currentQibla = res.magneticHeading - this.getQiblaPosition();
+        this.qiblaLocation = currentQibla > 360 ? currentQibla % 360 : currentQibla;
+        this._api.qublaLocationNext(this.qiblaLocation * -1);
+      } else {
+        this.devicekCurrentLocation();
+      }
+    });
+    // Watch current location
+  }
+  async devicekCurrentLocation() {
+    this.currentLocation = await Geolocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 1000
+    })
+  }
+  getQiblaPosition() {
+    this._api.currentLocationLatNext(this.currentLocation.coords.latitude);
+    this._api.currentLocationLongNext(this.currentLocation.coords.longitude);
+    // Convert all geopoint degree to radian before jump to furmula
+    const currentLocationLat = this.degreeToRadian(this.currentLocation.coords.latitude);
+    const currentLocationLng = this.degreeToRadian(this.currentLocation.coords.longitude);
+    const kaabaLocationLat = this.degreeToRadian(this.kaabaLocation.lat);
+    const kaabaLocationLng = this.degreeToRadian(this.kaabaLocation.lng);
+
+    let options: NativeGeocoderOptions = {
+      useLocale: true,
+      maxResults: 5
+    };
+
+    // Use Basic Spherical Trigonometric Formula
+    return this.radianToDegree(
+      Math.atan2(
+        Math.sin(kaabaLocationLng - currentLocationLng),
+        (Math.cos(currentLocationLat) * Math.tan(kaabaLocationLat) - Math.sin(currentLocationLat) * Math.cos(kaabaLocationLng - currentLocationLng))
+      )
+    );
+  }
+  /**
+  * Convert from Radian to Degree
+  * @param radian
+  */
+  radianToDegree(radian: number) {
+    return radian * 180 / Math.PI;
+  }
+
+  /**
+  * Convert from Degree to Radian
+  * @param degree
+  */
+  degreeToRadian(degree: number) {
+    return degree * Math.PI / 180;
+  }
 
 }
 

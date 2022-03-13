@@ -55,6 +55,8 @@ export class NewapiService {
 
   activeClass = new BehaviorSubject<string>('light')
   qublaLocation = new BehaviorSubject<number>(null)
+  currentLocationLat = new BehaviorSubject<number>(null)
+  currentLocationLong = new BehaviorSubject<number>(null)
 
   get_api()
   {
@@ -239,5 +241,18 @@ export class NewapiService {
    // console.log(c);
      this.qublaLocation.next(c);
   }
+
+  currentLocationLatNext(c)
+  {
+   // console.log(c);
+     this.currentLocationLat.next(c);
+  }
+  currentLocationLongNext(c)
+  {
+   // console.log(c);
+     this.currentLocationLong.next(c);
+  }
+
+
 
 }

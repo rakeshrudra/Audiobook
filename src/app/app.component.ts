@@ -16,11 +16,11 @@ import { File } from '@ionic-native/file/ngx';
 const MEDIA_FOLDER_NAME = 'audios';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
 
 import {
   Plugins,
   PushNotification,
-  Geolocation,
   PushNotificationToken,
   PushNotificationActionPerformed
 } from '@capacitor/core';
@@ -92,8 +92,8 @@ constructor(
     public file: File,
     private androidPermissions: AndroidPermissions,
     private zone : NgZone,
-    private nativeGeocoder: NativeGeocoder
-  ) {
+    private backgroundMode: BackgroundMode
+      ) {
     this.initializeApp();
   }
 
@@ -282,6 +282,8 @@ constructor(
 
   ///
   pushnotification(){
+
+    this.backgroundMode.enable();
 
     //console.log('Initializing HomePage');
 

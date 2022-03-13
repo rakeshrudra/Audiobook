@@ -6,7 +6,19 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class RemoveISTPipe implements PipeTransform {
 
   transform(value): unknown {
-    return value.replace('(IST)','');
+    let times =  value.replace('(IST)','');
+    let timeAr = times.split(":");
+
+    let hours = parseInt(timeAr[0]);
+    let minutes = parseInt(timeAr[1]);
+    console.log(minutes)
+
+    const ampm = hours >= 12 ? 'pm' : 'am';
+
+    hours %= 12;
+    hours = hours || 12;
+    const strTime = hours+":"+minutes+ampm;
+    return strTime;
   }
 
 }

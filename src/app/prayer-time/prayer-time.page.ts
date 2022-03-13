@@ -1,5 +1,7 @@
+import { ModalController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { NewapiService } from '../newapi.service';
+import { PrayersettingPage } from '../prayerTime/prayersetting/prayersetting.page';
 
 @Component({
   selector: 'app-prayer-time',
@@ -11,14 +13,14 @@ export class PrayerTimePage implements OnInit {
   response;
   timings;
   indexNo;
-  constructor(private _api: NewapiService) { }
+  constructor(private _api: NewapiService, private modalController: ModalController) { }
 
   ngOnInit() {
     const d = new Date();
 
     this.indexNo = d.getDate();
 
-    this._api.prayerTime({latitude:23.5195,longitude:91.6542,method:1,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:1,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
       this.response = res;
       this.timings = this.response?.data;
     }).add(v=>{
@@ -28,5 +30,16 @@ export class PrayerTimePage implements OnInit {
     })
   })
 }
+async presentSettingModal() {
+  const modal = await this.modalController.create({
+    component: PrayersettingPage,
+    backdropDismiss : true,
+    swipeToClose: true,
+    cssClass:"filterModal"
+
+  });
+  return await modal.present();
+}
+
 
 }

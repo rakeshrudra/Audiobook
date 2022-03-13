@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>Qibla Finder</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -8,3 +11,8 @@
   <img src="assets/qibla.png" style="margin-top: 20vh;" [ngStyle]="{'transform': 'rotate('+(_apiNew.qublaLocation.value)+'deg)'}" class="qubla">
 
 </ion-content>
+<ion-footer>
+  <ion-toolbar routerLink="/prayer-time" class="ion-text-center">
+    Salah Timing
+  </ion-toolbar>
+</ion-footer>

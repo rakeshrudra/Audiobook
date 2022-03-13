@@ -40,6 +40,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
 
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
+
 @NgModule({
   declarations: [AppComponent, MenulistPipe, AboutusPipe],
   entryComponents: [],
@@ -76,7 +78,8 @@ import { SuperTabsModule } from '@ionic-super-tabs/angular';
     AuthGuard,
     DeviceOrientation,
     Geolocation,
-    NativeGeocoder
+    NativeGeocoder,
+    BackgroundMode
   ],
   bootstrap: [AppComponent]
 })
