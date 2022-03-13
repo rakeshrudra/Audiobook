@@ -1,7 +1,11 @@
+import { async } from '@angular/core/testing';
 import { ModalController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { NewapiService } from '../newapi.service';
 import { PrayersettingPage } from '../prayerTime/prayersetting/prayersetting.page';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-prayer-time',
@@ -15,16 +19,20 @@ export class PrayerTimePage implements OnInit {
   indexNo;
   constructor(private _api: NewapiService, private modalController: ModalController) { }
 
-  ngOnInit() {
+ async ngOnInit() {
+   this.timings = null;
+    const ret = await Storage.get({ key: 'method' });
+    const method = ret.value;
+
     const d = new Date();
 
     this.indexNo = d.getDate();
 
-    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:1,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:method,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
       this.response = res;
       this.timings = this.response?.data;
     }).add(v=>{
-    this._api.prayerTime({latitude:23.5195,longitude:91.6542,method:1,month:d.getMonth()+2,year:d.getFullYear()}).subscribe(res=>{
+    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:method,month:d.getMonth()+2,year:d.getFullYear()}).subscribe(res=>{
       this.response = res;
       this.timings = [...this.timings,...this.response?.data];
     })
@@ -38,7 +46,11 @@ async presentSettingModal() {
     cssClass:"filterModal"
 
   });
-  return await modal.present();
+   await modal.present();
+
+   await modal.onDidDismiss().then(v=>{
+     this.ngOnInit();
+   })
 }
 
 

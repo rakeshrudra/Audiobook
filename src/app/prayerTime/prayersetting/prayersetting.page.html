@@ -1,11 +1,24 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Filter</ion-title>
+    <ion-title>Prayer Times Setting</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content style="--background: #ffffff">
-
-
-
+  <ion-list>
+    <ion-radio-group value="1" [(ngModel)]="methodVal" (ionChange)="setMethod()">
+    <ion-item>
+      University of Islamic Sciences, Karachi
+      <ion-radio slot="end" value="1"></ion-radio>
+    </ion-item>
+    <ion-item>
+      Islamic Society of North America
+      <ion-radio slot="end" value="2"></ion-radio>
+    </ion-item>
+    <ion-item>
+      Umm Al-Qura University, Makkah
+      <ion-radio slot="end" value="4"></ion-radio>
+    </ion-item>
+    </ion-radio-group>
+  </ion-list>
 </ion-content>

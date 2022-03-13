@@ -1,29 +1,28 @@
 export interface dateFormate{
-  "date": {
-    "gregorian": {
-        "date": "01-04-2022",
-        "day": "01",
-        "weekday": {
-            "en": "Friday"
+    readable: string,
+    gregorian: {
+        date: string,
+        day: string,
+        weekday: {
+            en: string
         },
-        "month": {
-            "en": "April"
+        month: {
+            en: string
         },
-        "year": "2022",
-        "designation": {
-            "abbreviated": "AD",
+        year: string,
+        designation: {
+            abbreviated: string,
         }
     },
-    "hijri": {
-        "date": "28-08-1443",
-        "day": "28",
-        "month": {
-            "en": "Shaʿbān",
+    hijri: {
+        date: string,
+        day: string,
+        month: {
+            en: string,
         },
-        "year": "1443",
-        "designation": {
-            "abbreviated": "AH"
+        year: string,
+        designation: {
+            abbreviated: string
         }
     }
-}
 }

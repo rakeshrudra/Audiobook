@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Plugins } from '@capacitor/core';
 
+const { Storage } = Plugins;
 @Component({
   selector: 'app-prayersetting',
   templateUrl: './prayersetting.page.html',
@@ -8,8 +10,20 @@ import { Component, OnInit } from '@angular/core';
 export class PrayersettingPage implements OnInit {
 
   constructor() { }
+  methodVal;
 
-  ngOnInit() {
+ async ngOnInit() {
+    const ret = await Storage.get({ key: 'method' });
+    this.methodVal = ret.value;
   }
-
+  setMethod()
+  {
+    this.setObject();
+  }
+  async setObject() {
+    await Storage.set({
+      key: 'method',
+      value: this.methodVal
+    });
+  }
 }

@@ -6,7 +6,18 @@ import { book } from './model/book';
 import { chapter } from './model/chapter';
 import { Storage } from '@ionic/storage';
 import { topic } from './model/topic';
+import { dateFormate } from './model/dateFormate';
 
+export interface timing{
+  Asr: string,
+Dhuhr: string,
+Fajr: string,
+Imsak: string,
+Isha: string,
+Maghrib: string,
+Midnight: string,
+Sunrise: string,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -203,9 +214,9 @@ export class NewapiService {
   {
     return this.http.get<topic[]>(this.url_topic+`${uri}`)
   }
-  prayerTime(params) : Observable<topic[]>
+  prayerTime(params) : Observable<{data:Array<{date:dateFormate,timings:timing}>}>
   {
-    return this.http.get<topic[]>('https://api.aladhan.com/v1/calendar',{params: params})
+    return this.http.get<{data:Array<{date:dateFormate,timings:timing}>}>('https://api.aladhan.com/v1/calendar',{params: params})
   }
 
   audiolistnext(data)
