@@ -17,7 +17,7 @@ export class PrayerTimePage implements OnInit {
   response;
   timings;
   indexNo;
-  constructor(private _api: NewapiService, private modalController: ModalController) { }
+  constructor(public _api: NewapiService, private modalController: ModalController) { }
 
  async ngOnInit() {
    this.timings = null;

@@ -118,6 +118,10 @@ const routes: Routes = [
     path: 'qubla-location',
     loadChildren: () => import('./qubla-location/qubla-location.module').then( m => m.QublaLocationPageModule)
   },
+  {
+    path: 'zakat-pay',
+    loadChildren: () => import('./zakat-pay/zakat-pay.module').then( m => m.ZakatPayPageModule)
+  },
 
 
 

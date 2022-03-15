@@ -8,7 +8,7 @@
       name="funnel-outline"
       (click)="presentSettingModal()"
       slot="end"
-      style="margin-right: 15px; font-size: 24px;"
+      style="margin-right: 15px; font-size: 24px"
     ></ion-icon>
   </ion-toolbar>
 </ion-header>
@@ -45,14 +45,24 @@
       <ng-container *ngFor="let timing of timings; let i = index">
         <super-tab *ngIf="i >= indexNo-1">
           <ion-content class="ion-padding">
-
             <h4>{{timing.date.readable}}</h4>
-            <h4>{{timing.date.hijri?.month?.en}} {{timing.date.hijri?.day}}, {{timing.date.hijri?.year}} {{timing.date.hijri?.designation?.abbreviated}}</h4>
+            <h4>
+              {{timing.date.hijri?.month?.en}} {{timing.date.hijri?.day}},
+              {{timing.date.hijri?.year}}
+              {{timing.date.hijri?.designation?.abbreviated}}
+            </h4>
+            <h4 *ngIf="i == indexNo-1">{{_api.nexTime(timing.timings)}}</h4>
 
             <ion-list *ngIf="timings">
               <ion-item>
-                <ion-label>Fajr</ion-label>
-                <ion-label slot="end" class="ion-text-right"
+                <ion-label
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Fajr')?'primary':''"
+                  >Fajr</ion-label
+                >
+                <ion-label
+                  slot="end"
+                  class="ion-text-right"
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Fajr')?'primary':''"
                   >{{timing.timings?.Fajr | removeIST}}</ion-label
                 >
               </ion-item>
@@ -64,28 +74,52 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>Dhuhr</ion-label>
-                <ion-label slot="end" class="ion-text-right"
+                <ion-label
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Dhuhr')?'primary':''"
+                  >Dhuhr</ion-label
+                >
+                <ion-label
+                  slot="end"
+                  class="ion-text-right"
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Dhuhr')?'primary':''"
                   >{{timing.timings?.Dhuhr | removeIST}}</ion-label
                 >
               </ion-item>
 
               <ion-item>
-                <ion-label>Asr</ion-label>
-                <ion-label slot="end" class="ion-text-right"
+                <ion-label
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Asr')?'primary':''"
+                  >Asr</ion-label
+                >
+                <ion-label
+                  slot="end"
+                  class="ion-text-right"
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Asr')?'primary':''"
                   >{{timing.timings?.Asr | removeIST}}</ion-label
                 >
               </ion-item>
               <ion-item>
-                <ion-label>Maghrib</ion-label>
-                <ion-label slot="end" class="ion-text-right"
+                <ion-label
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Maghrib')?'primary':''"
+                  >Maghrib</ion-label
+                >
+                <ion-label
+                  slot="end"
+                  class="ion-text-right"
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Maghrib')?'primary':''"
                   >{{timing.timings?.Maghrib | removeIST}}</ion-label
                 >
               </ion-item>
 
               <ion-item>
-                <ion-label>Isha</ion-label>
-                <ion-label slot="end" class="ion-text-right"
+                <ion-label
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Isha')?'primary':''"
+                  >Isha</ion-label
+                >
+                <ion-label
+                  slot="end"
+                  class="ion-text-right"
+                  [color]="(i == indexNo-1 && _api.nexPrayerTime(timing.timings)=='Isha')?'primary':''"
                   >{{timing.timings.Isha | removeIST }}</ion-label
                 >
               </ion-item>
