@@ -4,53 +4,62 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <h1>Wealth</h1>
-  <hr/>
-  <label for="amount_home">Cash at Home</label>
-  <input id="amount_home" step="any" type="number" onchange="calculate()"/>
+  <form  [formGroup]="calcuLate">
+  <ion-item>
+  <ion-label position="floating"  for="amount_home">Cash at Home</ion-label>
+  <ion-input formControlName="amount_home" step="any" type="number" ></ion-input>
+</ion-item>
+<ion-item>
+  <ion-label position="floating"  for="amount_bank">Bank Account Balance</ion-label>
+  <ion-input formControlName="amount_bank" step="any" type="number" ></ion-input>
+</ion-item>
+<ion-item>
+  <ion-label position="floating"  for="amount_shares">Cash value of Stocks and Equities</ion-label>
+  <ion-input formControlName="amount_shares" step="any" type="number" ></ion-input>
+</ion-item>
+<ion-item>
+  <ion-label position="floating"  for="amount_merchandise">Profits &amp; Inventory</ion-label>
+  <ion-input formControlName="amount_merchandise" step="any" type="number" ></ion-input>
+</ion-item>
+<ion-item>
 
+  <ion-label position="floating"  for="amount_gold">Gold &amp; Silver</ion-label>
+  <ion-input formControlName="amount_gold" step="any" type="number" ></ion-input>
+</ion-item>
+<ion-item>
 
-  <label for="amount_bank">Bank Account Balance</label>
-  <input id="amount_bank" step="any" type="number" onchange="calculate()"/>
-
-  <label for="amount_shares">Cash value of Stocks and Equities</label>
-  <input id="amount_shares" step="any" type="number" onchange="calculate()"/>
-
-  <label for="amount_merchandise">Profits &amp; Inventory</label>
-  <input id="amount_merchandise" step="any" type="number" onchange="calculate()"/>
-
-
-  <label for="amount_gold">Gold &amp; Silver</label>
-  <input id="amount_gold" step="any" type="number" onchange="calculate()"/>
-
-
-  <label for="">Investment Property</label>
-  <input id="amount_property" step="any" type="number" onchange="calculate()">
-
-  <label for="">Any Other Income</label>
-  <input id="amount_other" step="any" type="number" onchange="calculate()">
-
+  <ion-label position="floating"  for="">Investment Property</ion-label>
+  <ion-input formControlName="amount_property" step="any" type="number" ></ion-input>
+</ion-item>
+<ion-item>
+  <ion-label position="floating"  for="">Any Other Income</ion-label>
+  <ion-input formControlName="amount_other" step="any" type="number" ></ion-input>
+</ion-item>
 
   <h1>Deductions</h1>
   <hr/>
+<ion-item>
+  <ion-label position="floating"  for="">Debts</ion-label>
+  <ion-input formControlName="amount_debts" step="any" type="number" ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating"  for="">Expenses</ion-label>
+  <ion-input formControlName="amount_expenses" step="any" type="number" ></ion-input>
+  </ion-item>
 
-  <label for="">Debts</label>
-  <input id="amount_debts" step="any" type="number" onchange="calculate()">
-
-  <label for="">Expenses</label>
-  <input id="amount_expenses" step="any" type="number" onchange="calculate()">
-
-
-  <h1>Totals</h1>
-  <hr/>
-
-  <label for="">Amount Eligible For Zakat</label>
-  <input id="amount_eligable" type="text" readonly="readonly" onchange="calculate()">
-
-  <label for="">Your Zakat Total (2.5% of Eligible Amount)</label>
-  <input id="amount_zakat" type="text" readonly="readonly">
-
-  <button id="donate_button" type="button" aria-label="Donate" data-amount="50" data-formId="2426" style="padding: 12px 35px; font-size: 18px; border-radius: 3px; margin: 10px auto; background-color: #f3a800; color: #f8f17f; border: none; outline: none; cursor: pointer; display: block">Donate Now</button>
-
+</form>
 </ion-content>
+<ion-footer class="ion-padding-horizontal">
+  <ion-toolbar style="background: #ffffff" *ngIf="payableAmount > 0" >
+   <ion-note>
+     Total: {{total}}
+   </ion-note>
+   <ion-note slot="end">Payable Amount: {{pAmount}}</ion-note>
+  </ion-toolbar>
+    <ion-toolbar style="background: #ffffff" >
+    <ion-button (click)="calculateZaqat()">Calculate</ion-button>
+    <ion-note slot="end" *ngIf="payableAmount > 0">zakat: {{payableAmount.toFixed(2)}}</ion-note>
+  </ion-toolbar>
+</ion-footer>
