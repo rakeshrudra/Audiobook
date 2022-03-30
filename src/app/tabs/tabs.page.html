@@ -79,9 +79,7 @@
         <ion-fab-button style="border-radius: 100%; position: fixed; bottom: 5em; left:1em" *ngIf="activeTrack?.fav">
           <ion-icon name="heart" style="color: #ff0000 !important"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button style="border-radius: 100%; position: fixed; top: 10px; right:1em" *ngIf="activeTrack?.contentText =='' ||activeTrack?.contentTextArabic ==''">
-        <ion-icon name="information" style="color: rgb(1, 172, 1) !important"></ion-icon>
-    </ion-fab-button>
+        <ion-icon name="information" style="color: rgb(1, 172, 1) !important; right: 20px; top:10px" (click)="viewContent()" *ngIf="activeTrack?.contentText !=='' ||activeTrack?.contentTextArabic !==''" class="close" ></ion-icon>
 
     </div>
 </div>

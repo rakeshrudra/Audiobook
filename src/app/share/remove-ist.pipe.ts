@@ -11,7 +11,6 @@ export class RemoveISTPipe implements PipeTransform {
 
     let hours = parseInt(timeAr[0]);
     let minutes = parseInt(timeAr[1]);
-    console.log(minutes)
 
     const ampm = hours >= 12 ? 'pm' : 'am';
 

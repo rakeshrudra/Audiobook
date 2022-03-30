@@ -1,6 +1,7 @@
+import { AudioContentPage } from './../audio-content/audio-content.page';
 import { NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonTabs, LoadingController } from '@ionic/angular';
+import { IonTabs, LoadingController, ModalController } from '@ionic/angular';
 
 import { Howl, howler } from 'howler';
 import { IonRange } from '@ionic/angular';
@@ -121,6 +122,7 @@ export class TabsPage implements OnInit {
 
   constructor(private deviceOrientation: DeviceOrientation,
     private loadingController: LoadingController,
+    private modalController: ModalController,
     private socialSharing: SocialSharing,
     public _router: ActivatedRoute,
     public api: ApiService,
@@ -927,6 +929,19 @@ export class TabsPage implements OnInit {
   */
   degreeToRadian(degree: number) {
     return degree * Math.PI / 180;
+  }
+
+ async viewContent(){
+    const modal = await this.modalController.create({
+      component: AudioContentPage,
+      backdropDismiss : true,
+      swipeToClose: true,
+      cssClass:"filterModal",
+      componentProps  : {audio:this.activeTrack}
+
+    });
+     await modal.present();
+
   }
 
 }

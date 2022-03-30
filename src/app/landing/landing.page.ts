@@ -59,6 +59,15 @@ export class LandingPage implements OnInit {
     ionSlidePrevStart: true,
   };
 
+  slideOptsTime  = {
+    initialSlide: 4,
+    speed: 400,
+    spaceBetween: -36,
+    slidesPerView: 3,
+    ionSlidePrevStart: true,
+  };
+
+
   data = [];//this.route.snapshot.data['module'];;
   sliders = []//this.route.snapshot.data['slider'];
   books: book[] = [];
@@ -143,7 +152,7 @@ export class LandingPage implements OnInit {
 
     //})
 
-
+this.nextPrTime();
 
 
   }
@@ -237,6 +246,18 @@ checkstatusnew(alist:Array<any>){
   }else{
     return true;
   }
+}
+
+nextPrTime(){
+  let time = this.api.nexPrayerTime(this.api.todayTimings?.value);
+  let timePosition = 0;
+  if(time == 'Sunrise') timePosition = 1;
+  if(time == 'Dhuhr') timePosition = 2;
+  if(time == 'Asr') timePosition = 3;
+  if(time == 'Maghrib') timePosition = 4;
+  if(time == 'Isha') timePosition = 5;
+
+  this.slideOptsTime.initialSlide = timePosition;
 }
 
 }

@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Read</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="content" >
+  <ion-segment (ionChange)="segmentChanged($event)" value="english">
+    <ion-segment-button value="other">
+      <ion-label>Roman </ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="english" >
+      <ion-label>Arabic</ion-label>
+    </ion-segment-button>
+
+  </ion-segment>
+
+  <div *ngIf="selectedCard == 'english'">
+    <ion-card-content class="arabicFont" style="font-weight: 600; font-size: 16px;"> {{audio.contentText}} </ion-card-content>
+  </div>
+
+  <div *ngIf="selectedCard == 'other'">
+    <ion-card-content> {{audio.contentTextArabic}} </ion-card-content>
+  </div>
+</ion-content>

@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content style="--padding-bottom:1px">
   <div *ngIf="!timings">
     <br />
     <br />
@@ -51,6 +51,7 @@
               {{timing.date.hijri?.year}}
               {{timing.date.hijri?.designation?.abbreviated}}
             </h4>
+            <h5><ion-icon name="location-outline"></ion-icon> {{userLocation?.locality}}, {{userLocation?.subAdministrativeArea}}, {{userLocation?.countryName}}</h5>
             <h4 *ngIf="i == indexNo-1">{{_api.nexTime(timing.timings)}}</h4>
 
             <ion-list *ngIf="timings">

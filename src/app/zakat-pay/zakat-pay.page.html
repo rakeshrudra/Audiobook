@@ -1,65 +1,156 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>zakatPay</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Zakat Calculator</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <h1>Wealth</h1>
-  <form  [formGroup]="calcuLate">
-  <ion-item>
-  <ion-label position="floating"  for="amount_home">Cash at Home</ion-label>
-  <ion-input formControlName="amount_home" step="any" type="number" ></ion-input>
-</ion-item>
-<ion-item>
-  <ion-label position="floating"  for="amount_bank">Bank Account Balance</ion-label>
-  <ion-input formControlName="amount_bank" step="any" type="number" ></ion-input>
-</ion-item>
-<ion-item>
-  <ion-label position="floating"  for="amount_shares">Cash value of Stocks and Equities</ion-label>
-  <ion-input formControlName="amount_shares" step="any" type="number" ></ion-input>
-</ion-item>
-<ion-item>
-  <ion-label position="floating"  for="amount_merchandise">Profits &amp; Inventory</ion-label>
-  <ion-input formControlName="amount_merchandise" step="any" type="number" ></ion-input>
-</ion-item>
-<ion-item>
+  <form [formGroup]="calcuLate">
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating" for="amount_home"
+            >Gold Rate Per Gram</ion-label
+          >
+          <ion-input
+            min="0"
+            formControlName="gold_rate"
+            step="any"
+            type="number"
+          ></ion-input>
+        </ion-item>
+          <small class="text-danger"
+            *ngIf="calcuLate.get('gold_rate').hasError('required') && (calcuLate.get('gold_rate').dirty || calcuLate.get('gold_rate').touched || register_slot_submited)">
+            * Please enter a value
+          </small>
 
-  <ion-label position="floating"  for="amount_gold">Gold &amp; Silver</ion-label>
-  <ion-input formControlName="amount_gold" step="any" type="number" ></ion-input>
-</ion-item>
-<ion-item>
+      </ion-col>
+      <ion-col size="12" >
+        <ion-item>
+          <ion-label position="floating" for="amount_home"
+            >Silver Rate Per Gram</ion-label
+          >
+          <ion-input
+            min="0"
+            formControlName="silver_rate"
+            step="any"
+            type="number"
+          ></ion-input>
+        </ion-item>
+        <small class="text-danger"
+        *ngIf="calcuLate.get('gold_rate').hasError('required') && (calcuLate.get('gold_rate').dirty || calcuLate.get('gold_rate').touched || register_slot_submited)">
+        * Please enter a value
+      </small>
 
-  <ion-label position="floating"  for="">Investment Property</ion-label>
-  <ion-input formControlName="amount_property" step="any" type="number" ></ion-input>
-</ion-item>
-<ion-item>
-  <ion-label position="floating"  for="">Any Other Income</ion-label>
-  <ion-input formControlName="amount_other" step="any" type="number" ></ion-input>
-</ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-item>
+      <ion-label position="floating" for="amount_home">Cash at Home</ion-label>
+      <ion-input
+        min="0"
+        formControlName="amount_home"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" for="amount_bank"
+        >Bank Account Balance</ion-label
+      >
+      <ion-input
+        min="0"
+        formControlName="amount_bank"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" for="amount_shares"
+        >Cash value of Stocks and Equities</ion-label
+      >
+      <ion-input
+        min="0"
+        formControlName="amount_shares"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" for="amount_merchandise"
+        >Profits &amp; Inventory</ion-label
+      >
+      <ion-input
+        min="0"
+        formControlName="amount_merchandise"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" for="amount_gold"
+        >Gold &amp; Silver Value</ion-label
+      >
+      <ion-input
+        min="0"
+        formControlName="amount_gold"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" for="">Investment Property</ion-label>
+      <ion-input
+        min="0"
+        formControlName="amount_property"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" for="">Any Other Income</ion-label>
+      <ion-input
+        min="0"
+        formControlName="amount_other"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
 
-  <h1>Deductions</h1>
-  <hr/>
-<ion-item>
-  <ion-label position="floating"  for="">Debts</ion-label>
-  <ion-input formControlName="amount_debts" step="any" type="number" ></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating"  for="">Expenses</ion-label>
-  <ion-input formControlName="amount_expenses" step="any" type="number" ></ion-input>
-  </ion-item>
-
-</form>
+    <h1>Deductions</h1>
+    <hr />
+    <ion-item>
+      <ion-label position="floating" for="">Debts</ion-label>
+      <ion-input
+        min="0"
+        formControlName="amount_debts"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" for="">Expenses</ion-label>
+      <ion-input
+        min="0"
+        formControlName="amount_expenses"
+        step="any"
+        type="number"
+      ></ion-input>
+    </ion-item>
+  </form>
 </ion-content>
 <ion-footer class="ion-padding-horizontal">
-  <ion-toolbar style="background: #ffffff" *ngIf="payableAmount > 0" >
-   <ion-note>
-     Total: {{total}}
-   </ion-note>
-   <ion-note slot="end">Payable Amount: {{pAmount}}</ion-note>
+  <ion-toolbar style="background: var(--ion-color-dark);" *ngIf="payableAmount > 0">
+    <ion-note> Total: {{total.toFixed(1)}} </ion-note>
+    <ion-note slot="end">Taxable Amount: {{pAmount.toFixed(1)}}</ion-note>
   </ion-toolbar>
-    <ion-toolbar style="background: #ffffff" >
+  <ion-toolbar style="background: var(--ion-color-dark);">
     <ion-button (click)="calculateZaqat()">Calculate</ion-button>
-    <ion-note slot="end" *ngIf="payableAmount > 0">zakat: {{payableAmount.toFixed(2)}}</ion-note>
+    <ion-note slot="end" *ngIf="pAmount > 0"
+      >Zakat @ 2.5% = {{payableAmount.toFixed(2)}}</ion-note
+    >
   </ion-toolbar>
 </ion-footer>

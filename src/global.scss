@@ -36,6 +36,16 @@
    text-align: justify !important;
    direction: rtl;
 }
+.arabicFont{
+
+  font-family: 'amiri', serif !important;
+  line-height:30px !important;
+  //font-family: 'NafeesRegular' !important;
+   font-weight: normal;
+   font-style: normal;
+   text-align: right;
+
+}
 .dai-banna{
   font-family: 'dai banna' !important;
 }
@@ -362,6 +372,12 @@ ion-list
   --background-size: 300px auto;
     background-size: 300px auto;
   }
+
+  .light ion-content.content{
+    --background: #ffffff;
+    }
+
+
 
   ////////// ui container
 

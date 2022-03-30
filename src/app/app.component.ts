@@ -6,7 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { DOCUMENT } from '@angular/common';
 import { ApiService } from './api.service';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/Storage';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 import { Router, RouterEvent, Event, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
@@ -72,6 +72,9 @@ export class AppComponent {
   timePeriodToExit = 400;
   counter = 0;
   alertShown = false;
+  // prayer timing
+  timings;
+
 
 constructor(
     private platform: Platform,
@@ -80,7 +83,7 @@ constructor(
     @Inject(DOCUMENT) private document: Document,
     private _api: ApiService,
     public _apiNew: NewapiService,
-    public storage: Storage,
+    public Storage: Storage,
     private screenOrientation: ScreenOrientation,
     // public network: Network,
     public toastCtrl: ToastController,
@@ -104,7 +107,7 @@ constructor(
       this.statusBar.backgroundColorByHexString('#111111');
       setTimeout(() => {
         this.splashScreen.hide();
-
+        this.currentPrayerTiming();
       }, 1000)
 
    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.FOREGROUND_SERVICE).then(
@@ -177,7 +180,7 @@ constructor(
          // alert(JSON.stringify(myArray))
 
           if (myArray[0] == 'book') {
-            this.storage.set('slug_book',myArray[1]);
+            this.Storage.set('slug_book',myArray[1]);
           }
           if (myArray[0] == 'chapter') {
             this._api.chapterUrlnext(myArray[1])
@@ -186,7 +189,7 @@ constructor(
             this._api.topicUrlnext(myArray[1])
           }
           if (myArray[0] != 'book' && myArray[0] != 'chapter' && myArray[0] != 'topic') {
-            this.storage.set('audioid',myArray[0])
+            this.Storage.set('audioid',myArray[0])
           }
       });
   });
@@ -331,8 +334,29 @@ constructor(
       (notification: PushNotificationActionPerformed) => {
         //alert('Push action performed: ' + JSON.stringify(notification));
         console.log('audioid',notification.notification.data.audioId);
-        this.storage.set('audioid',notification.notification.data.audioId);
+        this.Storage.set('audioid',notification.notification.data.audioId);
       },
     );
   }
+
+  ///
+
+  async currentPrayerTiming(){
+    this.timings = null;
+    const method = 2;
+
+    const d = new Date();
+
+    this._apiNew.prayerTime({latitude:this._apiNew.currentLocationLat.value?this._apiNew.currentLocationLat.value:23.5195,longitude:this._apiNew.currentLocationLong.value?this._apiNew.currentLocationLong.value:91.6542,method:method?method:2,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+      this.timings = res?.data;
+      this.todayTiming();
+    })
+  }
+
+  todayTiming(){
+
+    let rr = this.timings.find(v=> v.date.gregorian.day == '08');
+    this._apiNew.todayTimingsNext(rr.timings)
+   }
+
 }

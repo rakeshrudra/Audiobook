@@ -23,9 +23,15 @@ export class MenulistPage implements OnInit {
   app;
   public appPages = [
     {
+      title: 'Zakat Calculator',
+      url: '/zakat-pay',
+      icon: 'cash-outline'
+    }
+    ,
+    {
       title: 'Salah Timing',
       url: '/prayer-time',
-      icon: 'information-circle'
+      icon: 'timer-outline'
     }
     ,
     {

@@ -1,3 +1,4 @@
+import { SuperTabsModule } from '@ionic-super-tabs/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MinuteSecondsPipe } from '../minute-seconds.pipe';
@@ -28,6 +29,7 @@ import { RemoveISTPipe } from './remove-ist.pipe';
   imports: [
     CommonModule,
     LazyLoadImageModule,
+    SuperTabsModule
   ],
   providers: [ SocialSharing,
     {
@@ -41,7 +43,8 @@ import { RemoveISTPipe } from './remove-ist.pipe';
     BooksearchPipe,
     ChaptersearchPipe,
     HighlightPipe,
-    RemoveISTPipe
+    RemoveISTPipe,
+    SuperTabsModule
   ]
 })
 export class ShareModule { }

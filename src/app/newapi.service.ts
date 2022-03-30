@@ -60,6 +60,7 @@ export class NewapiService {
   audiolist = new BehaviorSubject<track[]>(this.playlist)
   activetrack = new BehaviorSubject<track>(null)
   currentaudio = new BehaviorSubject<track>(null)
+  todayTimings = new BehaviorSubject<timing>(null)
   playno = new BehaviorSubject<number>(0)
   showplayer = new BehaviorSubject<boolean>(false)
   isapiloading = new BehaviorSubject<boolean>(false)
@@ -225,6 +226,10 @@ export class NewapiService {
     this.currentLocationLong.next(c);
   }
 
+  todayTimingsNext(c) {
+    // console.log(c);
+    this.todayTimings.next(c);
+  }
   ////
 
   nexTime(times: timing) {
@@ -325,7 +330,7 @@ export class NewapiService {
       let asstTime_i = parseInt(asr_i[0]);
       asstTime_i = (asstTime_i * 60 + parseInt(asr_i[1]));
 
-
+//return 'Maghrib';
 
       if (asstTime_f > hrToMin && asstTime_d > hrToMin) {
         return "Fajr";
@@ -343,9 +348,9 @@ export class NewapiService {
         return "Maghrib";
       }
       if (asstTime_i > hrToMin && asstTime_i > hrToMin) {
-        console.log("isha")
         return "Isha";
       }
+      return "Isha";
 
     }
 

@@ -122,6 +122,10 @@ const routes: Routes = [
     path: 'zakat-pay',
     loadChildren: () => import('./zakat-pay/zakat-pay.module').then( m => m.ZakatPayPageModule)
   },
+  {
+    path: 'audio-content',
+    loadChildren: () => import('./audio-content/audio-content.module').then( m => m.AudioContentPageModule)
+  },
 
 
 

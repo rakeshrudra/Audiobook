@@ -16,8 +16,8 @@ import { SuperTabsModule } from '@ionic-super-tabs/angular';
     FormsModule,
     IonicModule,
     PrayerTimePageRoutingModule,
-    ShareModule,
-    SuperTabsModule
+    ShareModule
+
   ],
   declarations: [PrayerTimePage]
 })

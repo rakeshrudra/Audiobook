@@ -13,4 +13,22 @@ ion-slide div
 
 .dark .slider-container{
     background: #555555 !important;
-} 
+}
+.pTimingClass div{
+  border: 1px solid #adadad;
+  background-color: var(--ion-background-color-container);
+  color: var(--ion-color-dark);
+  padding: 5px 10px;
+  border-radius: 10px;
+  min-width: 100px;
+}
+.pTimingClass .active div{
+  font-weight: 600;
+  color: #5f94f3;
+}
+.activeNext div{
+  font-weight: 600;
+  color: #94d1d9;
+
+}
+
