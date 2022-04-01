@@ -330,7 +330,6 @@ export class NewapiService {
       let asstTime_i = parseInt(asr_i[0]);
       asstTime_i = (asstTime_i * 60 + parseInt(asr_i[1]));
 
-//return 'Maghrib';
 
       if (asstTime_f > hrToMin && asstTime_d > hrToMin) {
         return "Fajr";
@@ -350,7 +349,7 @@ export class NewapiService {
       if (asstTime_i > hrToMin && asstTime_i > hrToMin) {
         return "Isha";
       }
-      return "Isha";
+      return "";
 
     }
 

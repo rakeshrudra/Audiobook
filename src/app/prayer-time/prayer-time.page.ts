@@ -31,17 +31,16 @@ export class PrayerTimePage implements OnInit {
    this.timings = null;
     const ret = await Storage.get({ key: 'method' });
     const method = ret.value;
-
     const d = new Date();
 
     this.indexNo = d.getDate();
 
-    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:method,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:method?method:4,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
       this.response = res;
       this.timings = this.response?.data;
       this.todayTiming();
     }).add(v=>{
-    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:method,month:d.getMonth()+2,year:d.getFullYear()}).subscribe(res=>{
+    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:method?method:4,month:d.getMonth()+2,year:d.getFullYear()}).subscribe(res=>{
       this.response = res;
       this.timings = [...this.timings,...this.response?.data];
     })

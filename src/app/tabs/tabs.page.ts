@@ -96,7 +96,7 @@ export class TabsPage implements OnInit {
   tab = 'home';
   jsonaudio = '/assets/audios.json';
   ////
-
+  timings;
 
   ///////////// dwnload ver
 
@@ -943,6 +943,27 @@ export class TabsPage implements OnInit {
      await modal.present();
 
   }
+  async currentPrayerTiming()
+  {
+    this.timings = null;
+    const method = localStorage.getItem('method')?localStorage.getItem('method'):4;
+    const d = new Date();
+    this._api.prayerTime({latitude:this._api.currentLocationLat.value?this._api.currentLocationLat.value:23.5195,longitude:this._api.currentLocationLong.value?this._api.currentLocationLong.value:91.6542,method:method?method:4,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+      this.timings = res?.data;
+      this.todayTiming();
+    })
+  }
+
+  todayTiming(){
+    const d = new Date();
+    let day = d.getDate();
+    let dayStr = day.toString();
+    if(day < 10){
+      dayStr = '0'+dayStr;
+    }
+    let rr = this.timings.find(v=> v.date.gregorian.day == dayStr);
+    this._api.todayTimingsNext(rr.timings)
+   }
 
 }
 

@@ -74,6 +74,7 @@ export class AppComponent {
   alertShown = false;
   // prayer timing
   timings;
+  timeApiCall = false;
 
 
 constructor(
@@ -107,7 +108,7 @@ constructor(
       this.statusBar.backgroundColorByHexString('#111111');
       setTimeout(() => {
         this.splashScreen.hide();
-        this.currentPrayerTiming();
+        //this.currentPrayerTiming();
       }, 1000)
 
    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.FOREGROUND_SERVICE).then(
@@ -193,6 +194,10 @@ constructor(
           }
       });
   });
+
+
+  /// subscribe location set
+
 
   }
   async presentLoadingWithOptions() {
@@ -340,23 +345,5 @@ constructor(
   }
 
   ///
-
-  async currentPrayerTiming(){
-    this.timings = null;
-    const method = 2;
-
-    const d = new Date();
-
-    this._apiNew.prayerTime({latitude:this._apiNew.currentLocationLat.value?this._apiNew.currentLocationLat.value:23.5195,longitude:this._apiNew.currentLocationLong.value?this._apiNew.currentLocationLong.value:91.6542,method:method?method:2,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
-      this.timings = res?.data;
-      this.todayTiming();
-    })
-  }
-
-  todayTiming(){
-
-    let rr = this.timings.find(v=> v.date.gregorian.day == '08');
-    this._apiNew.todayTimingsNext(rr.timings)
-   }
 
 }

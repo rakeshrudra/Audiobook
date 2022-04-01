@@ -68,14 +68,16 @@
     </ion-slides>
   </div>
 
+
   <ion-slides
   pager="false"
   [options]="slideOptsTime"
   class="pTimingClass"
   style="max-height: 250px !important"
 >
-  <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Fajr')?'activeNext': (api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'active':''" >
-        <div>Faj <br /> {{this.api.todayTimings?.value?.Fajr | removeIST}} </div>
+
+  <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Fajr')?'activeNext': (api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'active':''" *ngIf="this.api.todayTimings?.value" >
+        <div>Fajr <br /> {{this.api.todayTimings?.value?.Fajr | removeIST}} </div>
       </ion-slide>
       <ion-slide>
         <div>Sunrise <br /> {{this.api.todayTimings?.value?.Sunrise | removeIST}} </div>
@@ -90,7 +92,7 @@
       <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Maghrib')?'activeNext':(api.nexPrayerTime(this.api.todayTimings?.value)=='Isha')?'active':''">
         <div>Maghrib <br /> {{this.api.todayTimings?.value?.Maghrib | removeIST}} </div>
       </ion-slide>
-      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Isha')?'active':''" >
+      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Isha')?'active':(api.nexPrayerTime(this.api.todayTimings?.value)=='')?'active':''" >
         <div>Isha <br /> {{this.api.todayTimings?.value?.Isha | removeIST}} </div>
       </ion-slide>
     </ion-slides>

@@ -3,10 +3,12 @@
     <div *ngIf="offlinebutton">
      <h4>Your device is unable to connect to the internet. Please check your connection. </h4>
      <ion-button (click)="offline()" *ngIf="offlinebutton">Go Offline</ion-button>
+     <br />
+     <ion-button (click)="retry()">Retry</ion-button>
      </div>
      <div *ngIf="!offlinebutton">
         <h4>Your device is unable to connect to the internet. Please check your connection. </h4>
-
         <p>You do not have any downloaded audios, you should have some files downloaded to use in offline mode.</p>
+        <ion-button (click)="retry()">Retry</ion-button>
      </div>
 </ion-content>

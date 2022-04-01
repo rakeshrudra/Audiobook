@@ -78,7 +78,8 @@ export class LandingPage implements OnInit {
   defaultImage = '/assets/loader.gif';
   defaultImageslide = '/assets/sliderimg.png';
 
-  dailyaskar: track[] = []
+  dailyaskar: track[] = [];
+  timings;
 
   playslideraudio(id) {
     if (typeof id != undefined && id != '' && id != null) {
@@ -251,14 +252,39 @@ checkstatusnew(alist:Array<any>){
 nextPrTime(){
   let time = this.api.nexPrayerTime(this.api.todayTimings?.value);
   let timePosition = 0;
-  if(time == 'Sunrise') timePosition = 1;
-  if(time == 'Dhuhr') timePosition = 2;
-  if(time == 'Asr') timePosition = 3;
-  if(time == 'Maghrib') timePosition = 4;
-  if(time == 'Isha') timePosition = 5;
-
+  if(time == 'Sunrise') timePosition = 0;
+  if(time == 'Dhuhr') timePosition = 1;
+  if(time == 'Asr') timePosition = 2;
+  if(time == 'Maghrib') timePosition = 3;
+  if(time == 'Isha') timePosition = 4;
   this.slideOptsTime.initialSlide = timePosition;
 }
+
+/////////////
+
+async currentPrayerTiming()
+{
+  this.timings = null;
+  const method = localStorage.getItem('method')?localStorage.getItem('method'):4;
+  const d = new Date();
+  this.api.prayerTime({latitude:this.api.currentLocationLat.value?this.api.currentLocationLat.value:23.5195,longitude:this.api.currentLocationLong.value?this.api.currentLocationLong.value:91.6542,method:method?method:4,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+    this.timings = res?.data;
+    this.todayTiming();
+  })
+}
+
+todayTiming(){
+  const d = new Date();
+  let day = d.getDate();
+  let dayStr = day.toString();
+  if(day < 10){
+    dayStr = '0'+dayStr;
+  }
+  let rr = this.timings.find(v=> v.date.gregorian.day == dayStr);
+  this.api.todayTimingsNext(rr.timings)
+ }
+
+
 
 }
 
