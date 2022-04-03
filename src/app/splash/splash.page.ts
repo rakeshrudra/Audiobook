@@ -188,7 +188,7 @@ networkck()
 
     this.storage.get('allaudios').then((val: track[]) => {
       if (val) {
-        this.router.navigate(['tab/home/landing'], { replaceUrl: true })
+        this.router.navigate(['/checkpermission'], { replaceUrl: true })
       } else {
         this.storage.set('allaudios', []).then(() => {
           this.router.navigate(['/loader'], { replaceUrl: true })

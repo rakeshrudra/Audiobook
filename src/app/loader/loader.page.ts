@@ -11,14 +11,14 @@ import { book } from '../model/book';
   styleUrls: ['./loader.page.scss'],
 })
 export class LoaderPage implements OnInit {
- 
+
   classng = 'example-1'
   per = 0.00;
   percent = 0;
   myVar;
   constructor(public router: Router, public api: ApiService, public storage: Storage) {
   }
-  jsonaudio = '/assets/audios.json'; 
+  jsonaudio = '/assets/audios.json';
   ngOnInit() {
     this.myVar = setInterval(()=>{
       if(this.percent < 99)
@@ -29,7 +29,7 @@ export class LoaderPage implements OnInit {
       {
         this.jsoninportaudio()
       }
-      
+
     }, 1000);
 
         this.api.allaudio({}).subscribe(data=>{
@@ -50,7 +50,7 @@ export class LoaderPage implements OnInit {
       var date =new Date().toLocaleString();
       this.storage.set('lastdate', date)
       clearInterval(this.myVar);
-      this.router.navigate(['tab/home/landing'], { replaceUrl: true });
+      this.router.navigate(['/loader'], { replaceUrl: true });
     }, 3000);
   }
   /////////////////////////////////////

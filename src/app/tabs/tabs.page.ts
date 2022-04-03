@@ -785,10 +785,10 @@ export class TabsPage implements OnInit {
     }, onSuccess, onError);
 
     var onSuccess = function () {
-      alert('success')
+      //alert('success')
     }
     var onError = function () {
-      alert("error")
+      //alert("error")
     }
 
 

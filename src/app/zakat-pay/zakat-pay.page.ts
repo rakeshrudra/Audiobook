@@ -15,13 +15,28 @@ export class ZakatPayPage implements OnInit {
   register_slot_submited = false;
 
   calcuLate: FormGroup = this._fb.group({
-    gold_rate: [null, [Validators.min(0), Validators.required]],
-    silver_rate: [null, [Validators.min(0), Validators.required]],
+    gold_rate: [0, [Validators.min(0), Validators.required]],
+    silver_rate: [0, [Validators.min(0), Validators.required]],
     amount_home: [0, Validators.min(0)],
     amount_bank: [0, Validators.min(0)],
     amount_shares: [0, Validators.min(0)],
     amount_merchandise: [0, Validators.min(0)],
-    amount_gold: [0, Validators.min(0)],
+    gold_24: this._fb.group({
+      qty: [0, Validators.min(0)],
+      amount: [null, [Validators.min(1),Validators.required]]
+    }),
+    gold_22: this._fb.group({
+      qty: [0, Validators.min(0)],
+      amount: [0, Validators.min(0)]
+    }),
+    gold_20: this._fb.group({
+      qty: [0, Validators.min(0)],
+      amount: [0, Validators.min(0)]
+    }),
+    silver: this._fb.group({
+      qty: [0, Validators.min(0)],
+      amount: [null, [Validators.min(0),Validators.required]]
+    }),
     amount_property: [0, Validators.min(0)],
     amount_other: [0, Validators.min(0)],
     amount_debts: [0, Validators.min(0)],
@@ -40,8 +55,8 @@ export class ZakatPayPage implements OnInit {
     this.register_slot_submited = true;
     this.calcuLate.markAsTouched();
 
-    let gold_amount = 87 * this.calcuLate.value.gold_rate;
-    let silver_amount = 609 * this.calcuLate.value.silver_rate;
+    let gold_amount = 87 * this.calcuLate.value.gold_24.amount;
+    let silver_amount = 609 * this.calcuLate.value.silver.amount;
 
     this.nisab = silver_amount;
 
@@ -50,7 +65,15 @@ export class ZakatPayPage implements OnInit {
     }
 
     if (this.calcuLate.valid) {
-      this.total = this.calcuLate.value.amount_home + this.calcuLate.value.amount_bank + this.calcuLate.value.amount_shares + this.calcuLate.value.amount_merchandise + this.calcuLate.value.amount_gold + this.calcuLate.value.amount_property + this.calcuLate.value.amount_other;
+
+      console.log(this.calcuLate.value)
+
+      let goldSilverVal = this.calcuLate.value.gold_24.qty*this.calcuLate.value.gold_24.amount;
+       goldSilverVal = goldSilverVal+this.calcuLate.value.gold_22.qty*this.calcuLate.value.gold_22.amount;
+       goldSilverVal = goldSilverVal+this.calcuLate.value.gold_20.qty*this.calcuLate.value.gold_20.amount;
+       goldSilverVal = goldSilverVal+this.calcuLate.value.silver.qty*this.calcuLate.value.silver.amount;
+
+      this.total = this.calcuLate.value.amount_home + this.calcuLate.value.amount_bank + this.calcuLate.value.amount_shares + this.calcuLate.value.amount_merchandise + goldSilverVal+ this.calcuLate.value.amount_property + this.calcuLate.value.amount_other;
 
       let debt = this.calcuLate.value.amount_debts + this.calcuLate.value.amount_expenses;
 

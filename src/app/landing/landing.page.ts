@@ -29,7 +29,10 @@ export class LandingPage implements OnInit {
     public musicControls: MusicControls,
     // public network: Network
   ) {
-
+    api.currentLocationLat.subscribe(v=>{
+      this.currentPrayerTiming();
+      console.log(v)
+    })
   }
   @ViewChild(IonContent, { static: false }) ionContent: IonContent;
 
@@ -80,6 +83,7 @@ export class LandingPage implements OnInit {
 
   dailyaskar: track[] = [];
   timings;
+  todayApiCall = false;
 
   playslideraudio(id) {
     if (typeof id != undefined && id != '' && id != null) {
@@ -153,7 +157,6 @@ export class LandingPage implements OnInit {
 
     //})
 
-this.nextPrTime();
 
 
   }
@@ -264,13 +267,19 @@ nextPrTime(){
 
 async currentPrayerTiming()
 {
+  if(!this.todayApiCall)
+  {
   this.timings = null;
   const method = localStorage.getItem('method')?localStorage.getItem('method'):4;
   const d = new Date();
-  this.api.prayerTime({latitude:this.api.currentLocationLat.value?this.api.currentLocationLat.value:23.5195,longitude:this.api.currentLocationLong.value?this.api.currentLocationLong.value:91.6542,method:method?method:4,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+  this.todayApiCall = true;
+  this.api.prayerTime({latitude:this.api.currentLocationLat.value?this.api.currentLocationLat.value:23,longitude:this.api.currentLocationLong.value?this.api.currentLocationLong.value:91,method:method?method:4,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
     this.timings = res?.data;
     this.todayTiming();
+  }).add(v=>{
+    this.nextPrTime()
   })
+}
 }
 
 todayTiming(){

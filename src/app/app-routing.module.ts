@@ -126,6 +126,10 @@ const routes: Routes = [
     path: 'audio-content',
     loadChildren: () => import('./audio-content/audio-content.module').then( m => m.AudioContentPageModule)
   },
+  {
+    path: 'checkpermission',
+    loadChildren: () => import('./checkpermission/checkpermission.module').then( m => m.CheckpermissionPageModule)
+  },
 
 
 

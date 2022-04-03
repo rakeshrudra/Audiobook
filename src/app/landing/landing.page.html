@@ -74,9 +74,10 @@
   [options]="slideOptsTime"
   class="pTimingClass"
   style="max-height: 250px !important"
+  *ngIf="api.todayTimings?.value"
 >
 
-  <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Fajr')?'activeNext': (api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'active':''" *ngIf="this.api.todayTimings?.value" >
+  <ion-slide  [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Fajr')?'activeNext': (api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'active':''"  >
         <div>Fajr <br /> {{this.api.todayTimings?.value?.Fajr | removeIST}} </div>
       </ion-slide>
       <ion-slide>

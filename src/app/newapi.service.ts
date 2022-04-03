@@ -303,7 +303,6 @@ export class NewapiService {
       const currentHr = d.getHours();
       const currentMin = d.getMinutes();
       const hrToMin = currentHr * 60 + currentMin;
-
       //FAJR
       let arr_f = times.Fajr.replace(" (IST)", "");
       let asr_f = arr_f.split(":");

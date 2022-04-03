@@ -39,7 +39,7 @@ export class PrayersettingPage implements OnInit {
     this.timings = null;
     const method = localStorage.getItem('method')?localStorage.getItem('method'):4;
     const d = new Date();
-    this._apiNew.prayerTime({latitude:this._apiNew.currentLocationLat.value?this._apiNew.currentLocationLat.value:23.5195,longitude:this._apiNew.currentLocationLong.value?this._apiNew.currentLocationLong.value:91.6542,method:method?method:4,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
+    this._apiNew.prayerTime({latitude:this._apiNew.currentLocationLat.value?this._apiNew.currentLocationLat.value:23,longitude:this._apiNew.currentLocationLong.value?this._apiNew.currentLocationLong.value:91,method:method?method:4,month:d.getMonth()+1,year:d.getFullYear()}).subscribe(res=>{
       this.timings = res?.data;
       this.todayTiming();
     })

@@ -1,0 +1,19 @@
+
+<ion-content class="ion-text-center">
+<br />
+<br />
+<br />
+<br />
+<br />
+  <h4>Set Manually</h4>
+<br />
+
+  <p>
+    To do so, head to <br />Settings > Privacy > Location Services.
+    <br />
+    <br />
+    You'll see a list of apps and their location permission settings. Tap an app's name here to change its location permissions. You can then select “Ask Next Time,”
+  </p>
+  <ion-button *ngIf="!permition" (click)="retry()">Continue</ion-button>
+
+</ion-content>
