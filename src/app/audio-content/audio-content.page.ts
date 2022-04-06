@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-audio-content',
@@ -11,9 +12,11 @@ export class AudioContentPage implements OnInit {
   selectedCard = 'english';
 
 
-  constructor() { }
-
+  constructor(private sanitizer: DomSanitizer) {
+  }
   ngOnInit() {
+    this.audio.contentText = this.sanitizer.bypassSecurityTrustHtml(this.audio.contentText) ;
+    this.audio.contentTextArabic = this.sanitizer.bypassSecurityTrustHtml(this.audio.contentTextArabic) ;
   }
   segmentChanged(event)
   {

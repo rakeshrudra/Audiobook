@@ -55,7 +55,7 @@ export class ZakatPayPage implements OnInit {
     this.register_slot_submited = true;
     this.calcuLate.markAsTouched();
 
-    let gold_amount = 87 * this.calcuLate.value.gold_24.amount;
+    let gold_amount = 85 * this.calcuLate.value.gold_24.amount;
     let silver_amount = 609 * this.calcuLate.value.silver.amount;
 
     this.nisab = silver_amount;

@@ -212,6 +212,10 @@
     </ion-item>
   </form>
 
+
+
+</ion-content>
+<ion-footer >
   <ion-card *ngIf="payableAmount > 0">
     <ion-card-content>
       <ion-card-subtitle> <strong>Total:</strong>  {{total.toFixed(1)}} </ion-card-subtitle> <br />
@@ -221,10 +225,12 @@
       </ion-card-content>
   </ion-card>
 
+  <ion-card *ngIf="register_slot_submited && payableAmount == 0 && calcuLate.valid">
+    <ion-card-content>
+      <ion-card-subtitle class="ion-text-center">Your savings do not meet the Nisab. You are not eligible to pay Zakat.</ion-card-subtitle>
+    </ion-card-content>
+  </ion-card>
 
-
-</ion-content>
-<ion-footer >
   <ion-toolbar (click)="calculateZaqat()" class="ion-text-center">Calculate
   </ion-toolbar>
 </ion-footer>

@@ -11,12 +11,16 @@ export class RemoveISTPipe implements PipeTransform {
 
     let hours = parseInt(timeAr[0]);
     let minutes = parseInt(timeAr[1]);
+    let strMunit = minutes.toString();
 
     const ampm = hours >= 12 ? 'pm' : 'am';
 
     hours %= 12;
     hours = hours || 12;
-    const strTime = hours+":"+minutes+ampm;
+    if(minutes < 10){
+      strMunit = '0'+ minutes.toString()
+    }
+    const strTime = hours.toString()+":"+strMunit+ampm;
     return strTime;
   }
 
