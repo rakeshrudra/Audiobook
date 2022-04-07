@@ -18,17 +18,12 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
 
-import {
-  Plugins,
-  PushNotification,
-  PushNotificationToken,
-  PushNotificationActionPerformed
-} from '@capacitor/core';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { App } from '@capacitor/app';
 
 import { FCM } from '@capacitor-community/fcm';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 const fcm = new FCM();
-const { PushNotifications,App , FCMPlugin } = Plugins;
 
 
 @Component({
@@ -289,55 +284,41 @@ constructor(
   }
 
   ///
-  pushnotification(){
+  async pushnotification(){
 
     this.backgroundMode.enable();
 
-    //console.log('Initializing HomePage');
+    let permStatus = await PushNotifications.checkPermissions();
 
-    // Request permission to use push notifications
-    // iOS will prompt user and return if they granted permission or not
-    // Android will just grant without prompting
-    PushNotifications.requestPermission().then(result => {
-      if (result.granted) {
-        // Register with Apple / Google to receive push via APNS/FCM
-        PushNotifications.register();
-      } else {
-        // Show some error
-      }
-    });
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions();
+    }
 
-    PushNotifications.addListener(
-      'registration',
-      (token: PushNotificationToken) => {
-        //alert('Push registration success, token: ' + token.value);
-        //console.log(token.value);
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!');
+    }
+
+    await PushNotifications.addListener('registration', token => {
+
+        alert('Push registration success, token: ' + token.value);
+
         fcm
         .subscribeTo({ topic: 'all' })
         .then((r) => {console.log(`subscribed to topic`)})
         .catch((err) =>{ console.log(err)});
 
-   /*     this._api.get_fbtoken(token.value).subscribe(v=>{
-
-        })*/
       },
     );
 
-    PushNotifications.addListener('registrationError', (error: any) => {
-      //alert('Error on registration: ' + JSON.stringify(error));
+    await PushNotifications.addListener('registrationError', err => {
+      console.error('Registration error: ', err.error);
     });
 
-    PushNotifications.addListener(
-      'pushNotificationReceived',
-      (notification: PushNotification) => {
-        //alert('Push received: ' + JSON.stringify(notification));
-      },
-    );
+    await PushNotifications.addListener('pushNotificationReceived', notification => {
+      console.log('Push notification received: ', notification);
+    });
 
-    PushNotifications.addListener(
-      'pushNotificationActionPerformed',
-      (notification: PushNotificationActionPerformed) => {
-        //alert('Push action performed: ' + JSON.stringify(notification));
+    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {        //alert('Push action performed: ' + JSON.stringify(notification));
         console.log('audioid',notification.notification.data.audioId);
         this.Storage.set('audioid',notification.notification.data.audioId);
       },

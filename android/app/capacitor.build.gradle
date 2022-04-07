@@ -11,6 +11,13 @@ apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-facebook-login')
     implementation project(':capacitor-community-fcm')
+    implementation project(':capacitor-app')
+    implementation project(':capacitor-camera')
+    implementation project(':capacitor-filesystem')
+    implementation project(':capacitor-geolocation')
+    implementation project(':capacitor-push-notifications')
+    implementation project(':capacitor-share')
+    implementation project(':capacitor-storage')
     implementation project(':rdlabo-capacitor-facebook-login')
     implementation project(':capacitor-music-controls-plugin')
     implementation "com.google.firebase:firebase-analytics:18.0.+"

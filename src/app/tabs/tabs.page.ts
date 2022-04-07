@@ -22,17 +22,14 @@ import { AutoloadService } from '../service/autoload.service';
 import { PlaynewmediaService } from '../service/playnewmedia.service';
 import { NewapiService } from '../newapi.service';
 const MEDIA_FOLDER_NAME = 'audios';
-const { CapacitorMusicControls, Share } = Plugins;
+//const { CapacitorMusicControls } = Plugins;
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-import {
-  Plugins,
-  PushNotification,
-  Geolocation,
-  PushNotificationToken,
-  PushNotificationActionPerformed
-} from '@capacitor/core';
+
 
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+import { Share } from '@capacitor/share';
+import { Geolocation } from '@capacitor/geolocation';
+import { CapacitorMusicControls } from 'capacitor-music-controls-plugin';
 
 @Component({
   selector: 'app-tabs',
@@ -375,7 +372,7 @@ export class TabsPage implements OnInit {
   }
 
   togglePlayer(pause) {
-    this.isplaying = !pause;
+  /* this.isplaying = !pause;
     if (pause) {
       CapacitorMusicControls.updateIsPlaying({
         isPlaying: false, // affects Android only
@@ -392,15 +389,15 @@ export class TabsPage implements OnInit {
         this.palyer.play();
       }
       // //console.log(this.palyer.play(),'play');
-    }
+    }*/
   }
 
   pause() {
     this.palyer.pause();
     //this.musicControls.updateIsPlaying(false);
-    CapacitorMusicControls.updateIsPlaying({
+    /*CapacitorMusicControls.updateIsPlaying({
       isPlaying: false, // affects Android only
-    });
+    });*/
   }
   toggleplay() {
     this.palyer.play();
@@ -445,7 +442,7 @@ export class TabsPage implements OnInit {
     this.palyer.unload();
     this.playlist = []
     //this.musicControls.destroy()
-    CapacitorMusicControls.destroy();
+    //CapacitorMusicControls.destroy();
     this.activeTrack = null
     //this.router.navigate(['/tab/home/'])
   }
@@ -477,9 +474,9 @@ export class TabsPage implements OnInit {
   playcurrent() {
     this.palyer.play();
     //console.log('1')
-    CapacitorMusicControls.updateIsPlaying({
+   /* CapacitorMusicControls.updateIsPlaying({
       isPlaying: true, // affects Android only
-    });
+    });*/
   }
 
 
@@ -748,7 +745,7 @@ export class TabsPage implements OnInit {
   }
 
   createControls() {
-    CapacitorMusicControls.create({
+   /* CapacitorMusicControls.create({
       album: 'Islamic Audio Books',     // optional, default: ''
       // cover can be a local path (use fullpath 'file:///storage/emulated/...', or only 'my_image.jpg' if my_image.jpg is in the www folder of your app)
       //			 or a remote url ('http://...', 'https://...', 'ftp://...')
@@ -801,7 +798,7 @@ export class TabsPage implements OnInit {
       console.log('controlsNotification was fired');
       console.log(info);
       this.handleControlsEvent(info);
-    });
+    });*/
   }
 
   notificationCall = false;
