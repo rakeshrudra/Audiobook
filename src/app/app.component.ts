@@ -25,10 +25,10 @@ import {
   PushNotificationActionPerformed
 } from '@capacitor/core';
 
-import { FCM } from '@capacitor-community/fcm';
+//import { FCM } from '@capacitor-community/fcm';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
-const fcm = new FCM();
-const { PushNotifications,App , FCMPlugin } = Plugins;
+//const fcm = new FCM();
+const { PushNotifications,App } = Plugins;
 
 
 @Component({
@@ -312,14 +312,11 @@ constructor(
       (token: PushNotificationToken) => {
         //alert('Push registration success, token: ' + token.value);
         //console.log(token.value);
-        fcm
+       /* fcm
         .subscribeTo({ topic: 'all' })
         .then((r) => {console.log(`subscribed to topic`)})
         .catch((err) =>{ console.log(err)});
-
-   /*     this._api.get_fbtoken(token.value).subscribe(v=>{
-
-        })*/
+*/
       },
     );
 
