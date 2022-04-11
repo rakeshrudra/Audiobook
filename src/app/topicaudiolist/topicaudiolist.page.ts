@@ -1,7 +1,7 @@
 import { NewapiService } from './../newapi.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
-import { Storage } from '@ionic/storage';
+
 import { track } from '../model/track';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController, LoadingController, IonContent } from '@ionic/angular';
@@ -12,10 +12,8 @@ import { Downloader, DownloadRequest, NotificationVisibility } from '@ionic-nati
 import { AutoloadService } from '../service/autoload.service';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 
-const {Share} = Plugins;
-
-import { Plugins } from '@capacitor/core';
-
+import { Share } from '@capacitor/share';
+import { Storage } from '@capacitor/storage';
 @Component({
   selector: 'app-topicaudiolist',
   templateUrl: './topicaudiolist.page.html',
@@ -25,7 +23,7 @@ export class TopicaudiolistPage implements OnInit {
 
   constructor(
     public _autoload : AutoloadService,
-    private downloader: Downloader,public loadingController : LoadingController, public socialSharing : SocialSharing, public toastController : ToastController, public api : ApiService, public storage: Storage, public route : ActivatedRoute , public router : Router, public _api : NewapiService, private firebaseDynamicLinks : FirebaseDynamicLinks) {
+    private downloader: Downloader,public loadingController : LoadingController, public socialSharing : SocialSharing, public toastController : ToastController, public api : ApiService, public route : ActivatedRoute , public router : Router, public _api : NewapiService, private firebaseDynamicLinks : FirebaseDynamicLinks) {
       _autoload.activetrack.subscribe(val=>{
         _autoload.activetrack.subscribe(val=>{
         this.ckfev();
@@ -44,29 +42,12 @@ export class TopicaudiolistPage implements OnInit {
 
   ngOnInit() {
   }
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
 
    // sudo ln -s /etc/nginx/sites-available/admin.restaurant.twerlo.com /etc/nginx/sites-enabled/admin.restaurant.twerlo.com
 
     this.dqlist();
     this.ckfev();
-   // this.jsonaudiofun()
-       /* this.storage.get('allaudios').then((values:track[])=>{
-          if(values)
-          {
-          this.playlist = values.filter(list => list.topic === this.topic )
-          }
-        }).then(()=>{
-          this.ckfev();
-          this.jsonaudiofun()
-        })  */
-
-        this.storage.get('alltopic').then((values:topic[])=>{
-          if(values)
-          {
-            this.topicdata = values.filter(list => list.id === this.topic )[0]
-          }
-       })
 
        this._api.audio("?topic="+this.topic).subscribe(val=>{
          this.playlist = val;
@@ -101,49 +82,48 @@ export class TopicaudiolistPage implements OnInit {
 
   }
 
-  addfavouriteAudio(track : track)
-  {
-    this.storage.get('favourite').then((val : track[]) =>{
-      if(Array.isArray(val))
+  async addfavouriteAudio(track: track) {
+    await Storage.get({key:'favourite'}).then((tracks) => {
+      if(tracks.value)
       {
-      const filteredPeople = val.filter((item) => item.id != track.id);
-      if(Array.isArray(filteredPeople))
-        {
+        let val = JSON.parse(tracks.value);
+      if (Array.isArray(val)) {
+        const filteredPeople = val.filter((item) => item.url != track.url);
+        if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.push(track)
-          this.storage.set('favourite',this.favourit).then(()=>   { this.presentToast(); this.ckfev()})
+           Storage.set({key:'favourite', value: JSON.stringify(this.favourit)}).then(() => { this.presentToast(); this.ckfev() })
         }
-        else
-        {
-          this.storage.set('favourite',[track]).then(()=> { this.presentToast(); this.ckfev()})
+        else {
+           Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.presentToast(); this.ckfev() })
         }
       }
-      else
-      {
-         this.storage.set('favourite',[track]).then(()=>   { this.presentToast(); this.ckfev()})
+      else {
+         Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.presentToast(); this.ckfev() })
       }
+    }
+
     })
   }
 
-  removefavouriteAudio(track)
-  {
-    this.storage.get('favourite').then((val : track[]) =>{
-      if(Array.isArray(val))
+ async  removefavouriteAudio(track) {
+    await Storage.get({key:'favourite'}).then(async (traks) => {
+      if(traks.value)
       {
-      const filteredPeople = val.filter((item) => item.id != track.id);
-      if(Array.isArray(filteredPeople))
-        {
-          this.storage.set('favourite',filteredPeople).then(()=>   {  this.ckfev()})
+        let val = JSON.parse(traks.value);
+      if (Array.isArray(val)) {
+        const filteredPeople = val.filter((item) => item.url != track.url);
+        if (Array.isArray(filteredPeople)) {
+          await Storage.set({key:'favourite', value: JSON.stringify(filteredPeople)}).then(() => { this.ckfev() })
         }
-        else
-        {
-          this.storage.set('favourite',[]).then(()=> {  this.ckfev()})
+        else {
+          await Storage.set({key:'favourite', value: JSON.stringify([])}).then(() => { this.ckfev() })
         }
       }
-      else
-      {
-         this.storage.set('favourite',[]).then(()=>   {  this.ckfev()})
+      else {
+        await Storage.set({key:'favourite', value: JSON.stringify([])}).then(() => { this.ckfev() })
       }
+    }
     })
   }
 
@@ -191,29 +171,35 @@ export class TopicaudiolistPage implements OnInit {
     return book.color;
   }
 
-  ckfev() {
+ async ckfev() {
     this.downloadingck()
-    this.storage.get('favourite').then((val: track[]) => {
+    await Storage.get({key:'favourite'}).then(async (traks) => {
+      if(traks.value)
+      {
+        let val = JSON.parse(traks.value);
       if (Array.isArray(val)) {
-        this.favourit = val
-        for (var i = 0; i < this.playlist.length; i++) {
-          if (val.filter(e => e.id === this.playlist[i].id).length > 0) {
-            this.playlist[i].fav = true;
-          } else {
-            this.playlist[i].fav = false;
-          }
+      this.favourit = val
+      for (var i = 0; i < this.playlist.length; i++) {
+        if (val.filter(e => e.url === this.playlist[i].url).length > 0) {
+          this.playlist[i].fav = true;
+        } else {
+          this.playlist[i].fav = false;
         }
       }
-
-    })
+    }
   }
 
+  })
+}
+
   ///// downloading ck
-  downloadingck() {
+ async downloadingck() {
     this.downloadgck()
 
-    this.storage.get('downloadq').then((val: track[]) => {
-      if(val){
+    await Storage.get({key:'downloadq'}).then(async (traks) => {
+      if(traks.value)
+      {
+        let val = JSON.parse(traks.value);
       if (Array.isArray(val)) {
         this.favourit = val
         for (var i = 0; i < this.playlist.length; i++) {
@@ -228,10 +214,13 @@ export class TopicaudiolistPage implements OnInit {
     })
   }
   ///// downloaded ck
-  downloadgck() {
-    this.storage.get('download').then((val: track[]) => {
-      if(val){
-      if (Array.isArray(val)) {
+ async downloadgck() {
+    await Storage.get({key:'download'}).then(async (traks) => {
+      if(traks.value)
+      {
+        let val = JSON.parse(traks.value);
+
+  if (Array.isArray(val)) {
         this.favourit = val
         for (var i = 0; i < this.playlist.length; i++) {
           if (val.filter(e => e.id === this.playlist[i].id).length > 0) {
@@ -247,96 +236,89 @@ export class TopicaudiolistPage implements OnInit {
 
 
   storehistory(track) {
-    //console.log('down')
-    //console.log(track)
-    this.storage.get('download').then((val: track[]) => {
-      if (Array.isArray(val)) {
-        const filteredPeople = val.filter((item) => item.url != track.url);
-        if (Array.isArray(filteredPeople)) {
-          this.favourit = filteredPeople;
-          this.favourit.push(track)
-          this.storage.set('download', this.favourit)
-          //console.log('down1')
-          this.getindque(track)
-          this.ckfev();
-        }
-        else
-        {
-          this.storage.set('download', [track])
-          //console.log('down2')
-          this.getindque(track)
-          this.ckfev();
-        }
-      }
-      else {
-        //console.log('down3')
-        this.storage.set('download', [track])
-        this.getindque(track)
-        this.ckfev();
-      }
-    })
+
+
   }
 
-  downloadAll() {
+  async downloadAll() {
     let track = this.playlist
-    this.storage.get('downloadq').then((val: track[]) => {
+      await Storage.get({key:'downloadq'}).then(async (traks) => {
+        if(traks.value)
+        {
+          let val = JSON.parse(traks.value);
       if (Array.isArray(val)) {
         const filteredPeople = val;
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.concat(track);
           let primes = this.favourit.concat(this.playlist);
-         console.log(primes)
-          this.storage.set('downloadq', primes).then(()=>{
+         // this.storage.set('download', primes)
+          await Storage.set({key:'downloadq',value: JSON.stringify(primes)})
+          .then(()=>{
             this.ckfev();
           })
         }
         else {
-          this.storage.set('downloadq', track).then(()=>{
+          await Storage.set({key:'downloadq',value: JSON.stringify([track])})
+          .then(()=>{
             this.ckfev();
           })
         }
       }
       else {
-        this.storage.set('downloadq', track).then(()=>{
+        await Storage.set({key:'downloadq',value: JSON.stringify(track)})
+        .then(()=>{
           this.ckfev();
         })
-      }
+       }
+      }      else {
+        await Storage.set({key:'downloadq',value: JSON.stringify(track)})
+        .then(()=>{
+          this.ckfev();
+        })
+       }
+
     })
   }
-
   /// add in downloadq
-  downloadQ(track: track) {
-    this.storage.get('downloadq').then((val: track[]) => {
+  async downloadQ(track: track) {
+    await Storage.get({key:'downloadq'}).then(async (traks) => {
+      if(traks.value)
+      {
+        let val = JSON.parse(traks.value);
+
       if (Array.isArray(val)) {
-        const filteredPeople = val.filter((item) => item.id != track.id);
+        const filteredPeople = val.filter((item) => item.url != track.url);
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.push(track)
           //console.log(this.favourit)
-          this.storage.set('downloadq', this.favourit).then(() => {
+          await Storage.set({key:'downloadq', value: JSON.stringify(this.favourit)}).then(() => {
             this.ckfev();
+
           })
         }
         else {
-          this.storage.set('downloadq', [track]).then(() => {
-            this.ckfev();
+            await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => {
+              this.ckfev();
+
            })
         }
       }
       else {
-        this.storage.set('downloadq', [track]).then(() => {
+        await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => {
           this.ckfev();
         })
       }
+    }
     })
     this.api.downloadQstartnext(track.id);
     this.dqlist()
   }
 
-  dqlist() {
-    this.storage.get('downloadq').then((val: track[]) => {
-      this.downloadQlist = val;
+  async dqlist() {
+    await Storage.get({key:'downloadq'}).then((val) => {
+      this.downloadQlist = JSON.parse(val.value);
     })
   }
 
@@ -358,16 +340,16 @@ export class TopicaudiolistPage implements OnInit {
   storedid = [];
 ///
 
-get_storedlist(){
-  this.storage.get("storedaudio").then((val:Array<any>)=>{
-    if(val)
-    {
-    this.storedid = val
-    }
-    else{
-      this.storedid = []
-    }
-  })
+async get_storedlist(){
+  await Storage.get({key:'storedaudio'}).then((val) => {
+    if(val.value)
+  {
+  this.storedid = JSON.parse(val.value)
+  }
+  else{
+    this.storedid = []
+  }
+})
 
 }
 

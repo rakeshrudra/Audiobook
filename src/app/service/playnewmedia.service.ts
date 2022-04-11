@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MediaObject, Media } from '@ionic-native/media/ngx';
 import { track } from '../model/track';
 import { File, FileEntry } from '@ionic-native/file/ngx';
-import { Storage } from '@ionic/storage';
+//import { Storage } from '@ionic/storage';
 import { FileTransferObject, FileTransfer } from '@ionic-native/file-transfer/ngx';
 //import { DatePipe } from '@angular/common';
 import { Platform, LoadingController, ToastController } from '@ionic/angular';
@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class PlaynewmediaService {
 
-  constructor(public media: Media, public storage: Storage, public file: File) { } //this.getposition()
+  constructor(public media: Media, public file: File) { } //this.getposition()
 
   downloadPlaylist: track[] = [];
 

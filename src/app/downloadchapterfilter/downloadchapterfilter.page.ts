@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { chapter } from '../model/chapter';
 import { ModalController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+
 import { track } from '../model/track';
 import { DownloadsubchapterfilterPage } from '../downloadsubchapterfilter/downloadsubchapterfilter.page';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-downloadchapterfilter',
@@ -12,25 +13,33 @@ import { DownloadsubchapterfilterPage } from '../downloadsubchapterfilter/downlo
 })
 export class DownloadchapterfilterPage implements OnInit {
 
-  constructor( public modalCtrl : ModalController, public storag : Storage) {
-    this.storag.get('filter_book').then((val)=>{
-        this.book_id = val;
-    })
+  constructor( public modalCtrl : ModalController) {
    }
 
   chapters  = [];
   book_id ;
 
-  ngOnInit() {
-   this.storag.get('chapters').then((val : chapter[])=>{
+ async ngOnInit() {
+    await Storage.get({key:'filter_book'}).then((val)=>{
+      this.book_id = val.value;
+  })
+
+  await Storage.get({key:'chapters'}).then((chapters)=>{
+    if(chapters.value)
+    {
+      let val = JSON.parse(chapters.value);
      this.chapters = val.filter((b)=>b.book_id == this.book_id);
     this.audiocount();
- }) 
+    }
+ })
 }
-audiocount()
+async audiocount()
 {
-  this.storag.get('download').then((audio : track[])=>{
+  await Storage.get({key:'download'}).then((audios)=>{
 
+if(audios.value)
+{
+  let audio = JSON.parse(audios.value);
     if(audio)
     {
      for(var i =0; i < this.chapters.length; i++)
@@ -40,15 +49,16 @@ audiocount()
         this.chapters[i].isChecked = false;
      }
     }
+  }
   })
 
 }
 async save (id,topic)
 {
-  this.storag.set('filter_topiccount', topic).then(()=>{
+  await Storage.set({key:'filter_topiccount', value: JSON.stringify(topic)}).then(()=>{
   })
 
-  this.storag.set('filter_chapter', id).then(()=>{
+  await Storage.set({key:'filter_chapter', value: id}).then(()=>{
     this.modalCtrl.dismiss({chapter_id: id})
   })
 
@@ -67,7 +77,7 @@ async opensubdatachaptermod(data)
       this.closemodal()
     })
     return await modal.present();
- 
+
 }
 closemodal()
 {

@@ -3,17 +3,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { chapter } from '../model/chapter';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Route } from '@angular/compiler/src/core';
+
 import { book } from '../model/book';
 import { ModalController, LoadingController, IonContent } from '@ionic/angular';
 import { BookmodalPage } from '../bookmodal/bookmodal.page';
-import { Storage } from '@ionic/storage';
-import { Network } from '@ionic-native/network/ngx';
+
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { track } from '../model/track';
-import { Plugins } from '@capacitor/core';
+
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-const { CapacitorMusicControls , Share } = Plugins;
+
+import { Share } from '@capacitor/share';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-chapter',
@@ -23,7 +24,7 @@ const { CapacitorMusicControls , Share } = Plugins;
 export class ChapterPage implements OnInit {
 
   constructor( public loadingController : LoadingController, public socialSharing : SocialSharing, public api : ApiService,public _api : NewapiService, public route : ActivatedRoute, public firebaseDynamicLinks : FirebaseDynamicLinks,
-    public storage : Storage, public router : Router) {
+     public router : Router) {
     this.book_id = route.snapshot.params.book;
   }
   playlist : Array<chapter>;// = this.route.snapshot.data['chapters'];
@@ -58,13 +59,14 @@ export class ChapterPage implements OnInit {
   })
 
   }
-  ionViewWillEnter(){
+ async ionViewWillEnter(){
      this._api.book('?book_id='+this.book_id).subscribe(val=>{
         this.book = val[0]
      })
-   this.storage.get('allbooks').then((values:book[])=>{
-    if(values)
+   await Storage.get({key:'allbooks'}).then((val)=>{
+    if(val.value)
     {
+      let values = JSON.parse(val.value);
       let books = values.filter(list => list.id === this.book_id )
       this.book = books[0];
       console.log(this.playlist)
@@ -72,12 +74,13 @@ export class ChapterPage implements OnInit {
  })
 this.get_storedlist();
 }
-play(id)
+async play(id)
 {
     //const val = values.filter(list => list.book_id === this.book_id )
-    this.storage.get('allaudios').then((values: track[]) => {
-      if(values)
+    await Storage.get({key:'allaudios'}).then((audios) => {
+      if(audios.value)
       {
+        let values = JSON.parse(audios.value);
     const val = values.filter(list => list.chapter_id === id );
     if(val.length > 0)
     {
@@ -235,11 +238,11 @@ downloadall()
   }
 ///
 storedid = [];
-get_storedlist(){
-  this.storage.get("storedaudio").then((val:Array<any>)=>{
-    if(val)
+async get_storedlist(){
+  await Storage.get({key:"storedaudio"}).then((val)=>{
+    if(val.value)
     {
-    this.storedid = val
+    this.storedid = JSON.parse(val.value);
     }
     else{
       this.storedid = []
@@ -249,7 +252,6 @@ get_storedlist(){
 }
 checkstatusnew(alist:Array<any>){
   var v =alist.every(v => this.storedid.includes(v));
-  console.log(alist,this.storedid,v);
   return v;
 }
 

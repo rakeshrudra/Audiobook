@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Storage } from '@ionic/storage';
+
 import { Platform } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
+
 import { track } from '../model/track';
 import { chapter } from '../model/chapter';
 import { book } from '../model/book';
 import { NewapiService } from '../newapi.service';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-search',
@@ -19,7 +20,7 @@ export class SearchPage implements OnInit {
   @ViewChild('searchbar',{static:true}) searchbar;
   searchTerm ='';
   atrack: track;
-  constructor(public api: ApiService, public _api : NewapiService, public route: ActivatedRoute,  public router: Router, public storage: Storage, private platform: Platform) {
+  constructor(public api: ApiService, public _api : NewapiService, public route: ActivatedRoute,  public router: Router, private platform: Platform) {
 
   }
   data = null;
@@ -29,57 +30,14 @@ export class SearchPage implements OnInit {
   audios: track[] = []
   chapters: chapter[] = [];
   SearchPage : string = '';
-  ngOnInit() {
-    /*this.api.modules().subscribe(data=>{
-      this.data = data;
-    })*/
-    this.storage.get('lastdate').then(lastdate=>{
+  async ngOnInit() {
 
-      this._api.latestaudio('?lastdate='+lastdate).subscribe((val: track[]) => {
-        if (val.length > 0) {
-
-            this.storage.get('allaudios').then((e : track[]) => {
-              var ff = e;
-              for(var i =0; i < val.length; i++)
-              {
-                 ff = ff.filter(e=>e.id != val[i].id);
-               //this.storage.set('allaudios',ff)
-              }
-              var newar = ff.concat(val);
-              this.storage.set('allaudios',newar).then(()=>{
-                console.log(newar);
-              })
-              //this.router.navigate(['/tab'], { replaceUrl: true })
-              // this.timmer()
-           // }).then(() => {
-              //this.api.isapiloadingnext(true);
-              var date =new Date().toLocaleString();
-              this.storage.set('lastdate', date)
-
-            })
-        }else
-        {
-          var date =new Date().toLocaleString();
-          this.storage.set('lastdate', date)
-        }
-      })
-    })
-
-    this.storage.get('lasttrack').then((val: track) => {
-      this.atrack = val
-    })
-    this.api.showplayernext(false)
-    /*this.storage.get('allaudios').then((val: track[]) => {
-      this.audios = val;//this.router.navigate(['/tab'], { replaceUrl: true })
-      this.jsonaudiofun()
-    })*/
-    this.storage.get('chapters').then((val: chapter[]) => {
-      this.chapters = val;//this.router.navigate(['/tab'], { replaceUrl: true })
+    await Storage.get({key:'chapters'}).then((val) => {
+      this.chapters = JSON.parse(val.value);//this.router.navigate(['/tab'], { replaceUrl: true })
       console.log(val)
     })
-
-    this.storage.get('allbooks').then((val:book[])=>{
-      this.books = val;
+    await Storage.get({key:'allbooks'}).then((val) => {
+      this.books = JSON.parse(val.value);//this.router.navigate(['/tab'], { replaceUrl: true })
     })
     setTimeout(() => {
       this.searchbar.setFocus();

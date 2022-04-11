@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { AudioContentPage } from './../audio-content/audio-content.page';
 import { NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -6,7 +7,7 @@ import { IonTabs, LoadingController, ModalController } from '@ionic/angular';
 import { Howl, howler } from 'howler';
 import { IonRange } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { Storage } from '@ionic/storage';
+//import { Storage } from '@ionic/storage';
 import { track } from '../model/track';
 import { MusicControls } from '@ionic-native/music-controls/ngx';
 import { Router, NavigationStart, ActivatedRoute, Event } from '@angular/router';
@@ -22,18 +23,14 @@ import { AutoloadService } from '../service/autoload.service';
 import { PlaynewmediaService } from '../service/playnewmedia.service';
 import { NewapiService } from '../newapi.service';
 const MEDIA_FOLDER_NAME = 'audios';
-const { CapacitorMusicControls, Share } = Plugins;
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-import {
-  Plugins,
-  PushNotification,
-  Geolocation,
-  PushNotificationToken,
-  PushNotificationActionPerformed
-} from '@capacitor/core';
+import { Share } from '@capacitor/share';
+import { Geolocation } from '@capacitor/geolocation';
+import { CapacitorMusicControls } from 'capacitor-music-controls-plugin';
 
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
+import { Storage } from '@capacitor/storage';
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
@@ -46,31 +43,30 @@ export class TabsPage implements OnInit {
   downloadingStatus: boolean = false;
 
   searchready: boolean = false;
-  ngOnInit() {
-    this.storage.get('activeClass').then(val => {
-      this.api.activeClassnext(val);
-
+  async ngOnInit() {
+    await Storage.get({key:'activeClass'}).then(val => {
+      this.api.activeClassnext(val.value);
     })
     //   alert(this.api.activeClass.value)
-    this.api.allchapters({}).subscribe(data => {
-      this.storage.set('chapters', data).then(() => {
+    this.api.allchapters({}).subscribe(async data => {
+       await Storage.set({key:'chapters', value: JSON.stringify(data)}).then(() => {
       })
     }).add(() => {
-      this.api.alltopic().subscribe(data => {
-        this.storage.set('alltopic', data).then(() => {
+      this.api.alltopic().subscribe(async data => {
           // this.timmer()
-        })
+          await Storage.set({key:'alltopic', value: JSON.stringify(data)}).then(() => {
 
       })
+    })
     }).add(v => {
       this.deviceOrient();
     })
 
   }
-  change(val) {
+ async change(val) {
     this.api.activeClassnext(val);
     this._api.activeClassnext(val);
-    this.storage.set('activeClass', val)
+    await Storage.set({key:'activeClass', value: val})
   }
 
   showplayer: boolean = false;
@@ -128,7 +124,6 @@ export class TabsPage implements OnInit {
     public api: ApiService,
     public _api: NewapiService,
     public router: Router,
-    public storage: Storage,
     public musicControls: MusicControls,
     public file: File,
     public media: Media,
@@ -169,35 +164,7 @@ export class TabsPage implements OnInit {
       })
     })
     /// all new audios
-    this.storage.get('lastdate').then(lastdate => {
-
-      this._api.latestaudio('?lastdate=' + lastdate).subscribe((val: track[]) => {
-        if (val.length > 0) {
-
-          this.storage.get('allaudios').then((e: track[]) => {
-            var ff = e;
-            for (var i = 0; i < val.length; i++) {
-              ff = ff.filter(e => e.id != val[i].id);
-              //this.storage.set('allaudios',ff)
-            }
-            var newar = ff.concat(val);
-            this.storage.set('allaudios', newar).then(() => {
-              //console.log(newar);
-            })
-            //this.router.navigate(['/tab'], { replaceUrl: true })
-            // this.timmer()
-            // }).then(() => {
-            //this.api.isapiloadingnext(true);
-            var date = new Date().toLocaleString();
-            this.storage.set('lastdate', date)
-
-          })
-        } else {
-          var date = new Date().toLocaleString();
-          this.storage.set('lastdate', date)
-        }
-      })
-    })
+      this.allnewAudio();
     ///
 
 
@@ -212,6 +179,34 @@ export class TabsPage implements OnInit {
     })
 
   }
+
+  async allnewAudio(){
+    await Storage.get({key:'lastdate'}).then(lastdate => {
+
+      this._api.latestaudio('?lastdate=' + lastdate.value).subscribe(async (val: track[]) => {
+        if (val.length > 0) {
+
+          await Storage.get({key:'allaudios'}).then(async (list) => {
+            let e = JSON.parse(list.value);
+            var ff = e;
+            for (var i = 0; i < val.length; i++) {
+              ff = ff.filter(e => e.id != val[i].id);
+              //this.storage.set('allaudios',ff)
+            }
+            var newar = ff.concat(val);
+            await Storage.set({key:'allaudios', value: JSON.stringify(newar)})
+            var date = new Date().toLocaleString();
+            await Storage.set({key:'lastdate', value:date})
+
+          })
+        } else {
+          var date = new Date().toLocaleString();
+          await Storage.set({key:'lastdate', value:date})
+        }
+      })
+    })
+  }
+
   async trimurl() {
 
   }
@@ -264,7 +259,7 @@ export class TabsPage implements OnInit {
             this.palyer.play();
           });
         },
-        onplay: (e) => {
+        onplay: async (e) => {
           //console.log(e, "p")
           this.payId = e;
           this.notificationCall = false;
@@ -283,8 +278,8 @@ export class TabsPage implements OnInit {
           this.api.currentaudionext(this.activeTrack);
           this.api.activetracknext(this.activeTrack);
           this.nextchapteraodios();
-          this.storage.set('playlist', this.playlist);
-          this.storage.set('lasttrack', this.activeTrack);
+          await Storage.set({key:'playlist', value: JSON.stringify(this.playlist)});
+          await Storage.set({key:'lasttrack', value: JSON.stringify(this.activeTrack)});
           let index = this.playlist.indexOf(this.activeTrack);
           this.nexttrackId = index + 1;
           //console.log(this.palyer)
@@ -320,7 +315,7 @@ export class TabsPage implements OnInit {
       if (this.nexttrackId < this.playlist.length) {
         this.activeTrack = this.playlist[index + 1]
         this.start(this.playlist[index + 1])
-        this.storage.set('playnextid', index + 1)
+        //this.storage.set('playnextid', index + 1)
         this.nextchapteraodios();
       }
       else {
@@ -341,7 +336,7 @@ export class TabsPage implements OnInit {
       if (this.trackNo > 0) {
         this.start(this.playlist[this.trackNo - 1])
         this.trackNo = this.trackNo - 1;
-        this.storage.set('playnextid', this.trackNo)
+        //this.storage.set('playnextid', this.trackNo)
 
       } else {
         //this.start(this.playlist[0])
@@ -362,7 +357,7 @@ export class TabsPage implements OnInit {
       if (this.nexttrackId < this.playlist.length) {
         this.activeTrack = this.playlist[index]
         this.start(this.playlist[index])
-        this.storage.set('playnextid', index)
+       // this.storage.set('playnextid', index)
         this.nextchapteraodios();
       }
       else {
@@ -377,17 +372,17 @@ export class TabsPage implements OnInit {
   togglePlayer(pause) {
     this.isplaying = !pause;
     if (pause) {
-      CapacitorMusicControls.updateIsPlaying({
+     /* CapacitorMusicControls.updateIsPlaying({
         isPlaying: false, // affects Android only
-      });
+      });*/
       if (this.palyer.playing()) {
         this.palyer.pause();
       }
       // //console.log(this.palyer.pause(),'pause')
     } else {
-      CapacitorMusicControls.updateIsPlaying({
+      /*CapacitorMusicControls.updateIsPlaying({
         isPlaying: true, // affects Android only
-      });
+      });*/
       if (!this.palyer.playing()) {
         this.palyer.play();
       }
@@ -398,9 +393,9 @@ export class TabsPage implements OnInit {
   pause() {
     this.palyer.pause();
     //this.musicControls.updateIsPlaying(false);
-    CapacitorMusicControls.updateIsPlaying({
+   /* CapacitorMusicControls.updateIsPlaying({
       isPlaying: false, // affects Android only
-    });
+    });*/
   }
   toggleplay() {
     this.palyer.play();
@@ -445,41 +440,47 @@ export class TabsPage implements OnInit {
     this.palyer.unload();
     this.playlist = []
     //this.musicControls.destroy()
-    CapacitorMusicControls.destroy();
+    //CapacitorMusicControls.destroy();
     this.activeTrack = null
     //this.router.navigate(['/tab/home/'])
   }
-  storehistory(track: track) {
-    this.storage.get('history').then((val: track[]) => {
+ async storehistory(track: track) {
+    await Storage.get({key:'history'}).then(async (list) => {
+      if(list.value)
+      {
+        let val = JSON.stringify(list.value);
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.url != track.url);
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.push(track)
-          this.storage.set('history', this.favourit)
+          await Storage.set({key:'history', value: JSON.stringify(this.favourit)})
         }
         else {
-          this.storage.set('history', [track])
+          await Storage.set({key:'history', value: JSON.stringify([track])})
+
         }
       }
       else {
-        this.storage.set('history', [track])
+        await Storage.set({key:'history', value: JSON.stringify([track])})
       }
+    }
     })
+
   }
   play(i) {
     if (this.palyer) {
       this.palyer.unload();
     }
     this.start(this.playlist[i])
-    this.storage.set('playnextid', i)
+    //this.storage.set('playnextid', i)
   }
   playcurrent() {
     this.palyer.play();
     //console.log('1')
-    CapacitorMusicControls.updateIsPlaying({
+   /* CapacitorMusicControls.updateIsPlaying({
       isPlaying: true, // affects Android only
-    });
+    });*/
   }
 
 
@@ -520,35 +521,39 @@ export class TabsPage implements OnInit {
   searchfocus() {
     //this.router.navigate(['/tab/search'])
   }
-  storebook(track) {
-    this.storage.get('book').then(valc => {
+ async storebook(track) {
+    await Storage.get({key:'book'}).then(async list => {
+      if(list.value)
+      {
+        let valc = JSON.parse(list.value);
       if (valc) {
         const filteredPeople = valc.filter((item) => item.id != track.book_id);
         const filteredPeople1 = valc.filter((item) => item.id == track.book_id);
 
         if (Array.isArray(filteredPeople1)) {
           if (filteredPeople1.length > 0) { } else {
-            this.api.book(track).subscribe(val => {
-              this.storage.set('book', val).then()
+            this.api.book(track).subscribe(async val => {
+              await Storage.set({key:'book', value: JSON.stringify(val)}).then()
             })
           }
         } else {
           this.favourit = filteredPeople;
           ////console.log(this.favourit,'3')
-          this.api.book(track).subscribe(val => {
+          this.api.book(track).subscribe(async val => {
             this.favourit.push(val[0])
-            this.storage.set('book', this.favourit).then(c => {
+            await Storage.set({key:'book', value: JSON.stringify(this.favourit)}).then(c => {
               this.favourit = [];
             })
           })
         }
       }
       else {
-        this.api.book(track).subscribe(val => {
+        this.api.book(track).subscribe(async val => {
           ////console.log(val,"4")
-          this.storage.set('book', val).then()
+          await Storage.set({key:'book', value: JSON.stringify(val)}).then()
         })
       }
+    }
     })
   }
   nextchapteraodios() {
@@ -564,9 +569,12 @@ export class TabsPage implements OnInit {
   }
 
 
-  previouschapteraodios() {
+ async previouschapteraodios() {
     //console.log(this.api.playno.value);
-    this.storage.get('allaudios').then((tracks: track[]) => {
+    await Storage.get({key:'allaudios'}).then((val) => {
+      if(val.value)
+      {
+        let tracks = JSON.parse(val.value);
       if (this.activeTrack.topic != '') {
         let chapter_id = this.activeTrack.chapter_id;
         let topic_id = parseInt(this.activeTrack.topic) - 1;
@@ -594,6 +602,7 @@ export class TabsPage implements OnInit {
           this.close()
         }
       }//console.log(this.nextplaylist)
+    }
     })
   }
 
@@ -674,28 +683,35 @@ export class TabsPage implements OnInit {
   /////////////////////////////////////
   async processaudiodate(alltracks) {
 
-    this.storage.get('allbooks').then((val: book[]) => {
+    await Storage.get({key:'allbooks'}).then(async (val) => {
 
+      if(val.value)
+      {
+        let list = JSON.parse(val.value);
       const result = alltracks.map(function (el) {
         var e = Object.assign({}, el);
-        var element = val.filter(vv => vv.id == el.book_id, el);
+        var element = list.filter(vv => vv.id == el.book_id, el);
         e.booksynopsysenglish = element[0].synopsys;
         e.booksynopsysurdu = element[0].synopsysurdu;
         e.bookdetailsenglish = element[0].details;
         e.bookdetailsurdu = element[0].detailsurdu;
         return e;
-      }, val)
-      this.storage.set('allaudios', result);
+      }, list)
+      await Storage.set({key:'allaudios', value: JSON.stringify(result)});
+    }
     })
   }
   ///////////
   topicimage: string = '';
-  topicimg() {
+ async topicimg() {
     let bb = this.activeTrack.topic;
     if (bb != "") {
-      this.storage.get('alltopic').then((val: topic[]) => {
-        let hh = val.find(e => e.id == bb);
-        this.topicimage = hh.logo;
+      await Storage.get({key:'alltopic'}).then((val) => {
+        if(val.value)
+        { let list = JSON.parse(val.value);
+        let hh = list.find(e => e.id == bb);
+        this.topicimage = hh?.logo;
+        }
       })
     }
   }
@@ -711,31 +727,36 @@ export class TabsPage implements OnInit {
   //////////////////// add to fab ////////////
 
 
-  addfavouriteAudio(track: track) {
+ async addfavouriteAudio(track: track) {
     let favourit = []
-    this.storage.get('favourite').then((val) => {
+    await Storage.get({key:'favourite'}).then(async (list) => {
+      if(list.value)
+      {
+        let val = JSON.parse(list.value);
       if (val && Array.isArray(val) && val.length > 0) {
-        console.log(typeof val)
+        //console.log(typeof val)
         const filteredPeople = val.filter((item) => item.id != track.id);
         if (Array.isArray(filteredPeople)) {
           favourit = filteredPeople;
           favourit.push(track)
-          this.storage.set('favourite', favourit).then(() => { this.ckfeb(track) })
+          await Storage.set({key:'favourite', value: JSON.stringify([favourit])}).then(() => { this.ckfeb(track) })
         }
         else {
-          this.storage.set('favourite', [track]).then(() => { this.ckfeb(track) })
+          await Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.ckfeb(track) })
         }
       }
       else {
-        this.storage.set('favourite', [track]).then(() => { this.ckfeb(track) })
+        await Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.ckfeb(track) })
       }
+    }
     })
   }
 
-  ckfeb(track) {
+ async ckfeb(track) {
     // alert("ok")
-    this.storage.get('favourite').then((val: track[]) => {
-      if (val) {
+    await Storage.get({key:'favourite'}).then((value) => {
+      if (value.value) {
+        let val = JSON.parse(value.value);
         const filteredPeople = val.filter((item) => item.id == track.id);
         if (filteredPeople.length > 0) {
           this.activeTrack.fav = true
@@ -748,7 +769,7 @@ export class TabsPage implements OnInit {
   }
 
   createControls() {
-    CapacitorMusicControls.create({
+    /*CapacitorMusicControls.create({
       album: 'Islamic Audio Books',     // optional, default: ''
       // cover can be a local path (use fullpath 'file:///storage/emulated/...', or only 'my_image.jpg' if my_image.jpg is in the www folder of your app)
       //			 or a remote url ('http://...', 'https://...', 'ftp://...')
@@ -801,14 +822,13 @@ export class TabsPage implements OnInit {
       console.log('controlsNotification was fired');
       console.log(info);
       this.handleControlsEvent(info);
-    });
+    });*/
   }
 
   notificationCall = false;
 
   handleControlsEvent(action) {
 
-    console.log("hello from handleControlsEvent")
     const message = action.message;
     if (!this.notificationCall) {
       this.notificationCall = true;
@@ -855,15 +875,15 @@ export class TabsPage implements OnInit {
 
 
   /// tracking played Audio
-  storepayaudio(id) {
-    this.storage.get("storedaudio").then((val: Array<any>) => {
-      if (val) {
-        val.push(id);
-        console.log(val)
-        var unique = val.filter((v, i, a) => a.indexOf(v) === i);
-        this.storage.set("storedaudio", unique)
+ async storepayaudio(id) {
+    await Storage.get({key:"storedaudio"}).then(async (val) => {
+      if (val.value) {
+        let list = JSON.parse(val.value);
+        list.push(id);
+        var unique = list.filter((v, i, a) => a.indexOf(v) === i);
+        await Storage.set({key:"storedaudio", value: JSON.stringify(unique)})
       } else {
-        this.storage.set("storedaudio", [id])
+        await Storage.set({key:"storedaudio", value: JSON.stringify([id])})
       }
     })
   }

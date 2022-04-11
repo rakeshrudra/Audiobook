@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { ApiService } from '../api.service';
 import { track } from '../model/track';
-
+import { Storage } from '@capacitor/storage';
 @Component({
   selector: 'app-offlinealert',
   templateUrl: './offlinealert.page.html',
@@ -12,12 +11,12 @@ import { track } from '../model/track';
 })
 export class OfflinealertPage implements OnInit {
 
-  constructor(public modalCtrl : ModalController, public storage : Storage, private router: Router, private api: ApiService) { }
+  constructor(public modalCtrl : ModalController,  private router: Router, private api: ApiService) { }
 
   offlinebutton = false;
-  ngOnInit() {
-    this.storage.get('download').then((val: track[])=>{
-      if(val)
+ async ngOnInit() {
+    await Storage.get({key:'download'}).then((val)=>{
+      if(val.value)
       {
         this.offlinebutton  = true
       }
@@ -29,6 +28,7 @@ export class OfflinealertPage implements OnInit {
   }
   retry()
   {
+    alert("retry")
     this.api.slider().subscribe(data => {
       this.modalCtrl.dismiss({offline : false})
       this.router.navigate(['/'])

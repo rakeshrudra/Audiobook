@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { track } from '../model/track';
-import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { File } from '@ionic-native/file/ngx';
 
 const MEDIA_FOLDER_NAME = 'audios';
+
+import { Storage } from '@capacitor/storage';
 @Injectable({
   providedIn: 'root'
 })
 export class AutoloadService {
 
-  constructor(public file : File, public storage : Storage, public toastController : ToastController) { }
+  constructor(public file : File, public toastController : ToastController) { }
 
   activetrack = new BehaviorSubject<track>(null)
 
@@ -43,114 +44,132 @@ export class AutoloadService {
     );
   }
 
-  addfavouriteAudio(track: track) {
+  async addfavouriteAudio(track: track) {
     let favourit = []
-    this.storage.get('favourite').then((val: track[]) => {
+    await Storage.get({key:'favourite'}).then(async (list) => {
+      if(list.value)
+      {
+        let val = JSON.parse(list.value);
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.id != track.id);
         if (Array.isArray(filteredPeople)) {
           favourit = filteredPeople;
           favourit.push(track)
-          this.storage.set('favourite', favourit).then(() => { this.presentToast();this.activetrack.next(track) })
+          await Storage.set({key:'favourite', value: JSON.stringify(favourit)}).then(() => { this.presentToast();this.activetrack.next(track) })
         }
         else {
-          this.storage.set('favourite', [track]).then(() => { this.presentToast();this.activetrack.next(track) })
+          await Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.presentToast();this.activetrack.next(track) })
         }
       }
       else {
-        this.storage.set('favourite', [track]).then(() => { this.presentToast(); this.activetrack.next(track) })
+        await Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.presentToast(); this.activetrack.next(track) })
       }
+    }
     })
   }
 
-  removefavouriteAudio(track: track) {
+ async removefavouriteAudio(track: track) {
     let favourit = []
-    this.storage.get('favourite').then((val: track[]) => {
-      if (Array.isArray(val)) {
-        const filteredPeople = val.filter((item) => item.url != track.url);
-        if (Array.isArray(filteredPeople)) {
-          favourit = filteredPeople;
-         // favourit.push(track)
-          this.storage.set('favourite', favourit).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
-        }
-        else {
-          this.storage.set('favourite', [track]).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
-
-        }
-      }
-      else {
-        this.storage.set('favourite', [track]).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track)})
-
-      }
-    })
-  }
-
-  removehistoryAudio(track: track) {
-    let favourit = []
-    this.storage.get('history').then((val: track[]) => {
-      if (Array.isArray(val)) {
-        const filteredPeople = val.filter((item) => item.url != track.url);
-        if (Array.isArray(filteredPeople)) {
-          favourit = filteredPeople;
-         // favourit.push(track)
-          this.storage.set('history', favourit).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
-        }
-        else {
-          this.storage.set('history', [track]).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
-
-        }
-      }
-      else {
-        this.storage.set('history', [track]).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track)})
-
-      }
-    })
-  }
-
-  removedownloadAudio(track: track) {
-    let favourit = []
-    this.storage.get('download').then((val: track[]) => {
-      if(val)
+    await Storage.get({key:'favourite'}).then(async(list) => {
+      if(list.value)
       {
+        let val = JSON.parse(list.value);
+      if (Array.isArray(val)) {
+        const filteredPeople = val.filter((item) => item.url != track.url);
+        if (Array.isArray(filteredPeople)) {
+          favourit = filteredPeople;
+         // favourit.push(track)
+
+         await Storage.set({key:'favourite', value: JSON.stringify(favourit)}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
+        }
+        else {
+          await Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
+
+        }
+      }
+      else {
+        await Storage.set({key:'favourite', value:JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track)})
+
+      }
+    }
+    })
+  }
+
+ async  removehistoryAudio(track: track) {
+    let favourit = []
+    await Storage.get({key:'history'}).then(async (list) => {
+      if(list.value)
+      {
+        let val = JSON.parse(list.value);
+      if (Array.isArray(val)) {
+        const filteredPeople = val.filter((item) => item.url != track.url);
+        if (Array.isArray(filteredPeople)) {
+          favourit = filteredPeople;
+         // favourit.push(track)
+         await Storage.set({key:'downloadq', value: JSON.stringify(favourit)}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
+        }
+        else {
+          await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
+
+        }
+      }
+      else {
+        await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track)})
+
+      }
+    }
+    })
+  }
+
+ async removedownloadAudio(track: track) {
+    let favourit = []
+    await Storage.get({key:'downloadq'}).then(async (list) => {
+      if(list.value)
+      {
+        let val = JSON.parse(list.value);
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.id != track.id);
         if (Array.isArray(filteredPeople)) {
           favourit = filteredPeople;
          // favourit.push(track)
-          this.storage.set('download', favourit).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
+         await Storage.set({key:'downloadq', value: JSON.stringify(favourit)}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
 
         }
         else {
-          this.storage.set('download', [track]).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
+          await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
         }
       }
       else {
-        this.storage.set('download', [track]).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track)})
+        await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track)})
       }
     }
     })
   }
 
 
-  removedownloadqAudio(track: track) {
+ async removedownloadqAudio(track: track) {
     let favourit = []
-    this.storage.get('downloadq').then((val: track[]) => {
+    await Storage.get({key:'downloadq'}).then(async (list) => {
+      if(list.value)
+      {
+        let val = JSON.parse(list.value);
       if(val){
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.id != track.id);
         if (Array.isArray(filteredPeople)) {
           favourit = filteredPeople;
          // favourit.push(track)
-          this.storage.set('downloadq', favourit).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
+         await Storage.set({key:'downloadq', value: JSON.stringify(favourit)}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
         }
         else {
-          this.storage.set('downloadq', [track]).then(() => { this.cpresentToast('Succesfully removed');  this.activetrack.next(track) })
+          await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed');  this.activetrack.next(track) })
         }
       }
       else {
-        this.storage.set('downloadq', [track]).then(() => { this.cpresentToast('Succesfully removed');  this.activetrack.next(track) })
+        await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => { this.cpresentToast('Succesfully removed');  this.activetrack.next(track) })
       }
       }
+    }
     })
   }
 

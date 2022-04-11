@@ -3,12 +3,11 @@ import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import {validation_message} from '../valid_message'
 import { ApiService } from '../api.service';
-import { Storage } from '@ionic/storage';
 import { ToastController, LoadingController } from '@ionic/angular';
 //import { AppVersion } from '@ionic-native/app-version/ngx';
-import { Plugins } from '@capacitor/core';
-const { App,  Device } = Plugins;
 
+import { Device } from '@capacitor/device';
+import { Storage } from '@capacitor/storage';
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.page.html',
@@ -17,7 +16,7 @@ const { App,  Device } = Plugins;
 export class FeedbackPage implements OnInit {
 
   validation_message = validation_message
-  constructor(public _fb : FormBuilder , public loadingController : LoadingController, public toastController : ToastController, public router : Router , public api : ApiService , public storage : Storage) {
+  constructor(public _fb : FormBuilder , public loadingController : LoadingController, public toastController : ToastController, public router : Router , public api : ApiService) {
  /*   this.appVersion.getVersionNumber().then(e => {
       this.app = e;
   })*/
@@ -46,13 +45,13 @@ app = '';
   }
   async appBuild(){
     const info = await Device.getInfo();
-      this.app = info.appBuild;
+      this.app = info.name;
   }
   searchfocus()
   {
     this.router.navigate(['/tab/search'])
   }
-  submit()
+ async submit()
   {
     this.cperror = false;
     this.register_slot_submited = true
@@ -66,9 +65,9 @@ app = '';
     {
       console.log(this.profileForm.value)
       this.presentLoadingWithOptions();
-      this.api.feedback(this.profileForm.value).subscribe(val=>{
+      this.api.feedback(this.profileForm.value).subscribe(async val=>{
        this.register_slot_submited = false
-       this.storage.set('feedback',this.profileForm.value).then(val=>{
+       await Storage.set({key:'feedback',value: JSON.stringify(this.profileForm.value)}).then(val=>{
          this.presentToast();
          this.profileForm.reset();
          this.feedbackget();
@@ -90,10 +89,10 @@ app = '';
     });
     toast.present();
   }
-  feedbackget()
+ async feedbackget()
   {
-    this.storage.get('feedback').then(val=>{
-      this.feedback = val
+    await Storage.get({key:'feedback'}).then(val=>{
+      this.feedback = JSON.parse(val.value);
     })
   }
   refresh()

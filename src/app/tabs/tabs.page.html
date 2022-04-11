@@ -136,9 +136,6 @@
 <ion-grid
     style="position: fixed; bottom: 0px;; z-index: 3; background: var(--ion-color-theme); width: 100%;  padding: 0px; border-radius: 10px;">
     <ion-row style="background: var(--ion-color-theme);  border-radius: 10px 10px 0px 0px;">
-        <ion-col size="12" *ngIf="downloadingStatus">
-            <ion-spinner name="crescent" style="position: fixed; bottom: 80px; right: 10px"></ion-spinner>
-        </ion-col>
         <ion-col>
             <ion-tab-button (click)="api.showplayernext(false)" routerLink="/tab/home/landing"
                 [ngClass]="{'active' :  tab === 'home','inactive' :  tab !== 'home'}">

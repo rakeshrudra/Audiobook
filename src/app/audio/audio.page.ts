@@ -2,7 +2,7 @@ import { NewapiService } from './../newapi.service';
 import { async } from '@angular/core/testing';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
-import { Storage } from '@ionic/storage';
+
 import { track } from '../model/track';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController, LoadingController, IonContent } from '@ionic/angular';
@@ -13,9 +13,11 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file/ngx';
 import { AutoloadService } from '../service/autoload.service';
 const MEDIA_FOLDER_NAME = 'audios';
-import { Plugins } from '@capacitor/core';
+
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-const { CapacitorMusicControls , Share } = Plugins;
+
+import { Share } from '@capacitor/share';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-audio',
@@ -34,7 +36,6 @@ export class AudioPage implements OnInit {
     public toastController: ToastController,
     public api: ApiService,
     public _api: NewapiService,
-    public storage: Storage,
     public route: ActivatedRoute,
     public router: Router,
     public _autoload : AutoloadService,
@@ -48,14 +49,14 @@ export class AudioPage implements OnInit {
   }
   data = null;
   //playlist : track[] = this.route.snapshot.data['audios'];
-  playlist: track[] ;//= this.route.snapshot.data['audios'];
+  playlist: track[] = [] ;//= this.route.snapshot.data['audios'];
   favourit = [];
   storedid = [];
   chapter = this.route.snapshot.paramMap.get('id');
   chapterdata: chapter;
   defaultImage = '/assets/loader.gif';
   files = []
-  ngOnInit() {
+  async ngOnInit() {
     /*  this.storage.get('allaudios').then((values:track[])=>{
         if(values)
         {
@@ -69,10 +70,11 @@ export class AudioPage implements OnInit {
         this.get_storedlist()
       },2000)
     }
-      ionViewWillEnter(){
+   async   ionViewWillEnter(){
 
-    this.storage.get('chapters').then((values: chapter[]) => {
-      if (values) {
+    await Storage.get({key:'chapters'}).then((val) => {
+      if (val.value) {
+        let values = JSON.parse(val.value);
         this.chapterdata = values.filter(list => list.id === this.chapter)[0]
         //console.log(this.chapterdata)
       }
@@ -92,39 +94,48 @@ export class AudioPage implements OnInit {
       })
     }
   }
-  addfavouriteAudio(track: track) {
-    this.storage.get('favourite').then((val: track[]) => {
+ async addfavouriteAudio(track: track) {
+    await Storage.get({key:'favourite'}).then((tracks) => {
+      if(tracks.value)
+      {
+        let val = JSON.parse(tracks.value);
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.url != track.url);
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.push(track)
-          this.storage.set('favourite', this.favourit).then(() => { this.presentToast(); this.ckfev() })
+           Storage.set({key:'favourite', value: JSON.stringify(this.favourit)}).then(() => { this.presentToast(); this.ckfev() })
         }
         else {
-          this.storage.set('favourite', [track]).then(() => { this.presentToast(); this.ckfev() })
+           Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.presentToast(); this.ckfev() })
         }
       }
       else {
-        this.storage.set('favourite', [track]).then(() => { this.presentToast(); this.ckfev() })
+         Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.presentToast(); this.ckfev() })
       }
+    }
+
     })
   }
 
-  removefavouriteAudio(track) {
-    this.storage.get('favourite').then((val: track[]) => {
+ async  removefavouriteAudio(track) {
+    await Storage.get({key:'favourite'}).then(async (traks) => {
+      if(traks.value)
+      {
+        let val = JSON.parse(traks.value);
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.url != track.url);
         if (Array.isArray(filteredPeople)) {
-          this.storage.set('favourite', filteredPeople).then(() => { this.ckfev() })
+          await Storage.set({key:'favourite', value: JSON.stringify(filteredPeople)}).then(() => { this.ckfev() })
         }
         else {
-          this.storage.set('favourite', []).then(() => { this.ckfev() })
+          await Storage.set({key:'favourite', value: JSON.stringify([])}).then(() => { this.ckfev() })
         }
       }
       else {
-        this.storage.set('favourite', []).then(() => { this.ckfev() })
+        await Storage.set({key:'favourite', value: JSON.stringify([])}).then(() => { this.ckfev() })
       }
+    }
     })
   }
 
@@ -145,9 +156,12 @@ export class AudioPage implements OnInit {
     this.router.navigate(['/tab/search'])
   }
 
-  ckfev() {
-    this.storage.get('favourite').then((val: track[]) => {
-      if (Array.isArray(val)) {
+ async ckfev() {
+      await Storage.get({key:'favourite'}).then(async (traks) => {
+        if(traks.value)
+        {
+          let val = JSON.parse(traks.value);
+        if (Array.isArray(val)) {
         this.favourit = val
         for (var i = 0; i < this.playlist.length; i++) {
           if (val.filter(e => e.url === this.playlist[i].url).length > 0) {
@@ -157,18 +171,22 @@ export class AudioPage implements OnInit {
           }
         }
       }
+    }
 
     })
     this.downloadingck()
   }
 
   ///// downloading ck
-  downloadingck() {
+ async downloadingck() {
     this.downloadgck()
-    this.storage.get('downloadq').then((val: track[]) => {
-      if(val)
-      {
-      if (Array.isArray(val)) {
+        await Storage.get({key:'downloadq'}).then(async (traks) => {
+          if(traks.value)
+          {
+            let val = JSON.parse(traks.value);
+
+            if (Array.isArray(val)) {
+              console.log(this.playlist,"playlist");
         this.favourit = val
         for (var i = 0; i < this.playlist.length; i++) {
           if (val.filter(e => e.url === this.playlist[i].url).length > 0) {
@@ -179,15 +197,20 @@ export class AudioPage implements OnInit {
         }
       }
       console.log('downloading play',this.playlist)
-
     }
+
     })
 
   }
   ///// downloaded ck
-  downloadgck() {
-    this.storage.get('download').then((val: track[]) => {
-      if(val){
+ async downloadgck() {
+
+
+        await Storage.get({key:'download'}).then(async (traks) => {
+          if(traks.value)
+          {
+            let val = JSON.parse(traks.value);
+
       if (Array.isArray(val)) {
         this.favourit = val
         for (var i = 0; i < this.playlist.length; i++) {
@@ -334,23 +357,28 @@ async  shareaudio(msg, img, url,id) {
 
   }
 
-  storehistory(track) {
+ async storehistory(track) {
     //console.log('down')
     //console.log(track)
-    this.storage.get('download').then((val: track[]) => {
+      await Storage.get({key:'download'}).then(async (traks) => {
+        if(traks.value)
+        {
+          let val = JSON.parse(traks.value);
+
+
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.url != track.url);
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.push(track)
-          this.storage.set('download', this.favourit)
+          await Storage.set({key:'download', value: JSON.stringify(this.favourit)})
           //console.log('down1')
           this.getindque(track)
           this.ckfev();
 
         }
         else {
-          this.storage.set('download', [track])
+          await Storage.set({key:'download', value: JSON.stringify([track])})
           //console.log('down2')
           this.getindque(track)
           this.ckfev();
@@ -359,10 +387,11 @@ async  shareaudio(msg, img, url,id) {
       }
       else {
         //console.log('down3')
-        this.storage.set('download', [track])
+        await Storage.set({key:'download', value: JSON.stringify([track])})
         this.getindque(track)
         this.ckfev();
       }
+    }
     })
   }
   loadFiles() {
@@ -374,41 +403,53 @@ async  shareaudio(msg, img, url,id) {
       err =>{} //console.log('error loading files: ', err)
     );
   }
-  downloadAll() {
+ async downloadAll() {
     let track = this.playlist
-    this.storage.get('downloadq').then((val: track[]) => {
+      await Storage.get({key:'downloadq'}).then(async (traks) => {
+        if(traks.value)
+        {
+          let val = JSON.parse(traks.value);
       if (Array.isArray(val)) {
         const filteredPeople = val;
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.concat(track);
           let primes = this.favourit.concat(this.playlist);
-         console.log(primes)
          // this.storage.set('download', primes)
-          this.storage.set('downloadq', primes)
+          await Storage.set({key:'downloadq',value: JSON.stringify(primes)})
           .then(()=>{
             this.ckfev();
           })
         }
         else {
-          this.storage.set('downloadq', track)
+          await Storage.set({key:'downloadq',value: JSON.stringify(track)})
           .then(()=>{
             this.ckfev();
           })
         }
       }
       else {
-        this.storage.set('downloadq', track)
+        await Storage.set({key:'downloadq',value: JSON.stringify(track)})
         .then(()=>{
           this.ckfev();
         })
        }
+      }      else {
+        await Storage.set({key:'downloadq',value: JSON.stringify(track)})
+        .then(()=>{
+          this.ckfev();
+        })
+       }
+
     })
   }
 
   /// add in downloadq
-  downloadQ(track: track) {
-    this.storage.get('downloadq').then((val: track[]) => {
+  async downloadQ(track: track) {
+    await Storage.get({key:'downloadq'}).then(async (traks) => {
+      if(traks.value)
+      {
+        let val = JSON.parse(traks.value);
 
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.url != track.url);
@@ -416,32 +457,37 @@ async  shareaudio(msg, img, url,id) {
           this.favourit = filteredPeople;
           this.favourit.push(track)
           //console.log(this.favourit)
-          this.storage.set('downloadq', this.favourit).then(() => {
+          await Storage.set({key:'downloadq', value: JSON.stringify(this.favourit)}).then(() => {
             this.ckfev();
 
           })
         }
         else {
-          this.storage.set('downloadq', [track]).then(() => {
-            this.ckfev();
+            await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => {
+              this.ckfev();
 
            })
         }
       }
       else {
-        this.storage.set('downloadq', [track]).then(() => {
+        await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => {
           this.ckfev();
         })
       }
+    }else{
+      await Storage.set({key:'downloadq', value: JSON.stringify([track])}).then(() => {
+        this.ckfev();
+      })
+    }
     })
     this.api.downloadQstartnext(track.id);
     this.dqlist()
   }
 
   downloadQlist = []
-  dqlist() {
-    this.storage.get('downloadq').then((val: track[]) => {
-      this.downloadQlist = val;
+  async dqlist() {
+    await Storage.get({key:'downloadq'}).then((val) => {
+      this.downloadQlist = JSON.parse(val.value);
     })
   }
 
@@ -462,11 +508,11 @@ async  shareaudio(msg, img, url,id) {
 
 ///
 
-get_storedlist(){
-  this.storage.get("storedaudio").then((val:Array<any>)=>{
-    if(val)
+async get_storedlist(){
+    await Storage.get({key:'storedaudio'}).then((val) => {
+      if(val.value)
     {
-    this.storedid = val
+    this.storedid = JSON.parse(val.value)
     }
     else{
       this.storedid = []

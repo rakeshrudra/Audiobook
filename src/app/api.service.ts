@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
 import { BehaviorSubject, Observable } from 'rxjs';
 import { track } from './model/track';
 import { book } from './model/book';
 import { chapter } from './model/chapter';
-import { Storage } from '@ionic/storage';
+
 import { topic } from './model/topic';
 import { PlaynewmediaService } from './service/playnewmedia.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -34,7 +35,7 @@ export class ApiService {
 
   playlist : track[] = []
 
-  constructor(public http: HttpClient , public storage : Storage , public audioser : PlaynewmediaService) { }
+  constructor(public http: HttpClient , public audioser : PlaynewmediaService) { }
   audiolist = new BehaviorSubject<track[]>(this.playlist)
   activetrack = new BehaviorSubject<track>(null)
   currentaudio = new BehaviorSubject<track>(null)
@@ -132,19 +133,6 @@ export class ApiService {
 
   chapters(data) //: Observable<chapter[]>
   {
-   /*let uri = '?';
-   if(typeof  data.book_id)
-   {
-      uri = uri+'book_id='+data.book_id
-   }
-
-   return this.http.get<chapter[]>(this.url_chapter+`${uri}`)*/
-    this.storage.get('chapters').then(val=>{
-       if(val)
-       {
-          return val.filter((val)=>{ val.book_id == data.book_id})
-       }
-    })
   }
 
   allchapters(data) : Observable<chapter[]>

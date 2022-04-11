@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
+
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { track } from '../model/track';
 import { AutoloadService } from '../service/autoload.service';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-favourite',
@@ -12,7 +13,7 @@ import { AutoloadService } from '../service/autoload.service';
 })
 export class FavouritePage implements OnInit {
 
-  constructor(public storage : Storage, public api : ApiService, public router : Router, public _autoload : AutoloadService) { 
+  constructor(public api : ApiService, public router : Router, public _autoload : AutoloadService) {
     _autoload.activetrack.subscribe(val=>{
       _autoload.activetrack.subscribe(val=>{
       this.ngOnInit();
@@ -24,9 +25,12 @@ export class FavouritePage implements OnInit {
   playlist = [];
   defaultImage = '/assets/loader.gif';
 
-  ngOnInit() {
-    this.storage.get('favourite').then((val : track[])=>{
-      this.playlist = val
+ async ngOnInit() {
+   await Storage.get({key:'favourite'}).then((val)=>{
+     if(val.value)
+     {
+      this.playlist = JSON.parse(val.value);
+     }
     })
 
   }
@@ -49,31 +53,37 @@ export class FavouritePage implements OnInit {
   {
     this.router.navigate(['/tab/search'])
   }
-  removefavouriteAudio(track)
+ async removefavouriteAudio(track)
   {
-    this.storage.get('favourite').then((val : track[]) =>{
-      if(Array.isArray(val))
+    await Storage.get({key:'favourite'}).then(async (val) =>{
+      if(val.value)
       {
-      const filteredPeople = val.filter((item) => item.url != track.url); 
+        let list = JSON.parse(val.value);
+      if(Array.isArray(list))
+      {
+      const filteredPeople = list.filter((item) => item.url != track.url);
       if(Array.isArray(filteredPeople))
         {
-          this.storage.set('favourite',filteredPeople).then(()=>   {  this.ckfev()})
-        } 
+          await Storage.set({key:'favourite', value: JSON.stringify(filteredPeople)}).then(()=>   {  this.ckfev()})
+        }
         else
         {
-          this.storage.set('favourite',[]).then(()=> {  this.ckfev()})
-        }
-      } 
+          await Storage.set({key:'favourite', value: JSON.stringify([])}).then(()=>   {  this.ckfev()})        }
+      }
       else
       {
-         this.storage.set('favourite',[]).then(()=>   {  this.ckfev()})
-      }
+        await Storage.set({key:'favourite', value: JSON.stringify([])}).then(()=>   {  this.ckfev()})      }
+    }
     })
-  } 
-  ckfev()
+  }
+ async ckfev()
   {
-    this.storage.get('favourite').then(val=>{
-      this.playlist = val
-    })
+    await Storage.get({key:'favourite'}).then((val)=>{
+      if(val.value)
+      {
+       this.playlist = JSON.parse(val.value);
+      }
+     })
+
   }
 }

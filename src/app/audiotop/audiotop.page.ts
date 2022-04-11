@@ -5,14 +5,15 @@ import { book } from '../model/book';
 import { LoadingController, IonContent } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Storage } from '@ionic/storage';
+
 import { topic } from '../model/topic';
 import { track } from '../model/track';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Plugins } from '@capacitor/core';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-const { CapacitorMusicControls , Share } = Plugins;
 
+import { Share } from '@capacitor/share';
+import { Storage } from '@capacitor/storage';
 @Component({
   selector: 'app-audiotop',
   templateUrl: './audiotop.page.html',
@@ -20,8 +21,7 @@ const { CapacitorMusicControls , Share } = Plugins;
 })
 export class AudiotopPage implements OnInit {
 
-  constructor(public loadingController: LoadingController, public socialSharing: SocialSharing, public api: ApiService, public route: ActivatedRoute, private firebaseDynamicLinks : FirebaseDynamicLinks,
-    public storage: Storage, public router: Router, public _api : NewapiService) {
+  constructor(public loadingController: LoadingController, public socialSharing: SocialSharing, public api: ApiService, public route: ActivatedRoute, private firebaseDynamicLinks : FirebaseDynamicLinks, public router: Router, public _api : NewapiService) {
     this.chapter_id = route.snapshot.params.id;
   }
   jsonaudio = '/assets/audios.json';
@@ -39,15 +39,19 @@ export class AudiotopPage implements OnInit {
       this.playlist = values.filter(list => list.chapter_id === this.chapter_id)
     })*/
   }
-  ionViewWillEnter(){
+ async ionViewWillEnter(){
 
     this._api.topicbychapter("?chapter_id="+this.chapter_id).subscribe(val=>{
       this.playlist = val;
     })
-    this.storage.get('chapters').then((values: chapter[]) => {
+    await Storage.get({key:'chapters'}).then((val) => {
+      if(val.value)
+      {
+        let values = JSON.parse(val.value);
       if (values) {
         this.chapter = values.filter(list => list.id === this.chapter_id)[0]
       }
+    }
     })
     this.get_storedlist()
   }
@@ -56,12 +60,13 @@ export class AudiotopPage implements OnInit {
     return book.color;
   }
 
-  play(id) {
+ async play(id) {
     //const val = values.filter(list => list.book_id === this.book_id )
-    this.storage.get('allaudios').then((values: track[]) => {
-      if (values) {
-
-        const val = values.filter(list => list.topic === id);
+        await Storage.get({key:'allaudios'}).then((traks) => {
+          if(traks.value)
+          {
+            let values = JSON.parse(traks.value);
+            const val = values.filter(list => list.topic === id);
         if (val.length > 0) {
           console.log(val, id);
           this.api.playnonext(0)
@@ -161,11 +166,11 @@ export class AudiotopPage implements OnInit {
 
   ///
   storedid = [];
-  get_storedlist(){
-    this.storage.get("storedaudio").then((val:Array<any>)=>{
-      if(val)
+  async get_storedlist(){
+   await Storage.get({key:"storedaudio"}).then((val)=>{
+      if(val.value)
       {
-      this.storedid = val
+      this.storedid =  JSON.parse(val.value);
       }
       else{
         this.storedid = []

@@ -1,8 +1,9 @@
+import { FCM } from '@capacitor-community/fcm';
 import { NewapiService } from './newapi.service';
 import { Component, Inject , NgZone} from '@angular/core';
 
 import { Platform, ToastController, LoadingController, AlertController } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+//import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { DOCUMENT } from '@angular/common';
 import { ApiService } from './api.service';
@@ -15,20 +16,12 @@ import { Location } from '@angular/common';
 import { File } from '@ionic-native/file/ngx';
 const MEDIA_FOLDER_NAME = 'audios';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
 
-import {
-  Plugins,
-  PushNotification,
-  PushNotificationToken,
-  PushNotificationActionPerformed
-} from '@capacitor/core';
+import { App } from '@capacitor/app';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { SplashScreen } from '@capacitor/splash-screen';
 
-//import { FCM } from '@capacitor-community/fcm';
-import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
-//const fcm = new FCM();
-const { PushNotifications,App } = Plugins;
 
 
 @Component({
@@ -79,12 +72,12 @@ export class AppComponent {
 
 constructor(
     private platform: Platform,
-    private splashScreen: SplashScreen,
+   // private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     @Inject(DOCUMENT) private document: Document,
     private _api: ApiService,
     public _apiNew: NewapiService,
-    public Storage: Storage,
+    //public Storage: Storage,
     private screenOrientation: ScreenOrientation,
     // public network: Network,
     public toastCtrl: ToastController,
@@ -106,8 +99,8 @@ constructor(
       this.statusBar.styleLightContent();
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       this.statusBar.backgroundColorByHexString('#111111');
-      setTimeout(() => {
-        this.splashScreen.hide();
+      setTimeout(async() => {
+        await SplashScreen.hide();
         //this.currentPrayerTiming();
       }, 1000)
 
@@ -171,7 +164,7 @@ constructor(
     });
 
 
-    App.addListener('appUrlOpen', (data: any) => {
+ /*   App.addListener('appUrlOpen', (data: any) => {
       this.zone.run(() => {
           // Example url: https://beerswift.app/tabs/tab2
           // slug = /tabs/tab2
@@ -193,7 +186,7 @@ constructor(
             this.Storage.set('audioid',myArray[0])
           }
       });
-  });
+  });*/
 
 
   /// subscribe location set
@@ -289,58 +282,46 @@ constructor(
   }
 
   ///
-  pushnotification(){
+
+  async pushnotification(){
 
     this.backgroundMode.enable();
 
-    //console.log('Initializing HomePage');
+    let permStatus = await PushNotifications.checkPermissions();
 
-    // Request permission to use push notifications
-    // iOS will prompt user and return if they granted permission or not
-    // Android will just grant without prompting
-    PushNotifications.requestPermission().then(result => {
-      if (result.granted) {
-        // Register with Apple / Google to receive push via APNS/FCM
-        PushNotifications.register();
-      } else {
-        // Show some error
-      }
-    });
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions();
+    }
 
-    PushNotifications.addListener(
-      'registration',
-      (token: PushNotificationToken) => {
-        //alert('Push registration success, token: ' + token.value);
-        //console.log(token.value);
-       /* fcm
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!');
+    }
+
+    await PushNotifications.addListener('registration', token => {
+       FCM
         .subscribeTo({ topic: 'all' })
         .then((r) => {console.log(`subscribed to topic`)})
         .catch((err) =>{ console.log(err)});
-*/
       },
     );
 
-    PushNotifications.addListener('registrationError', (error: any) => {
-      //alert('Error on registration: ' + JSON.stringify(error));
+    await PushNotifications.addListener('registrationError', err => {
+      console.error('Registration error: ', err.error);
     });
 
-    PushNotifications.addListener(
-      'pushNotificationReceived',
-      (notification: PushNotification) => {
-        //alert('Push received: ' + JSON.stringify(notification));
-      },
-    );
+    await PushNotifications.addListener('pushNotificationReceived', notification => {
+      console.log('Push notification received: ', notification);
+    });
 
-    PushNotifications.addListener(
-      'pushNotificationActionPerformed',
-      (notification: PushNotificationActionPerformed) => {
-        //alert('Push action performed: ' + JSON.stringify(notification));
+    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+       //alert('Push action performed: ' + JSON.stringify(notification));
         console.log('audioid',notification.notification.data.audioId);
-        this.Storage.set('audioid',notification.notification.data.audioId);
+        //this.Storage.set('audioid',notification.notification.data.audioId);
       },
     );
   }
-
   ///
+
+
 
 }

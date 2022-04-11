@@ -1,8 +1,10 @@
+import { async } from '@angular/core/testing';
 import { Component, OnInit, Input } from '@angular/core';
-import { Storage } from '@ionic/storage';
+
 import { topic } from '../model/topic';
 import { ModalController } from '@ionic/angular';
 import { track } from '../model/track';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-downloadsubchapterfilter',
@@ -11,44 +13,54 @@ import { track } from '../model/track';
 })
 export class DownloadsubchapterfilterPage implements OnInit {
 
-  constructor(public storag : Storage, public modalCtrl1 : ModalController) { 
-    this.storag.get('filter_chapter').then((val)=>{
-      this.chapter_id = val;
-  })
+  constructor(public modalCtrl1 : ModalController) {
 
   }
  chapter_id : string;
  topics : topic[] = [];
-  ngOnInit() {
-    this.storag.get('alltopic').then((topic : topic[])=>{
+ async ngOnInit() {
+  await Storage.get({key:'filter_chapter'}).then((val)=>{
+    this.chapter_id = val.value;
+})
+
+    await Storage.get({key:'alltopic'}).then((val)=>{
+      if(val.value)
+      {
+        let topic = JSON.parse(val.value);
       var filteredPeople = topic.filter((downloadsq) => downloadsq.chapter_id == this.chapter_id);
       this.topics = filteredPeople
+      }
    })
 
   }
 
-  audiocount()
+async  audiocount()
   {
-    this.storag.get('download').then((audio : track[])=>{
-  
+    await Storage.get({key:'download'}).then((audios)=>{
+
+      if(audios.value)
+      {
+        let audio = JSON.parse(audios.value);
        for(var i =0; i < this.topics.length; i++)
        {
+
           var filteredPeople = audio.filter((downloadsq) => downloadsq.topic == this.topics[i].id);
           this.topics[i].audiocount =filteredPeople.length;
           this.topics[i].isChecked = false;
-          
+
        }
+      }
     })
-  
-  
+
+
   }
-  
-   save (id)
+
+  async save (id)
   {
-        this.storag.set('filter_topic',id).then(()=>{
+        await Storage.set({key:'filter_topic',value:id}).then(()=>{
           this.modalCtrl1.dismiss({topic : id})
         })
   }
-  
+
 
 }

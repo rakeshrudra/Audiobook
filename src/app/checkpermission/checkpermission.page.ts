@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
-import {
-  Plugins,
-  PushNotification,
-  PushNotificationToken,
-  PushNotificationActionPerformed,
-  PermissionType
-} from '@capacitor/core';
-import { NewapiService } from '../newapi.service';
-import { RouteConfigLoadEnd, Router } from '@angular/router';
 
-const { Geolocation, Permissions } = Plugins;
+import { NewapiService } from '../newapi.service';
+import { Router } from '@angular/router';
+
+import { Geolocation } from '@capacitor/geolocation';
+
 
 @Component({
   selector: 'app-checkpermission',
@@ -29,31 +23,24 @@ export class CheckpermissionPage implements OnInit {
   }
   async devicekCurrentLocation() {
 
-   this.permition = await Permissions.query({ name: PermissionType.Geolocation }).then( async v=>{
-      this.currentLocation = await Geolocation.getCurrentPosition({
+    const status = await Geolocation.checkPermissions();
+   if(status)
+   {
+    this.currentLocation = await Geolocation.getCurrentPosition({
         enableHighAccuracy: true,
         timeout: 1000
       });
       this._api.currentLocationLatNext(this.currentLocation.coords.latitude);
       this._api.currentLocationLongNext(this.currentLocation.coords.longitude);
       this.router.navigate(['tab/home/landing'], { replaceUrl: true })
-    }).catch( async (er)=>{
-         await Permissions.requestPermissions().then( async v=>{
-            this.devicekCurrentLocation()
-         },async er=>{
-          this.devicekCurrentLocation()
-         } )
-    });
-
-
+    }else{
+      await Geolocation.requestPermissions();
+    }
 
   }
- async retry(){
-    await Permissions.requestPermissions().then( async v=>{
-      this.devicekCurrentLocation()
-   },async er=>{
-    this.devicekCurrentLocation()
-   } )
 
-  }
+  async retry(){
+    this.devicekCurrentLocation();
+}
+
 }

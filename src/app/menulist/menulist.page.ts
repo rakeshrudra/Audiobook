@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { Storage } from '@ionic/storage';
+
 import { Market } from '@ionic-native/market/ngx';
+import { Storage } from '@capacitor/storage';
+import { Device } from '@capacitor/device';
 //import { AppVersion } from '@ionic-native/app-version/ngx';
-import { Plugins } from '@capacitor/core';
-const { App,  Device } = Plugins;
 
 @Component({
   selector: 'app-menulist',
@@ -15,7 +15,7 @@ const { App,  Device } = Plugins;
 })
 export class MenulistPage implements OnInit {
 
-  constructor(public  router : Router , private market: Market, public platform : Platform, public storage : Storage, public api : ApiService) {
+  constructor(public  router : Router , private market: Market, public platform : Platform, public api : ApiService) {
   /*  this.appVersion.getVersionNumber().then(e => {
         this.app = e;
     })*/
@@ -93,10 +93,10 @@ export class MenulistPage implements OnInit {
   {
     this.router.navigate(['/tab/search'])
   }
-  change(val)
+ async change(val)
   {
     this.api.activeClassnext(val);
-    this.storage.set('activeClass',val)
+    await Storage.set({key:'activeClass', value: JSON.stringify(val)})
   }
   pay()
   {
@@ -110,6 +110,6 @@ export class MenulistPage implements OnInit {
   }
   async appBuild(){
     const info = await Device.getInfo();
-      this.app = info.appVersion;
+      this.app = info.model;
   }
 }

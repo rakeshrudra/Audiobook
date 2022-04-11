@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
+
 import { book } from '../model/book';
 import { chapter } from '../model/chapter';
 import { ModalController } from '@ionic/angular';
 import { DownloadfilterPageModule } from './downloadfilter.module';
 import { DownloadchapterfilterPage } from '../downloadchapterfilter/downloadchapterfilter.page';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-downloadfilter',
@@ -13,25 +14,25 @@ import { DownloadchapterfilterPage } from '../downloadchapterfilter/downloadchap
 })
 export class DownloadfilterPage implements OnInit {
 
-  constructor( public modalCtrl : ModalController, public storag : Storage) { }
+  constructor( public modalCtrl : ModalController) { }
 
   books : book[] = [];
   chapters : chapter[] = [];
 
-  ngOnInit() {
-    this.storag.get('allbooks').then((val : book[])=>{
-      this.books = val;
-   })
-   this.storag.get('chapters').then((val : chapter[])=>{
-    this.chapters = val;
+ async ngOnInit() {
+  await Storage.get({key:'allbooks'}).then((val)=>{
+    this.books = JSON.parse(val.value);
  })
+ await Storage.get({key:'chapters'}).then((val)=>{
+  this.chapters = JSON.parse(val.value);
+})
 }
 async presentModal(id) {
- this.storag.set('filter_book',id).then(()=>{
-  this.storag.remove('filter_chapter'); 
-  this.storag.remove('filter_topic'); 
-  this.storag.remove('filter_topiccount'); 
-  
+ await Storage.set({key:'filter_book',value:id}).then(async ()=>{
+  await Storage.remove({key:'filter_chapter'});
+  await Storage.remove({key:'filter_topic'});
+  await Storage.remove({key:'filter_topiccount'});
+
  }).then(()=>{
   this.modalCtrl.dismiss({
     book_id : id

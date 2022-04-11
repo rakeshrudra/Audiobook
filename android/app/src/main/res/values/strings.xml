@@ -4,4 +4,6 @@
     <string name="title_activity_main">Islamic Audio Books</string>
     <string name="package_name">com.urduaudiobooks.urdutafsir</string>
     <string name="custom_url_scheme">com.urduaudiobooks.urdutafsir</string>
+  <string name="facebook_app_id">481955366287779</string>
+
 </resources>

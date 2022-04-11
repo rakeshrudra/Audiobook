@@ -1,18 +1,19 @@
 import { track } from './../model/track';
 import { PlaynewmediaService } from './playnewmedia.service';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { ToastController } from '@ionic/angular';
 import { Downloader, DownloadRequest } from '@ionic-native/downloader/ngx';
 const MEDIA_FOLDER_NAME = 'audios';
+
+import { Storage } from '@capacitor/storage';
 @Injectable({
   providedIn: 'root'
 })
 export class DownloadService {
 
-  constructor( public toastController : ToastController, public storage : Storage, public transfer : FileTransfer, public file : File,private downloader: Downloader, public _playmedia : PlaynewmediaService) {
+  constructor( public toastController : ToastController, public transfer : FileTransfer, public file : File,private downloader: Downloader, public _playmedia : PlaynewmediaService) {
   }
   waitingtime = 320;
   interval ;
@@ -49,10 +50,10 @@ export class DownloadService {
 
   ///  download q checking and downloading status
 
-  qdownload() {
-    this.storage.get('downloadq').then((val: track[]) => {
-      if (val) {
-
+ async  qdownload() {
+    await Storage.get({key:'downloadq'}).then((list) => {
+      if (list.value) {
+         let val = JSON.parse(list.value);
         if(!this.downloadingStatus)
         {
         console.log(val[0], 'download Started');
@@ -146,16 +147,18 @@ this.downloader.download(request)
   }
 
   //// store record in down loading  list for later use
-  storedownloadhistort(track) {
+  async storedownloadhistort(track) {
     console.log('down')
     console.log(track)
-    this.storage.get('download').then((val: track[]) => {
+    await Storage.get({key:'downloadq'}).then(async (list) => {
+      if (list.value) {
+        let val = JSON.parse(list.value);
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.url != track.url);
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
           this.favourit.push(track)
-          this.storage.set('download', this.favourit)
+          await Storage.set({key:'download', value: JSON.stringify(this.favourit)})
           console.log('Store Success 1');
           this.presentToast('Downloading completed '+track.audioname);
 
@@ -163,29 +166,35 @@ this.downloader.download(request)
         }
         else {
           this.presentToast('Downloading completed '+track.audioname);
-          this.storage.set('download', [track])
+          await Storage.set({key:'download', value: JSON.stringify([track])})
+
           console.log('Store Success 2')
           this.removefromdownloadQ(track);
         }
       }
       else {
         this.presentToast('Downloading completed '+track.audioname);
-        this.storage.set('download', [track])
+        await Storage.set({key:'download', value: JSON.stringify([track])})
         console.log('Store Success 3')
         this.removefromdownloadQ(track);
       }
+    }
     })
   }
   //// remove file from download Q
 
-  removefromdownloadQ(track: track) {
+ async removefromdownloadQ(track: track) {
    // alert("q list");
-    this.storage.get('downloadq').then((val: track[]) => {
-      if (Array.isArray(val)) {
+   await Storage.get({key:'downloadq'}).then(async (list) => {
+    if (list.value) {
+      let val = JSON.parse(list.value);
+    if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.id != track.id);
         console.log(track, filteredPeople);
         if (Array.isArray(filteredPeople)) {
-          this.storage.set('downloadq', filteredPeople).then(() => { })
+
+          await Storage.set({key:'download', value: JSON.stringify(filteredPeople)})
+
           console.log("Removed")
           this.downloadingStatus = false;
 
@@ -194,7 +203,7 @@ this.downloader.download(request)
           this.trackingwaittime()
         }
         else {
-          this.storage.set('downloadq', []).then(() => { })
+          await Storage.set({key:'download', value: JSON.stringify([])})
           this.downloadingStatus = false;
           clearInterval(this.interval)
           this.waitingtime = 320;
@@ -202,12 +211,13 @@ this.downloader.download(request)
         }
       }
       else {
-        this.storage.set('downloadq', []).then(() => { })
+        await Storage.set({key:'download', value: JSON.stringify([])})
         this.downloadingStatus = false;
         clearInterval(this.interval)
         this.waitingtime = 320;
         this.trackingwaittime()
     }
+  }
     })
   }
   /// toaster for downloading status

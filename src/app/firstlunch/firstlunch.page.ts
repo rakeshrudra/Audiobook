@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-firstlunch',
@@ -10,9 +10,9 @@ import { Storage } from '@ionic/storage';
 export class FirstlunchPage implements OnInit {
 
   howpage = false;
-  constructor(public router: Router, public storage : Storage ) {
-    this.storage.get('fasttime').then(val=>{
-        if(val)
+  constructor(public router: Router ) {
+    Storage.get({key:'fasttime'}).then(val=>{
+        if(val.value)
         {
           this.router.navigate(['/splash'],{ replaceUrl: true });
         }else
@@ -36,10 +36,10 @@ export class FirstlunchPage implements OnInit {
 
   ngOnInit() {
   }
-submit()
+async submit()
 {
-  this.storage.set('fasttime','true').then(val=>{
-   this.router.navigate(['/splash'],{ replaceUrl: true });
+  Storage.set({key:'fasttime',value:'true'}).then(val=>{
+    this.router.navigate(['/splash'],{ replaceUrl: true });
   });
 }
 

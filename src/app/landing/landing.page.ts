@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Router, ActivatedRoute, Event, NavigationStart, NavigationEnd } from '@angular/router';
-import { Storage } from '@ionic/storage';
+
 import { track } from '../model/track';
 import { Platform, ToastController, IonContent } from '@ionic/angular';
 import { MusicControls } from '@ionic-native/music-controls/ngx';
@@ -10,6 +10,7 @@ import { book } from '../model/book';
 import { NewapiService } from '../newapi.service';
 import { timeout } from 'rxjs/operators';
 
+import { Storage } from '@capacitor/storage';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
@@ -24,10 +25,7 @@ export class LandingPage implements OnInit {
     public api: NewapiService,
     public _api: ApiService,
     public router: Router,
-    public storage: Storage,
-    private platform: Platform,
     public musicControls: MusicControls,
-    // public network: Network
   ) {
     api.currentLocationLat.subscribe(v=>{
       this.currentPrayerTiming();
@@ -85,9 +83,9 @@ export class LandingPage implements OnInit {
   timings;
   todayApiCall = false;
 
-  playslideraudio(id) {
+ async playslideraudio(id) {
     if (typeof id != undefined && id != '' && id != null) {
-      this.storage.remove('audioid');
+      await Storage.remove({key:'audioid'});
       this.api.audio('?a_id=' + id).subscribe(val => {
         this._api.playnextchapternext(false)
         this._api.audiolistnext(val)
@@ -101,10 +99,10 @@ export class LandingPage implements OnInit {
     return book.color;
   }
 
-  playpushaudio(){
-    this.storage.get('audioid').then(val=>{
-      if(val){
-      this.playslideraudio(val)
+ async playpushaudio(){
+    await Storage.get({key:'audioid'}).then(val=>{
+      if(val.value){
+      this.playslideraudio(val.value)
       }
     })
 
@@ -133,12 +131,12 @@ export class LandingPage implements OnInit {
 
   }
 
-  ngOnInit() {
+ async ngOnInit() {
     this._api.dailyazkar().subscribe(val => {
       this.dailyaskar = val;
     })
-    this.storage.get('allbooks').then((val: book[]) => {
-      this.books = val;
+    await Storage.get({key:'allbooks'}).then((val) => {
+      this.books = JSON.parse(val.value);
     })/*.then(() => { */
    /* this.storage.get('allmodule').then(val => {
       this.data = val
@@ -148,11 +146,11 @@ export class LandingPage implements OnInit {
      this.data = data;
     })
 
-    this.storage.get('allslider').then(val => {
-      this.sliders = val
+   await Storage.get({key:'allslider'}).then(val => {
+      this.sliders = JSON.parse(val.value);
     })
-    this.storage.get('trandingaudio').then(val => {
-      this.taudiodata = val
+    await Storage.get({key:'trandingaudio'}).then(val => {
+      this.taudiodata = JSON.parse(val.value);
     })
 
     //})
@@ -191,13 +189,20 @@ export class LandingPage implements OnInit {
       e.target.complete();
     })
   }
-  ionViewDidEnter() {
+ async ionViewDidEnter() {
     this.ionContent.scrollToTop(3);
-    this.storage.get('history').then(val => {
-      this.lastlist = val.reverse();
-    }).then(() => {
-      this.storage.get('lasttrack').then(val => {
-        this.activetrack = val
+    await Storage.get({key:'history'}).then(val => {
+      if(val.value)
+      {
+        let list = JSON.parse(val.value);
+      this.lastlist = list.reverse();
+      }
+    }).then(async () => {
+      await Storage.get({key:'lasttrack'}).then(val => {
+        if(val.value)
+        {
+        this.activetrack = JSON.parse(val.value);
+        }
       })
     })
     this.playpushaudio();
@@ -211,9 +216,10 @@ this.get_storedlist()
 
   /// book url
 
-  urllink(module) {
-    this.storage.get('allbooks').then((values: book[]) => {
-      if (values) {
+ async urllink(module) {
+    await Storage.get({key:'allbooks'}).then((val) => {
+      if (val.value) {
+        let values = JSON.parse(val.value);
         const playlist = values.filter(list => list.modules.toLowerCase().indexOf(module.toLowerCase()) !== -1)
         if (playlist.length == 1) {
           this.router.navigate(['/tab/home/chapter/',playlist[0].id])
@@ -230,11 +236,11 @@ this.get_storedlist()
 
     ///
 storedid = [];
-get_storedlist(){
-  this.storage.get("storedaudio").then((val:Array<any>)=>{
-    if(val)
+async get_storedlist(){
+  await Storage.get({key:"storedaudio"}).then(async (val)=>{
+    if(val.value)
     {
-    this.storedid = val
+    this.storedid = JSON.parse(val.value);
     }
     else{
       this.storedid = []

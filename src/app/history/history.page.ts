@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
+
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { AutoloadService } from '../service/autoload.service';
+
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-history',
@@ -11,7 +13,7 @@ import { AutoloadService } from '../service/autoload.service';
 })
 export class HistoryPage implements OnInit {
 
-  constructor(public storage : Storage, public api : ApiService , public router : Router, public _autoload : AutoloadService) { 
+  constructor(public api : ApiService , public router : Router, public _autoload : AutoloadService) {
     _autoload.activetrack.subscribe(val=>{
       _autoload.activetrack.subscribe(val=>{
       this.ngOnInit();
@@ -22,10 +24,14 @@ export class HistoryPage implements OnInit {
   playlist = []
   defaultImage = '/assets/loader.gif';
 
-  ngOnInit() 
+ async ngOnInit()
   {
-    this.storage.get('history').then(val=>{
-      this.playlist = val.reverse();
+    await Storage.get({key:'history'}).then(val=>{
+      if(val.value)
+      {
+      let list = JSON.parse(val.value);
+      this.playlist = list.reverse();
+      }
     })
 
   }
@@ -48,12 +54,11 @@ export class HistoryPage implements OnInit {
     this.router.navigate(['/tab/search'])
   }
 
-   clearall()
+   async clearall()
    {
-     this.storage.remove('history').then(()=>{
+     await Storage.remove({key:'history'}).then(()=>{
       this.playlist = []
      })
      this.ngOnInit()
-
    }
 }

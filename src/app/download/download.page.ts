@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Storage } from '@ionic/storage';
+
+
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { Howl, howler } from 'howler';
@@ -18,7 +19,9 @@ import { DownloadsubchapterfilterPage } from '../downloadsubchapterfilter/downlo
 import { book } from '../model/book';
 import { chapter } from '../model/chapter';
 import { topic } from '../model/topic';
+import { Storage } from '@capacitor/storage';
 const MEDIA_FOLDER_NAME = 'audios';
+
 
 @Component({
   selector: 'app-favourite',
@@ -29,7 +32,7 @@ export class DownloadPage implements OnInit {
 
   @ViewChild('range', { static: false }) range: IonRange;
 
-  constructor(public api: ApiService, public modalCtrl: ModalController, public _downloadPlay: PlaynewmediaService, public storage: Storage, public file: File, public _autoload: AutoloadService) {
+  constructor(public api: ApiService, public modalCtrl: ModalController, public _downloadPlay: PlaynewmediaService,  public file: File, public _autoload: AutoloadService) {
     _autoload.activetrack.subscribe(val => {
       _autoload.activetrack.subscribe(val => {
         this.ngOnInit();
@@ -67,32 +70,40 @@ export class DownloadPage implements OnInit {
     this.showdownloading = true;
   }
 
-  ngOnInit() {
+ async ngOnInit() {
     this.loadFiles();
-    this.storage.get('downloadq').then((val: track[]) => {
-      if (val) {
-        this.downloadPlaylistq = val;
+    await Storage.get({key:'downloadq'}).then((val) => {
+      if (val.value) {
+        this.downloadPlaylistq = JSON.parse(val.value);
         //console.log(val,"Qlist")
       }
     })
     this.findBook();
   }
   setinterval;
-  ionViewDidEnter() {
+ async ionViewDidEnter() {
     this.ngOnInit();
     this.selectedbook = null;
     this.selectedchapter = null;
     this.findBook();
-      this.storage.get('chapters').then((book: chapter[]) => {
+      await Storage.get({key:'chapters'}).then((val) => {
+        if(val.value)
+        {
+          let book = JSON.parse(val.value);
         if (book) {
           this.allchapters = book.filter(e => e.book_id === this.selectedbook);
         }
+        }
       })
 
-      this.storage.get('download').then((book: track[]) => {
+      await Storage.get({key:'download'}).then((val) => {
+        if(val.value)
+        {
+          let book = JSON.parse(val.value);
         if (book) {
           this.allaudios = book.filter(e => e.chapter_id === this.selectedchapter);
         }
+      }
       })
 
 
@@ -107,11 +118,11 @@ export class DownloadPage implements OnInit {
   }
   downloadPlaylistq: track[] = []
 
-  loadFiles() {
-    this.storage.get('download').then((val: track[]) => {
-      if (val) {
-        this.files = val;
-        this.tempfiles = val;
+  async loadFiles() {
+    await Storage.get({key:'download'}).then((val) => {
+      if (val.value) {
+        this.files = JSON.parse(val.value);
+        this.tempfiles = JSON.parse(val.value);;
         this.boookfilter();
       }
     })
@@ -187,10 +198,11 @@ export class DownloadPage implements OnInit {
   }
   // filter by book
 
-  boookfilter() {
-    this.storage.get('filter_book').then((val: string) => {
-      //alert(val)
-      console.log(this.tempfiles)
+ async boookfilter() {
+    await Storage.get({key:'filter_book'}).then(async (list) => {
+      if(list.value)
+      {
+        let val = list.value;
       if (val) {
         this.files = this.tempfiles.filter(e => e.book_id === val)
         console.log('book', this.files)
@@ -199,28 +211,32 @@ export class DownloadPage implements OnInit {
         this.chaptername = null;
         this.chapterfilter();
 
-        this.storage.get('allbooks').then((book: book[]) => {
+        await Storage.get({key:'allbooks'}).then((books) => {
+          if(books.value)
+          {
+            let book = JSON.parse(books.value);
           if (book) {
             var vv = book.find(e => e.id === val);
             console.log(vv)
             this.bookname = vv.name;
           }
+        }
         })
 
       }
+    }
     })
 
   }
 
-  chapterfilter() {
-    this.storage.get('filter_chapter').then((val) => {
-      if (val) {
+ async chapterfilter() {
+    await Storage.get({key:'filter_chapter'}).then(async (filterval) => {
+      if (filterval.value) {
+        let val = filterval.value;
         this.files = this.tempfiles.filter(e => e.chapter_id === val)
-        console.log('chapter', this.files)
 
-
-        this.storage.get('filter_topiccount').then((valc) => {
-          if (valc != '0') {
+        await Storage.get({key:'filter_topiccount'}).then(async (valtop) => {
+          if (valtop.value && valtop.value != '0') {
             this.showtopic = true;
           } else {
             this.showtopic = false;
@@ -229,9 +245,10 @@ export class DownloadPage implements OnInit {
           this.topicfilter()
         })
         this.topicfilter()
-        this.storage.get('chapters').then((book: chapter[]) => {
-          if (book) {
-
+        await Storage.get({key:'chapters'}).then((books) => {
+          if(books.value)
+          {
+            let book = JSON.parse(books.value);
             var vv = book.find(e => e.id === val)
             console.log(vv)
             this.chaptername = vv.chapter;
@@ -242,38 +259,46 @@ export class DownloadPage implements OnInit {
       }
     })
   }
-  topicfilter() {
-    this.storage.get('filter_topic').then((val) => {
+ async topicfilter() {
+    await Storage.get({key:'filter_topic'}).then(async (valFilter) => {
+      if(valFilter.value)
+      {
+        let val = valFilter.value;
       if (val) {
         this.files = this.tempfiles.filter(e => e.topic === val)
         console.log('topic', this.files)
         // this.showtopic = true;
-        this.storage.get('alltopic').then((book: topic[]) => {
+        await Storage.get({key:'alltopic'}).then((books) => {
+          if(books.value)
+          {
+            let book = JSON.parse(books.value);
           if (book) {
             var vv = book.find(e => e.id === val)
             console.log(vv)
 
             this.subchaptername = vv.topic;
           }
+        }
         })
 
       }
+    }
     })
 
   }
 
-  clearfilter() {
-    this.storage.remove('filter_book').then(() => {
+ async clearfilter() {
+    await Storage.remove({key:'filter_book'}).then(() => {
       this.ngOnInit();
       this.bookname = null
     });
 
-    this.storage.remove('filter_chapter').then(() => {
+    await Storage.remove({key:'filter_chapter'}).then(() => {
       this.ngOnInit();
       this.chaptername = null
     });
 
-    this.storage.remove('filter_topic').then(() => {
+    await Storage.remove({key:'filter_topic'}).then(() => {
       this.ngOnInit();
       this.subchaptername = null
     });
@@ -289,28 +314,34 @@ export class DownloadPage implements OnInit {
 
 
 
-  findBook() {
-    this.storage.get('download').then((book: track[]) => {
+ async findBook() {
+   await Storage.get({key:'download'}).then((books) => {
+     if(books.value)
+     {
+       let book = JSON.parse(books.value);
       if (book) {
         this.allaudiolist = book;//.filter(e => e.chapter_id === i);
       }
-    }).then(()=>{
+    }
+    }).then(async()=>{
 
-    this.storage.get('allbooks').then(val => {
-      if (val) {
+      await Storage.get({key:'allbooks'}).then(allbooks => {
+      if (allbooks.value) {
+        let val =JSON.parse(allbooks.value);
         this.allbooks = val;
         for(var i =0 ; i < this.allbooks.length ; i++){
            var vv = this.allaudiolist.filter(e => e.book_id === this.allbooks[i].id);
            this.allbooks[i].audiodownloaded = vv.length;
         }
       }
+
     }).then(v=>{
       this.downloadedBookcount = this.allbooks.filter(e=>e.audiodownloaded>0).length;
     })
   })
   }
 
-  findChapter(i) {
+ async  findChapter(i) {
     if(this.selectedbook == i)
     {
       this.selectedbook = null;
@@ -318,7 +349,10 @@ export class DownloadPage implements OnInit {
     this.selectedbook = i;
 
 
-    this.storage.get('chapters').then((book: chapter[]) => {
+    await Storage.get({key:'chapters'}).then((chapters) => {
+      if(chapters.value)
+      {
+      let book = JSON.parse(chapters.value);
       if (book) {
         this.allchapters = book.filter(e => e.book_id === i);
         this.allchapters = this.allchapters.sort((a, b) => (a.chapterno < b.chapterno)?-1:1);
@@ -333,21 +367,26 @@ export class DownloadPage implements OnInit {
        this.allaudiostemp = this.allaudiostemp.sort((a,b)=> (a.chapter_id < b.chapter_id)?-1:1);//.sort((a, b) =>  a.chapter_id.localeCompare(b.chapter_id) && a.slno.localeCompare(b.slno) );
        console.log(this.allchapters)
       }
+    }
     })
   }
 
   }
-  findaudios(i) {
+async  findaudios(i) {
     if(this.selectedchapter == i)
     {
       this.selectedchapter = null;
     }else{
     this.selectedchapter = i;
 
-    this.storage.get('download').then((book: track[]) => {
+  await Storage.get({key:'download'}).then((download) => {
+    if(download.value)
+    {
+      let book = JSON.parse(download.value);
       if (book) {
         this.allaudios = book.filter(e => e.chapter_id === i);
       }
+    }
     })
   }
   // inside ngAfterViewInit() to make sure the list items render or inside ngAfterViewChecked() if you are anticipating live data using @Inputs
@@ -357,14 +396,18 @@ if (itemToScrollTo) {
   itemToScrollTo.scrollIntoView(true);
 }
   }
-  removeaudiofromq(f){
+ async removeaudiofromq(f){
     this.allaudios = this.allaudios.filter((item) => item.id !== f.id);  //ES6
 
-    this.storage.get('download').then((book: track[]) => {
+    await Storage.get({key:'download'}).then(async(books) => {
+      if(books.value)
+      {
+        let book = JSON.parse(books.value);
       if (book) {
        var vv = book.filter(e => e.id !== f.id);
-       this.storage.set('downloa',vv);
+       await Storage.set({key:'downloa',value: JSON.stringify(vv)});
       }
+    }
     }).then(()=>{
     this.findBook();
     this.findChapter(this.selectedbook)
