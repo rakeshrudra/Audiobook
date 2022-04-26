@@ -37,6 +37,7 @@ export class ApiService {
 
   constructor(public http: HttpClient , public audioser : PlaynewmediaService) { }
   audiolist = new BehaviorSubject<track[]>(this.playlist)
+  currentAudioList = new BehaviorSubject<track[]>([])
   activetrack = new BehaviorSubject<track>(null)
   currentaudio = new BehaviorSubject<track>(null)
   playno = new BehaviorSubject<number>(0)
@@ -246,5 +247,8 @@ export class ApiService {
   isapiloadingnext(c)
   {
      this.isapiloading = c
+  }
+  currentAudioListNext(e){
+    this.currentAudioList.next(e)
   }
 }

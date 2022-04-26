@@ -156,13 +156,13 @@
     </ng-container>
   </ion-slides><br /-->
 
-  <h3 style="padding-left: 16px; font-size: 16px" *ngIf="lastlist?.length >0">
+  <h3 style="padding-left: 16px; font-size: 16px" *ngIf="_api.currentAudioList?.value?.length >0">
     <b>You were listening</b>
   </h3>
 
   <div class="ion-padding">
     <ion-list lines="full">
-      <ng-container *ngFor="let a of lastlist; let i = index">
+      <ng-container *ngFor="let a of _api.currentAudioList.value; let i = index">
         <ion-item class="chaptercontainer" *ngIf="i < 4">
           <ion-label (click)="palylast(i)" class="ion-text-wrap">
             <h2>

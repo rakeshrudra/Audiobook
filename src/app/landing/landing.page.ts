@@ -4,7 +4,7 @@ import { Router, ActivatedRoute, Event, NavigationStart, NavigationEnd } from '@
 
 import { track } from '../model/track';
 import { Platform, ToastController, IonContent } from '@ionic/angular';
-import { MusicControls } from '@ionic-native/music-controls/ngx';
+import { MusicControls } from '@awesome-cordova-plugins/music-controls/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { book } from '../model/book';
 import { NewapiService } from '../newapi.service';
@@ -167,7 +167,7 @@ export class LandingPage implements OnInit {
     this.router.navigate(['/tab/home/play'])
   }
   palylast(i) {
-    this._api.audiolistnext(this.lastlist)
+    this._api.audiolistnext(this._api.currentAudioList.value)
     this._api.playnonext(i)
     this._api.showplayernext(true)
   }
@@ -195,7 +195,8 @@ export class LandingPage implements OnInit {
       if(val.value)
       {
         let list = JSON.parse(val.value);
-      this.lastlist = list.reverse();
+         let clastlist = list.reverse();
+      this._api.currentAudioListNext(clastlist);
       }
     }).then(async () => {
       await Storage.get({key:'lasttrack'}).then(val => {

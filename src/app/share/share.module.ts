@@ -14,6 +14,7 @@ import { IntercepterService } from '../intercepter.service';
 import { MarqueeDirective } from './marquee.directive';
 import { OfflinealertPageModule } from '../offlinealert/offlinealert.module';
 import { RemoveISTPipe } from './remove-ist.pipe';
+import { SafeHtmlPipe } from '../safe-html.pipe';
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import { RemoveISTPipe } from './remove-ist.pipe';
     BooksearchPipe,
     ChaptersearchPipe,
     HighlightPipe,
-    MarqueeDirective, RemoveISTPipe
+    MarqueeDirective, RemoveISTPipe, SafeHtmlPipe
   ],
   imports: [
     CommonModule,
@@ -44,7 +45,8 @@ import { RemoveISTPipe } from './remove-ist.pipe';
     ChaptersearchPipe,
     HighlightPipe,
     RemoveISTPipe,
-    SuperTabsModule
+    SuperTabsModule,
+    SafeHtmlPipe
   ]
 })
 export class ShareModule { }

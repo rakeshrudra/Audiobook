@@ -4,7 +4,7 @@ import { IonRange } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { Storage } from '@ionic/storage';
 import { track } from '../model/track';
-import { MusicControls } from '@ionic-native/music-controls/ngx';
+import { MusicControls } from '@awesome-cordova-plugins/music-controls/ngx';
 import { Router } from '@angular/router';
 //import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 

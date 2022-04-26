@@ -11,7 +11,7 @@ import { Storage } from '@ionic/Storage';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 import { Router, RouterEvent, Event, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
-import { MusicControls } from '@ionic-native/music-controls/ngx';
+import { MusicControls } from '@awesome-cordova-plugins/music-controls/ngx';
 import { Location } from '@angular/common';
 import { File } from '@ionic-native/file/ngx';
 const MEDIA_FOLDER_NAME = 'audios';
@@ -96,6 +96,7 @@ constructor(
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.unloadApp();
       this.statusBar.styleLightContent();
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       this.statusBar.backgroundColorByHexString('#111111');
@@ -254,7 +255,7 @@ constructor(
             ////console.log('Confirm Okay');
             this.alertShown = false;
             this.musicControls.destroy()
-            navigator['app'].exitApp(); //Exit from app
+            App.exitApp(); //Exit from app
 
           }
         }
@@ -322,6 +323,11 @@ constructor(
   }
   ///
 
-
+unloadApp(){
+  window.addEventListener('beforeunload', () => {
+    // is called when app is forced and closed
+    this.musicControls.destroy()
+  });
+}
 
 }

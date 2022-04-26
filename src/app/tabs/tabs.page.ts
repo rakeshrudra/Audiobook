@@ -1,4 +1,3 @@
-import { async } from '@angular/core/testing';
 import { AudioContentPage } from './../audio-content/audio-content.page';
 import { NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -9,13 +8,14 @@ import { IonRange } from '@ionic/angular';
 import { ApiService } from '../api.service';
 //import { Storage } from '@ionic/storage';
 import { track } from '../model/track';
-import { MusicControls } from '@ionic-native/music-controls/ngx';
+
+import { MusicControls } from '@awesome-cordova-plugins/music-controls/ngx';
+
 import { Router, NavigationStart, ActivatedRoute, Event } from '@angular/router';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { book } from '../model/book';
-import { topic } from '../model/topic';
-import { File, FileEntry } from '@ionic-native/file/ngx';
-import { promise } from 'protractor';
+
+import { File } from '@ionic-native/file/ngx';
+
 import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { DownloadService } from '../service/download.service';
 import { FileTransferObject, FileTransfer } from '@ionic-native/file-transfer/ngx';
@@ -26,7 +26,6 @@ const MEDIA_FOLDER_NAME = 'audios';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links/ngx';
 import { Share } from '@capacitor/share';
 import { Geolocation } from '@capacitor/geolocation';
-import { CapacitorMusicControls } from 'capacitor-music-controls-plugin';
 
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 
@@ -372,14 +371,18 @@ export class TabsPage implements OnInit {
   togglePlayer(pause) {
     this.isplaying = !pause;
     if (pause) {
+      this.musicControls.updateIsPlaying(false)
      /* CapacitorMusicControls.updateIsPlaying({
         isPlaying: false, // affects Android only
       });*/
       if (this.palyer.playing()) {
+        this.musicControls.updateIsPlaying(true)
         this.palyer.pause();
       }
       // //console.log(this.palyer.pause(),'pause')
     } else {
+      this.musicControls.updateIsPlaying(true)
+
       /*CapacitorMusicControls.updateIsPlaying({
         isPlaying: true, // affects Android only
       });*/
@@ -392,7 +395,7 @@ export class TabsPage implements OnInit {
 
   pause() {
     this.palyer.pause();
-    //this.musicControls.updateIsPlaying(false);
+    this.musicControls.updateIsPlaying(false);
    /* CapacitorMusicControls.updateIsPlaying({
       isPlaying: false, // affects Android only
     });*/
@@ -448,22 +451,25 @@ export class TabsPage implements OnInit {
     await Storage.get({key:'history'}).then(async (list) => {
       if(list.value)
       {
-        let val = JSON.stringify(list.value);
+        let val = JSON.parse(list.value);
       if (Array.isArray(val)) {
         const filteredPeople = val.filter((item) => item.url != track.url);
         if (Array.isArray(filteredPeople)) {
           this.favourit = filteredPeople;
-          this.favourit.push(track)
-          await Storage.set({key:'history', value: JSON.stringify(this.favourit)})
+          this.favourit.push(track);
+          await Storage.set({key:'history', value: JSON.stringify(this.favourit)});
+          this.api.currentAudioListNext(this.favourit);
         }
         else {
           await Storage.set({key:'history', value: JSON.stringify([track])})
-
         }
       }
       else {
         await Storage.set({key:'history', value: JSON.stringify([track])})
       }
+    }else{
+      await Storage.set({key:'history', value: JSON.stringify([track])})
+
     }
     })
 
@@ -476,6 +482,7 @@ export class TabsPage implements OnInit {
     //this.storage.set('playnextid', i)
   }
   playcurrent() {
+    this.musicControls.updateIsPlaying(true)
     this.palyer.play();
     //console.log('1')
    /* CapacitorMusicControls.updateIsPlaying({
@@ -484,7 +491,7 @@ export class TabsPage implements OnInit {
   }
 
 
-  createControls1() {
+  createControls() {
     this.musicControls.create({
       track: this.activeTrack.audioname,
       artist: this.activeTrack.chapter,
@@ -492,7 +499,7 @@ export class TabsPage implements OnInit {
       isPlaying: true,
       hasPrev: true,
       hasNext: true,
-      dismissable: false,
+      dismissable: true,
     });
 
     this.musicControls.subscribe().subscribe(action => {
@@ -748,6 +755,8 @@ export class TabsPage implements OnInit {
       else {
         await Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.ckfeb(track) })
       }
+    }else{
+      await Storage.set({key:'favourite', value: JSON.stringify([track])}).then(() => { this.ckfeb(track) })
     }
     })
   }
@@ -768,7 +777,7 @@ export class TabsPage implements OnInit {
 
   }
 
-  createControls() {
+  createControls1() {
     /*CapacitorMusicControls.create({
       album: 'Islamic Audio Books',     // optional, default: ''
       // cover can be a local path (use fullpath 'file:///storage/emulated/...', or only 'my_image.jpg' if my_image.jpg is in the www folder of your app)

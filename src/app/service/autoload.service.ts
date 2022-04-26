@@ -131,7 +131,6 @@ export class AutoloadService {
         const filteredPeople = val.filter((item) => item.id != track.id);
         if (Array.isArray(filteredPeople)) {
           favourit = filteredPeople;
-         // favourit.push(track)
          await Storage.set({key:'downloadq', value: JSON.stringify(favourit)}).then(() => { this.cpresentToast('Succesfully removed'); this.activetrack.next(track) })
 
         }

@@ -15,7 +15,7 @@ import { MinuteSecondsPipe } from './minute-seconds.pipe';
 import { ApiService } from './api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ShareModule } from './share/share.module';
-import { MusicControls } from '@ionic-native/music-controls/ngx';
+import { MusicControls } from '@awesome-cordova-plugins/music-controls/ngx';
 import { MenulistPipe } from './menulist.pipe';
 
 import { Network } from '@ionic-native/network/ngx';

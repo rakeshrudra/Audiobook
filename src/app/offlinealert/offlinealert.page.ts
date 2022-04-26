@@ -28,7 +28,6 @@ export class OfflinealertPage implements OnInit {
   }
   retry()
   {
-    alert("retry")
     this.api.slider().subscribe(data => {
       this.modalCtrl.dismiss({offline : false})
       this.router.navigate(['/'])

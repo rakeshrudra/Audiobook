@@ -20,6 +20,7 @@ dependencies {
     implementation project(':capacitor-storage')
     implementation project(':capacitor-music-controls-plugin')
     implementation "com.google.firebase:firebase-analytics:18.0.+"
+    implementation "com.android.support:support-v4:28.0.0"
 }
 
 

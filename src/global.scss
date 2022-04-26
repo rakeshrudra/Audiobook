@@ -38,13 +38,16 @@
 }
 .arabicFont{
 
-  font-family: 'amiri', serif !important;
+  font-family: 'Noto Nastaliq Arabic', serif !important;
   line-height:30px !important;
   //font-family: 'NafeesRegular' !important;
    font-weight: normal;
    font-style: normal;
    text-align: right;
 
+}
+ion-range ion-label{
+  color : #aaaaaa !important;
 }
 .dai-banna{
   font-family: 'dai banna' !important;

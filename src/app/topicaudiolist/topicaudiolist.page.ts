@@ -59,12 +59,6 @@ export class TopicaudiolistPage implements OnInit {
 
   jsonaudiofun()
   {
-    if(this.playlist.length < 1)
-    {
-    this.api.localaudio().subscribe(values=>{
-      this.playlist = values.filter(list => list.topic === this.topic )
-    })
-   }
   }
   downloadQlist = []
 

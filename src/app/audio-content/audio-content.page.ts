@@ -10,13 +10,14 @@ export class AudioContentPage implements OnInit {
 
   @Input('audio') audio;
   selectedCard = 'english';
-
+  enCon;
+  arCon;
 
   constructor(private sanitizer: DomSanitizer) {
   }
   ngOnInit() {
-    this.audio.contentText = this.sanitizer.bypassSecurityTrustHtml(this.audio.contentText) ;
-    this.audio.contentTextArabic = this.sanitizer.bypassSecurityTrustHtml(this.audio.contentTextArabic) ;
+    this.enCon = this.sanitizer.bypassSecurityTrustHtml(this.audio.contentText) ;
+    this.arCon = this.sanitizer.bypassSecurityTrustHtml(this.audio.contentTextArabic) ;
   }
   segmentChanged(event)
   {

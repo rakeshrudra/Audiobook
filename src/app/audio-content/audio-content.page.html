@@ -16,10 +16,10 @@
   </ion-segment>
 
   <div *ngIf="selectedCard == 'english'">
-    <ion-card-content class="arabicFont" style="font-weight: 600; font-size: 16px;" [innerHTML]="audio.contentText">  </ion-card-content>
+    <ion-card-content class="arabicFont" style="font-weight: 600; font-size: 16px; padding-right:30px" [innerHTML]="enCon" >  </ion-card-content>
   </div>
 
-  <div *ngIf="selectedCard == 'other'">
-    <ion-card-content [innerHTML]="audio.contentTextArabic">  </ion-card-content>
+  <div *ngIf="selectedCard == 'other' " >
+    <ion-card-content [innerHTML]="arCon" >  </ion-card-content>
   </div>
 </ion-content>

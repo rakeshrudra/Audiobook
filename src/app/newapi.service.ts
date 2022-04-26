@@ -7,7 +7,7 @@ import { chapter } from './model/chapter';
 
 import { topic } from './model/topic';
 import { dateFormate } from './model/dateFormate';
-import { parse } from 'path';
+
 
 export interface timing {
   Asr: string,
@@ -334,7 +334,6 @@ export class NewapiService {
         return "Fajr";
       }
       if (asstTime_d > hrToMin && asstTime_a > hrToMin) {
-        console.log("Dhua")
         return "Dhuhr";
       }
 
@@ -342,7 +341,6 @@ export class NewapiService {
         return "Asr";
       }
       if (asstTime_m > hrToMin) {
-        console.log("mag")
         return "Maghrib";
       }
       if (asstTime_i > hrToMin && asstTime_i > hrToMin) {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MusicControls } from '@ionic-native/music-controls/ngx';
+import { MusicControls } from '@awesome-cordova-plugins/music-controls/ngx';
 import { NavController, ToastController, LoadingController } from '@ionic/angular';
 import { AudioProvider } from '../service/audio-service';
 import { ApiService } from '../api.service';
@@ -20,9 +20,9 @@ export class PlayPage implements OnInit {
   activetrack : track;
   defaultImage = '/assets/loader.gif';
 
-  constructor(public loadingController : LoadingController, public socialSharing : SocialSharing,  public toastController : ToastController, public router: Router, public navCtrl: NavController, public api: ApiService , public storage : Storage) 
+  constructor(public loadingController : LoadingController, public socialSharing : SocialSharing,  public toastController : ToastController, public router: Router, public navCtrl: NavController, public api: ApiService , public storage : Storage)
   {
-    
+
     api.audiolist.subscribe((val:track[])=>{
       this.playlist = val;
     })
@@ -39,7 +39,7 @@ export class PlayPage implements OnInit {
       {
         this.favourit = val
       }
-      for(var i=0; i<this.playlist.length; i++)  
+      for(var i=0; i<this.playlist.length; i++)
       {
         if (val.filter(e => e.url === this.playlist[i].url).length > 0) {
           this.playlist[i].fav = true;
@@ -51,7 +51,7 @@ export class PlayPage implements OnInit {
 
     })
   }
- 
+
   ngOnInit() {
   }
   play(data,i)
@@ -63,18 +63,18 @@ export class PlayPage implements OnInit {
     this.storage.get('favourite').then((val : track[]) =>{
       if(Array.isArray(val))
       {
-      const filteredPeople = val.filter((item) => item.url != track.url); 
+      const filteredPeople = val.filter((item) => item.url != track.url);
       if(Array.isArray(filteredPeople))
         {
           this.favourit = filteredPeople;
           this.favourit.push(track)
           this.storage.set('favourite',this.favourit).then(()=>   { this.presentToast(); this.ckfev()})
-        } 
+        }
         else
         {
           this.storage.set('favourite',[track]).then(()=> { this.presentToast(); this.ckfev()})
         }
-      } 
+      }
       else
       {
          this.storage.set('favourite',[track]).then(()=>   { this.presentToast(); this.ckfev()})
@@ -87,23 +87,23 @@ export class PlayPage implements OnInit {
     this.storage.get('favourite').then((val : track[]) =>{
       if(Array.isArray(val))
       {
-      const filteredPeople = val.filter((item) => item.url != track.url); 
+      const filteredPeople = val.filter((item) => item.url != track.url);
       if(Array.isArray(filteredPeople))
         {
           this.favourit = filteredPeople;
           this.storage.set('favourite',this.favourit).then(()=>   {  this.ckfev()})
-        } 
+        }
         else
         {
           this.storage.set('favourite',[]).then(()=> {  this.ckfev()})
         }
-      } 
+      }
       else
       {
          this.storage.set('favourite',[]).then(()=>   {  this.ckfev()})
       }
     })
-  } 
+  }
 
   searchfocus()
   {

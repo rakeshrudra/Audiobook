@@ -88,11 +88,6 @@ export class AudioPage implements OnInit {
     this.dqlist()
   }
   jsonaudiofun() {
-    if (this.playlist.length < 1) {
-      this.api.localaudio().subscribe(values => {
-        this.playlist = values.filter(list => list.id === this.chapter)
-      })
-    }
   }
  async addfavouriteAudio(track: track) {
     await Storage.get({key:'favourite'}).then((tracks) => {
