@@ -1,3 +1,4 @@
+import { SetlocalnotificationService } from './service/setlocalnotification.service';
 import { AuthGuard } from './auth.guard';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -74,6 +75,7 @@ import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
     DatePipe,
     PlaynewmediaService,
     AutoloadService,
+    SetlocalnotificationService,
     Network,
     AndroidPermissions,
     FirebaseDynamicLinks,

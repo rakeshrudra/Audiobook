@@ -89,7 +89,7 @@ constructor(
     public file: File,
     private androidPermissions: AndroidPermissions,
     private zone : NgZone,
-    private backgroundMode: BackgroundMode
+    private backgroundMode: BackgroundMode,
       ) {
     this.initializeApp();
   }

@@ -14,6 +14,11 @@
 				"sound",
 				"alert"
 			]
+		},
+		"LocalNotifications": {
+			"smallIcon": "ic_stat_name",
+			"iconColor": "#004075",
+			"sound": "allha.wav"
 		}
 	},
 	"cordova": {}

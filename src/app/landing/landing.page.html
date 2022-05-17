@@ -77,23 +77,23 @@
   *ngIf="api.todayTimings?.value"
 >
 
-  <ion-slide  [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Fajr')?'activeNext': (api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'active':''"  >
+  <ion-slide  [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Fajr')?'activeNext': (api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'active':''" routerLink="/prayer-time"  >
         <div>Fajr <br /> {{this.api.todayTimings?.value?.Fajr | removeIST}} </div>
       </ion-slide>
-      <ion-slide>
+      <ion-slide routerLink="/prayer-time" >
         <div>Sunrise <br /> {{this.api.todayTimings?.value?.Sunrise | removeIST}} </div>
       </ion-slide>
-      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'activeNext':(api.nexPrayerTime(this.api.todayTimings?.value)=='Asr')?'active':''" >
+      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Dhuhr')?'activeNext':(api.nexPrayerTime(this.api.todayTimings?.value)=='Asr')?'active':''" routerLink="/prayer-time"  >
         <div>Dhuhr <br /> {{this.api.todayTimings?.value?.Dhuhr | removeIST}} </div>
       </ion-slide>
-      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Asr')?'activeNext':(api.nexPrayerTime(this.api.todayTimings?.value)=='Maghrib')?'active':''" >
+      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Asr')?'activeNext':(api.nexPrayerTime(this.api.todayTimings?.value)=='Maghrib')?'active':''" routerLink="/prayer-time"  >
         <div>Asr <br /> {{this.api.todayTimings?.value?.Asr | removeIST}} </div>
       </ion-slide>
 
-      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Maghrib')?'activeNext':(api.nexPrayerTime(this.api.todayTimings?.value)=='Isha')?'active':''">
+      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Maghrib')?'activeNext':(api.nexPrayerTime(this.api.todayTimings?.value)=='Isha')?'active':''" routerLink="/prayer-time" >
         <div>Maghrib <br /> {{this.api.todayTimings?.value?.Maghrib | removeIST}} </div>
       </ion-slide>
-      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Isha')?'active':(api.nexPrayerTime(this.api.todayTimings?.value)=='')?'active':''" >
+      <ion-slide [class]="(api.nexPrayerTime(this.api.todayTimings?.value)=='Isha')?'active':(api.nexPrayerTime(this.api.todayTimings?.value)=='')?'active':''" routerLink="/prayer-time"  >
         <div>Isha <br /> {{this.api.todayTimings?.value?.Isha | removeIST}} </div>
       </ion-slide>
     </ion-slides>

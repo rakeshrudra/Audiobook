@@ -110,6 +110,6 @@ export class MenulistPage implements OnInit {
   }
   async appBuild(){
    // const info = await Device.getInfo();
-      this.app = '4.0.3';
+      this.app = '4.0.6';
   }
 }
