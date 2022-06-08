@@ -73,8 +73,8 @@ async showAlert(b,c,d)
 async  nexPrayerTime(givendate,times: timing) {
     //console.log(times)
     let date = givendate.split("-").reverse().join("-");
-    const rtext = " (+06)";
-    //const rtext = " (IST)";
+    //const rtext = " (+06)";
+    const rtext = " (IST)";
     //FAJR
     let arr_f = times.Fajr.replace(rtext, "");
         arr_f = date+' '+arr_f;

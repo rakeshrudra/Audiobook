@@ -61,7 +61,7 @@ export class SplashPage implements OnInit {
     console.log(info,'info');
     console.log(getId,'getId');
 
-          this._api.appupdatechecker("?appcode=40006").subscribe(val => {
+          this._api.appupdatechecker("?appcode=40007").subscribe(val => {
             if (val.status == 1) {
               if (val.data == 1) {
                 this.fupdate()

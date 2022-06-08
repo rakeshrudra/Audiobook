@@ -109,9 +109,10 @@ export class TabsPage implements OnInit {
   public currentLocation = null;
   public currentLocationtt = null;
   // Initial Kaaba location that we've got from google maps
-  private kaabaLocation: { lat: number, lng: number } = { lat: 21.42276, lng: 39.8256687 };
+  private kaabaLocation: { lat: number, lng: number } = { lat: 21.422468520116468, lng: 39.82616932320385 };
   // Initial Qibla Location
   public qiblaLocation = 0;
+
 
 
 
